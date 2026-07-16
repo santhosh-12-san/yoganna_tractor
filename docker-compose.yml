@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: yoganna_postgres_db
+    environment:
+      - POSTGRES_DB=yoganna_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5400:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    container_name: yoganna_redis_broker
+    ports:
+      - "6379:6379"
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: yoganna_django_backend
+    command: daphne -b 0.0.0.0 -p 8000 backend.asgi:application
+    volumes:
+      - ./backend:/app
+    environment:
+      - POSTGRES_DB=yoganna_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - REDIS_HOST=redis
+      - DJANGO_DEBUG=True
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: yoganna_react_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    container_name: yoganna_nginx_proxy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./aws/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+      - frontend
+    restart: always
+
+volumes:
+  postgres_data:
