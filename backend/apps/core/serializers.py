@@ -8,6 +8,7 @@ User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    username = serializers.CharField(required=False, allow_blank=True)
     full_name = serializers.SerializerMethodField()
 
     class Meta:
