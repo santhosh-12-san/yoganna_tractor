@@ -26,7 +26,8 @@ jobs:
       env:
         DJANGO_SECRET_KEY: 'test-secret-key-123'
       run: |
-        python backend/manage.py test backend/apps/core/tests --keepdb || true
+        cd backend
+        python manage.py test apps.core
 
   deploy-to-aws:
     needs: build-and-test
