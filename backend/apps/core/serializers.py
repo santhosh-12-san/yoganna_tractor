@@ -62,19 +62,19 @@ class BookingSerializer(serializers.ModelSerializer):
     driver_name = serializers.ReadOnlyField(source='driver.name')
     customer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all(), required=False, allow_null=True)
     engine_hours = serializers.DecimalField(max_digits=6, decimal_places=2, default=0.00, required=False)
-    time_slot = serializers.CharField(max_length=50, default='Morning', required=False)
+    booking_time = serializers.CharField(max_length=50, default='09:00', required=False)
 
     def validate(self, attrs):
         # Obtain values from input or existing instance if not provided
         date = attrs.get('date', self.instance.date if self.instance else None)
-        time_slot = attrs.get('time_slot', self.instance.time_slot if self.instance else None)
+        booking_time = attrs.get('booking_time', self.instance.booking_time if self.instance else None)
         status = attrs.get('status', self.instance.status if self.instance else 'Pending')
 
         # Overlap check
-        if date and time_slot and status != 'Cancelled':
+        if date and booking_time and status != 'Cancelled':
             overlapping = Booking.objects.filter(
                 date=date,
-                time_slot=time_slot
+                booking_time=booking_time
             ).exclude(status='Cancelled')
 
             if self.instance:
@@ -82,7 +82,7 @@ class BookingSerializer(serializers.ModelSerializer):
 
             if overlapping.exists():
                 raise serializers.ValidationError({
-                    "time_slot": "This time slot is already booked on this date. Please choose another slot or date."
+                    "booking_time": "This time is already booked on this date. Please select another time or date."
                 })
 
         return attrs

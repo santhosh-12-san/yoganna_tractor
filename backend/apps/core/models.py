@@ -55,14 +55,9 @@ class Booking(models.Model):
         ('Completed', 'Completed'),
         ('Cancelled', 'Cancelled'),
     )
-    TIME_SLOT_CHOICES = (
-        ('Morning', 'Morning (08:00 AM - 12:00 PM)'),
-        ('Afternoon', 'Afternoon (12:00 PM - 04:00 PM)'),
-        ('Evening', 'Evening (04:00 PM - 08:00 PM)'),
-    )
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='bookings')
     date = models.DateField()
-    time_slot = models.CharField(max_length=50, choices=TIME_SLOT_CHOICES, default='Morning')
+    booking_time = models.CharField(max_length=50, default='09:00', null=True, blank=True)
     work_type = models.CharField(max_length=50, choices=WORK_TYPE_CHOICES)
     acres_hours = models.DecimalField(max_digits=10, decimal_places=2)
     rate_per_unit = models.DecimalField(max_digits=10, decimal_places=2)

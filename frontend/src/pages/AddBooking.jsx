@@ -8,16 +8,14 @@ const AddBooking = () => {
   const [formData, setFormData] = useState({
     customer: '',
     date: new Date().toISOString().split('T')[0],
-    time_slot: 'Morning',
+    booking_time: '09:00',
     work_type: 'Ploughing',
     acres_hours: '',
     rate_per_unit: '',
     driver: '',
     advance: '0.00',
     status: 'Pending',
-    notes: '',
-    latitude: '',
-    longitude: ''
+    notes: ''
   });
 
   const [customers, setCustomers] = useState([]);
@@ -31,11 +29,7 @@ const AddBooking = () => {
   const role = localStorage.getItem('user_role');
   const isOwner = role === 'OWNER';
 
-  const mapRef = useRef(null);
-  const markerRef = useRef(null);
-
   const [loadingBooking, setLoadingBooking] = useState(isEdit);
-  const [map, setMap] = useState(null);
 
   useEffect(() => {
     // If Owner, fetch customers and drivers lists for dropdowns
@@ -66,16 +60,14 @@ const AddBooking = () => {
           setFormData({
             customer: b.customer,
             date: b.date,
-            time_slot: b.time_slot || 'Morning',
+            booking_time: b.booking_time || '09:00',
             work_type: b.work_type,
             acres_hours: b.acres_hours,
             rate_per_unit: b.rate_per_unit,
             driver: b.driver || '',
             advance: b.advance,
             status: b.status,
-            notes: b.notes || '',
-            latitude: b.latitude || '',
-            longitude: b.longitude || ''
+            notes: b.notes || ''
           });
         } catch (err) {
           console.error("Error fetching booking detail:", err);
@@ -91,91 +83,10 @@ const AddBooking = () => {
   }, [id, isEdit]);
 
   useEffect(() => {
-    if (loadingBooking) return;
-    
-    const container = document.getElementById('field-map');
-    if (!container || container._leaflet_id) return;
-
-    const L = window.L;
-    if (!L) {
-      console.warn("Leaflet library not available on window object.");
-      return;
+    if (isEdit) {
+      setLoadingBooking(false);
     }
-
-    const initialLat = parseFloat(formData.latitude) || 13.3379;
-    const initialLng = parseFloat(formData.longitude) || 77.1173;
-    
-    const mapInstance = L.map('field-map').setView([initialLat, initialLng], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(mapInstance);
-    
-    let markerInstance;
-    if (formData.latitude && formData.longitude) {
-      markerInstance = L.marker([initialLat, initialLng]).addTo(mapInstance);
-    }
-    
-    mapRef.current = mapInstance;
-    markerRef.current = markerInstance;
-
-    mapInstance.on('click', (e) => {
-      const { lat, lng } = e.latlng;
-      setFormData(prev => ({
-        ...prev,
-        latitude: lat.toFixed(6),
-        longitude: lng.toFixed(6)
-      }));
-      if (markerRef.current) {
-        markerRef.current.setLatLng(e.latlng);
-      } else {
-        markerRef.current = L.marker(e.latlng).addTo(mapInstance);
-      }
-    });
-
-    return () => {
-      if (mapInstance) {
-        mapInstance.remove();
-      }
-    };
-  }, [loadingBooking]);
-
-  const handleLocateUser = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
-      return;
-    }
-    
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        const lat = parseFloat(latitude.toFixed(6));
-        const lng = parseFloat(longitude.toFixed(6));
-        
-        setFormData(prev => ({
-          ...prev,
-          latitude: lat.toString(),
-          longitude: lng.toString()
-        }));
-        
-        const map = mapRef.current;
-        const L = window.L;
-        
-        if (map && L) {
-          map.setView([lat, lng], 15);
-          if (markerRef.current) {
-            markerRef.current.setLatLng([lat, lng]);
-          } else {
-            markerRef.current = L.marker([lat, lng]).addTo(map);
-          }
-        }
-      },
-      (error) => {
-        console.error("Geolocation error:", error);
-        alert("Failed to access your location. Please check browser permissions.");
-      },
-      { enableHighAccuracy: true }
-    );
-  };
+  }, [id, isEdit]);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -210,12 +121,6 @@ const AddBooking = () => {
 
     if (payload.driver === '') {
       payload.driver = null;
-    }
-    if (payload.latitude === '') {
-      payload.latitude = null;
-    }
-    if (payload.longitude === '') {
-      payload.longitude = null;
     }
 
     if (!navigator.onLine) {
@@ -302,19 +207,16 @@ const AddBooking = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="time_slot">{t('Time Slot')}</label>
-          <select
-            id="time_slot"
-            name="time_slot"
+          <label htmlFor="booking_time">{t('Time') || 'Time'}</label>
+          <input
+            type="time"
+            id="booking_time"
+            name="booking_time"
             className="form-control"
-            value={formData.time_slot}
+            value={formData.booking_time}
             onChange={handleInputChange}
             required
-          >
-            <option value="Morning">{t('Morning')}</option>
-            <option value="Afternoon">{t('Afternoon')}</option>
-            <option value="Evening">{t('Evening')}</option>
-          </select>
+          />
         </div>
 
         <div className="form-group">
@@ -425,24 +327,7 @@ const AddBooking = () => {
           </>
         )}
 
-        <div className="form-group" style={{ gridColumn: 'span 2' }}>
-          <label>{t('Field Location')}</label>
-          <div id="field-map" style={{ height: '320px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginBottom: '12px', zIndex: 1 }}></div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-            <div style={{ display: 'flex', gap: '16px', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-              <span><strong>{t('Latitude')}:</strong> {formData.latitude || 'Not selected'}</span>
-              <span><strong>{t('Longitude')}:</strong> {formData.longitude || 'Not selected'}</span>
-            </div>
-            <button 
-              type="button" 
-              onClick={handleLocateUser} 
-              className="btn btn-secondary"
-              style={{ padding: '6px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <span>📍 {t('Use My Location')}</span>
-            </button>
-          </div>
-        </div>
+        {/* Map removed per user request */}
 
         <div className="form-group">
           <label htmlFor="notes">{t('Notes / Special Instructions')}</label>

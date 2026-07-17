@@ -207,7 +207,7 @@ const BookingsList = () => {
                 <td>{idx + 1}</td>
                  <td>
                   {new Date(b.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                  {b.time_slot && (
+                  {b.booking_time && (
                     <span style={{ 
                       fontSize: '0.75rem', 
                       padding: '2px 6px', 
@@ -218,7 +218,7 @@ const BookingsList = () => {
                       marginLeft: '6px', 
                       fontWeight: '600' 
                     }}>
-                      {t(b.time_slot)}
+                      {b.booking_time}
                     </span>
                   )}
                  </td>
