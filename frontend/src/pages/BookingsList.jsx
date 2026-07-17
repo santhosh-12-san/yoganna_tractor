@@ -139,7 +139,8 @@ const BookingsList = () => {
       ) : error ? (
         <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>
       ) : (
-        <table className="data-table">
+        <div className="table-responsive">
+          <table className="data-table">
           <thead>
             <tr>
               <th>#</th>
@@ -206,7 +207,8 @@ const BookingsList = () => {
               </tr>
             )}
           </tbody>
-        </table>
+          </table>
+        </div>
       )}
     </div>
   );

@@ -662,3 +662,33 @@ a:hover {
     padding: 16px;
   }
 }
+
+/* Responsive Table Wrapper for Mobile and Tablet horizontal scaling */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  background: white;
+}
+
+@media (max-width: 1024px) {
+  /* Automatically make all data tables block-level scrollable on mobile and tablet */
+  .data-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+  
+  .data-table th,
+  .data-table td {
+    white-space: nowrap; /* Prevent text wrapping inside cells to preserve layout */
+    padding: 12px 16px;
+  }
+}

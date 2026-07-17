@@ -147,7 +147,8 @@ class BookingViewSet(viewsets.ModelViewSet):
                 customer = self.request.user.customer_profile
                 instance = serializer.save(customer=customer)
             except Customer.DoesNotExist:
-                return Response({"detail": "Customer profile missing."}, status=status.HTTP_400_BAD_REQUEST)
+                from rest_framework.exceptions import ValidationError
+                raise ValidationError("Customer profile missing.")
         else:
             instance = serializer.save()
 
