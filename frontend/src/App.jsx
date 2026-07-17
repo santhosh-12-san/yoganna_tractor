@@ -130,14 +130,14 @@ const NavigationLayout = () => {
 
       {/* Main Panel Content */}
       <div className="main-wrapper">
-        <header className="top-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', background: 'var(--bg-sidebar)', borderBottom: '1px solid var(--border)' }}>
+        <header className="top-header">
           <div className="page-title">
             <h1 style={{ fontSize: '1.25rem', color: 'var(--primary)', margin: 0 }}>
               {navItems.find(item => location.pathname.startsWith(item.path))?.name || t('Tractor Service Management')}
             </h1>
           </div>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: '600' }}>🌐 Language:</span>
               <select
@@ -159,7 +159,7 @@ const NavigationLayout = () => {
               </select>
             </div>
 
-            <div className="user-profile-badge" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className="user-profile-badge">
               <div className="user-profile-info">
                 <div className="user-profile-name">{userFullName}</div>
                 <div className="user-profile-role">{role}</div>
