@@ -154,7 +154,7 @@ const NavigationLayout = () => {
             <Route path="/customers/add" element={<PrivateRoute allowedRoles={['OWNER']}><AddCustomer /></PrivateRoute>} />
             <Route path="/customers/edit/:id" element={<PrivateRoute allowedRoles={['OWNER']}><AddCustomer /></PrivateRoute>} />
             
-            <Route path="/bookings/add" element={<PrivateRoute allowedRoles={['OWNER']}><AddBooking /></PrivateRoute>} />
+            <Route path="/bookings/add" element={<PrivateRoute allowedRoles={['OWNER', 'CUSTOMER']}><AddBooking /></PrivateRoute>} />
             <Route path="/bookings/edit/:id" element={<PrivateRoute allowedRoles={['OWNER']}><AddBooking /></PrivateRoute>} />
             
             <Route path="/drivers" element={<PrivateRoute allowedRoles={['OWNER']}><DriversList /></PrivateRoute>} />
