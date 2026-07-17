@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -27,6 +27,9 @@ const AddBooking = () => {
 
   const role = localStorage.getItem('user_role');
   const isOwner = role === 'OWNER';
+
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
 
   const [loadingBooking, setLoadingBooking] = useState(isEdit);
   const [map, setMap] = useState(null);
@@ -108,6 +111,9 @@ const AddBooking = () => {
       markerInstance = L.marker([initialLat, initialLng]).addTo(mapInstance);
     }
     
+    mapRef.current = mapInstance;
+    markerRef.current = markerInstance;
+
     mapInstance.on('click', (e) => {
       const { lat, lng } = e.latlng;
       setFormData(prev => ({
@@ -115,10 +121,10 @@ const AddBooking = () => {
         latitude: lat.toFixed(6),
         longitude: lng.toFixed(6)
       }));
-      if (markerInstance) {
-        markerInstance.setLatLng(e.latlng);
+      if (markerRef.current) {
+        markerRef.current.setLatLng(e.latlng);
       } else {
-        markerInstance = L.marker(e.latlng).addTo(mapInstance);
+        markerRef.current = L.marker(e.latlng).addTo(mapInstance);
       }
     });
 
@@ -128,6 +134,44 @@ const AddBooking = () => {
       }
     };
   }, [loadingBooking]);
+
+  const handleLocateUser = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const lat = parseFloat(latitude.toFixed(6));
+        const lng = parseFloat(longitude.toFixed(6));
+        
+        setFormData(prev => ({
+          ...prev,
+          latitude: lat.toString(),
+          longitude: lng.toString()
+        }));
+        
+        const map = mapRef.current;
+        const L = window.L;
+        
+        if (map && L) {
+          map.setView([lat, lng], 15);
+          if (markerRef.current) {
+            markerRef.current.setLatLng([lat, lng]);
+          } else {
+            markerRef.current = L.marker([lat, lng]).addTo(map);
+          }
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        alert("Failed to access your location. Please check browser permissions.");
+      },
+      { enableHighAccuracy: true }
+    );
+  };
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -358,9 +402,19 @@ const AddBooking = () => {
         <div className="form-group" style={{ gridColumn: 'span 2' }}>
           <label>Field Location (Click on the map to pin location)</label>
           <div id="field-map" style={{ height: '320px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginBottom: '12px', zIndex: 1 }}></div>
-          <div style={{ display: 'flex', gap: '16px', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-            <span><strong>Latitude:</strong> {formData.latitude || 'Not selected'}</span>
-            <span><strong>Longitude:</strong> {formData.longitude || 'Not selected'}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            <div style={{ display: 'flex', gap: '16px', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+              <span><strong>Latitude:</strong> {formData.latitude || 'Not selected'}</span>
+              <span><strong>Longitude:</strong> {formData.longitude || 'Not selected'}</span>
+            </div>
+            <button 
+              type="button" 
+              onClick={handleLocateUser} 
+              className="btn btn-secondary"
+              style={{ padding: '6px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <span>📍 Use My Location</span>
+            </button>
           </div>
         </div>
 
