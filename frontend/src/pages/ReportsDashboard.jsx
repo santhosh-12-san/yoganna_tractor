@@ -160,6 +160,7 @@ const ReportsDashboard = () => {
             <div style={{ padding: '16px', background: '#fcfdfc', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Total Income</div>
               <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--secondary)' }}>₹{reportData.summary?.totalIncome.toLocaleString('en-IN')}</div>
+            </div>
           </div>
         )}
 
