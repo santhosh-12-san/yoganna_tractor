@@ -229,7 +229,7 @@ const BookingsList = () => {
                         <button 
                           onClick={() => openCompletionModal(b)} 
                           className="btn"
-                          style={{ padding: '4px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'var(--success)', color: 'white' }}
+                          style={{ padding: '4px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'var(--secondary)', color: 'white' }}
                           title="Complete Work"
                         >
                           <Check size={12} />
