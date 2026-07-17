@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useLanguage } from '../context/LanguageContext';
 
 const AddBooking = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     customer: '',
     date: new Date().toISOString().split('T')[0],
@@ -241,7 +243,7 @@ const AddBooking = () => {
   return (
     <div className="form-container">
       <h2 style={{ marginBottom: '24px', fontSize: '1.25rem', color: 'var(--primary)' }}>
-        {isEdit ? 'Modify Tractor Booking' : (isOwner ? 'Create Tractor Booking' : 'Request Tractor Service')}
+        {isEdit ? t('Modify Tractor Booking') : (isOwner ? t('New Booking') : t('Submit Request'))}
       </h2>
 
       {error && (
@@ -261,7 +263,7 @@ const AddBooking = () => {
       <form onSubmit={handleSubmit}>
         {isOwner && (
           <div className="form-group">
-            <label htmlFor="customer">Select Customer</label>
+            <label htmlFor="customer">{t('Customer')}</label>
             <select
               id="customer"
               name="customer"
@@ -270,7 +272,7 @@ const AddBooking = () => {
               onChange={handleInputChange}
               required
             >
-              <option value="">-- Choose Customer --</option>
+              <option value="">-- {t('Customer')} --</option>
               {customers.map(c => (
                 <option key={c.id} value={c.id}>{c.name} ({c.village})</option>
               ))}
@@ -279,7 +281,7 @@ const AddBooking = () => {
         )}
 
         <div className="form-group">
-          <label htmlFor="date">Date</label>
+          <label htmlFor="date">{t('Date')}</label>
           <input
             type="date"
             id="date"
@@ -292,7 +294,7 @@ const AddBooking = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="work_type">Work Type</label>
+          <label htmlFor="work_type">{t('Work Type')}</label>
           <select
             id="work_type"
             name="work_type"
@@ -301,16 +303,16 @@ const AddBooking = () => {
             onChange={handleInputChange}
             required
           >
-            <option value="Ploughing">Ploughing</option>
-            <option value="Rotavator">Rotavator</option>
-            <option value="Transport">Transport</option>
-            <option value="Seed Sowing">Seed Sowing</option>
-            <option value="Others">Others</option>
+            <option value="Ploughing">{t('Ploughing')}</option>
+            <option value="Rotavator">{t('Rotavator')}</option>
+            <option value="Transport">{t('Transport')}</option>
+            <option value="Seed Sowing">{t('Seed Sowing')}</option>
+            <option value="Others">{t('Others')}</option>
           </select>
         </div>
 
         <div className="form-group">
-          <label htmlFor="acres_hours">Acres / Hours</label>
+          <label htmlFor="acres_hours">{t('Acres/Hours')}</label>
           <input
             type="number"
             step="0.01"
@@ -327,7 +329,7 @@ const AddBooking = () => {
         {isOwner && (
           <>
             <div className="form-group">
-              <label htmlFor="rate_per_unit">Rate (₹ per Acre/Hour)</label>
+              <label htmlFor="rate_per_unit">{t('Rate per Unit (₹)')}</label>
               <input
                 type="number"
                 step="0.01"
@@ -342,7 +344,7 @@ const AddBooking = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="driver">Select Driver</label>
+              <label htmlFor="driver">{t('Driver')}</label>
               <select
                 id="driver"
                 name="driver"
@@ -350,7 +352,7 @@ const AddBooking = () => {
                 value={formData.driver}
                 onChange={handleInputChange}
               >
-                <option value="">-- No Driver / Unassigned --</option>
+                <option value="">-- {t('Unassigned')} --</option>
                 {drivers.map(d => (
                   <option key={d.id} value={d.id}>{d.name} ({d.village})</option>
                 ))}
@@ -358,7 +360,7 @@ const AddBooking = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="advance">Advance Amount (Optional)</label>
+              <label htmlFor="advance">{t('Advance Payment Received (₹)')}</label>
               <input
                 type="number"
                 step="0.01"
@@ -371,7 +373,7 @@ const AddBooking = () => {
             </div>
 
             <div className="form-group">
-              <label>Total Amount (Auto-Calculated)</label>
+              <label>{t('Total Amount')}</label>
               <input
                 type="text"
                 className="form-control"
@@ -382,7 +384,7 @@ const AddBooking = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="status">Status</label>
+              <label htmlFor="status">{t('Status')}</label>
               <select
                 id="status"
                 name="status"
@@ -390,22 +392,22 @@ const AddBooking = () => {
                 value={formData.status}
                 onChange={handleInputChange}
               >
-                <option value="Pending">Pending</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
+                <option value="Pending">{t('Pending')}</option>
+                <option value="In Progress">{t('In Progress')}</option>
+                <option value="Completed">{t('Completed')}</option>
+                <option value="Cancelled">{t('Cancelled')}</option>
               </select>
             </div>
           </>
         )}
 
         <div className="form-group" style={{ gridColumn: 'span 2' }}>
-          <label>Field Location (Click on the map to pin location)</label>
+          <label>{t('Field Location')}</label>
           <div id="field-map" style={{ height: '320px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginBottom: '12px', zIndex: 1 }}></div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             <div style={{ display: 'flex', gap: '16px', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-              <span><strong>Latitude:</strong> {formData.latitude || 'Not selected'}</span>
-              <span><strong>Longitude:</strong> {formData.longitude || 'Not selected'}</span>
+              <span><strong>{t('Latitude')}:</strong> {formData.latitude || 'Not selected'}</span>
+              <span><strong>{t('Longitude')}:</strong> {formData.longitude || 'Not selected'}</span>
             </div>
             <button 
               type="button" 
@@ -413,19 +415,19 @@ const AddBooking = () => {
               className="btn btn-secondary"
               style={{ padding: '6px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}
             >
-              <span>📍 Use My Location</span>
+              <span>📍 {t('Use My Location')}</span>
             </button>
           </div>
         </div>
 
         <div className="form-group">
-          <label htmlFor="notes">Notes / Special Instructions</label>
+          <label htmlFor="notes">{t('Notes / Special Instructions')}</label>
           <textarea
             id="notes"
             name="notes"
             rows="3"
             className="form-control"
-            placeholder="Add any specific details here..."
+            placeholder={t('Add any specific details here...')}
             value={formData.notes}
             onChange={handleInputChange}
           ></textarea>
@@ -438,14 +440,14 @@ const AddBooking = () => {
             onClick={() => navigate('/bookings')}
             disabled={loading}
           >
-            Cancel
+            {t('Cancel')}
           </button>
           <button 
             type="submit" 
             className="btn btn-primary"
             disabled={loading}
           >
-            {loading ? 'Submitting...' : (isOwner ? 'Save Booking' : 'Submit Request')}
+            {loading ? 'Submitting...' : (isOwner ? t('Save Booking') : t('Submit Request'))}
           </button>
         </div>
       </form>

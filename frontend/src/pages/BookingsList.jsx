@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Plus, Edit2, Trash2, Search, Calendar, RefreshCw, Play, Check } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const BookingsList = () => {
+  const { t } = useLanguage();
   const [bookings, setBookings] = useState([]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -169,12 +171,12 @@ const BookingsList = () => {
         {isOwner ? (
           <Link to="/bookings/add" className="btn btn-primary">
             <Plus size={16} />
-            <span>New Booking</span>
+            <span>{t('New Booking')}</span>
           </Link>
         ) : (
           <button onClick={() => navigate('/bookings/add')} className="btn btn-primary">
             <Plus size={16} />
-            <span>Request Booking</span>
+            <span>{t('Submit Request')}</span>
           </button>
         )}
       </div>
@@ -189,14 +191,14 @@ const BookingsList = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Date</th>
-              {isOwner && <th>Customer</th>}
-              <th>Work Type</th>
-              <th>Acres/Hours</th>
-              <th>Amount</th>
-              <th>Driver</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>{t('Date')}</th>
+              {isOwner && <th>{t('Customer')}</th>}
+              <th>{t('Work Type')}</th>
+              <th>{t('Acres/Hours')}</th>
+              <th>{t('Amount')}</th>
+              <th>{t('Driver')}</th>
+              <th>{t('Status')}</th>
+              <th>{t('Actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -205,13 +207,13 @@ const BookingsList = () => {
                 <td>{idx + 1}</td>
                 <td>{new Date(b.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
                 {isOwner && <td style={{ fontWeight: '600' }}>{b.customer_name}</td>}
-                <td>{b.work_type}</td>
+                <td>{t(b.work_type)}</td>
                 <td>{b.acres_hours}</td>
                 <td>₹{parseFloat(b.total_amount).toLocaleString('en-IN')}</td>
-                <td>{b.driver_name || 'Unassigned'}</td>
+                <td>{b.driver_name || t('Unassigned')}</td>
                 <td>
                   <span className={`badge ${b.status.toLowerCase().replace(" ", "-")}`}>
-                    {b.status}
+                    {t(b.status)}
                   </span>
                 </td>
                 <td>
@@ -225,7 +227,7 @@ const BookingsList = () => {
                           title="Start Work"
                         >
                           <Play size={12} fill="white" />
-                          <span>Start</span>
+                          <span>{t('Start')}</span>
                         </button>
                       )}
                       {b.status?.toLowerCase() === 'in progress' && (
@@ -236,7 +238,7 @@ const BookingsList = () => {
                           title="Complete Work"
                         >
                           <Check size={12} />
-                          <span>Complete</span>
+                          <span>{t('Complete')}</span>
                         </button>
                       )}
                       <button 
@@ -298,10 +300,10 @@ const BookingsList = () => {
             width: '400px',
             boxShadow: 'var(--shadow-lg)'
           }}>
-            <h3 style={{ marginBottom: '16px', color: 'var(--primary)' }}>Complete Booking & Invoice</h3>
+            <h3 style={{ marginBottom: '16px', color: 'var(--primary)' }}>{t('Complete Booking & Invoice')}</h3>
             <form onSubmit={handleCompleteWorkSubmit}>
               <div className="form-group">
-                <label htmlFor="modal_acres_hours">Actual Acres / Hours</label>
+                <label htmlFor="modal_acres_hours">{t('Actual Acres / Hours')}</label>
                 <input
                   id="modal_acres_hours"
                   type="number"
@@ -313,7 +315,7 @@ const BookingsList = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="modal_engine_hours">Tractor Engine Hours Spent</label>
+                <label htmlFor="modal_engine_hours">{t('Tractor Engine Hours Spent')}</label>
                 <input
                   id="modal_engine_hours"
                   type="number"
@@ -325,7 +327,7 @@ const BookingsList = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="modal_rate_per_unit">Rate per Unit (₹)</label>
+                <label htmlFor="modal_rate_per_unit">{t('Rate per Unit (₹)')}</label>
                 <input
                   id="modal_rate_per_unit"
                   type="number"
@@ -337,7 +339,7 @@ const BookingsList = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="modal_advance">Advance Payment Received (₹)</label>
+                <label htmlFor="modal_advance">{t('Advance Payment Received (₹)')}</label>
                 <input
                   id="modal_advance"
                   type="number"
@@ -350,7 +352,7 @@ const BookingsList = () => {
               </div>
               <div style={{ margin: '16px 0', padding: '12px', background: 'var(--bg-light)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
                 <div style={{ display: 'flex', justifycontent: 'space-between', fontWeight: '600' }}>
-                  <span>Total Amount:</span>
+                  <span>{t('Total Amount')}:</span>
                   <span style={{ color: 'var(--primary)' }}>
                     ₹{(parseFloat(completeFormData.acres_hours) * parseFloat(completeFormData.rate_per_unit) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
@@ -363,10 +365,10 @@ const BookingsList = () => {
                   style={{ backgroundColor: 'var(--border)', color: 'var(--text-primary)' }}
                   onClick={() => setCompletingBooking(null)}
                 >
-                  Cancel
+                  {t('Cancel')}
                 </button>
                 <button type="submit" className="btn btn-primary">
-                  Save & Complete
+                  {t('Save & Complete')}
                 </button>
               </div>
             </form>

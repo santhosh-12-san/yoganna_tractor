@@ -22,6 +22,7 @@ import Maintenance from './pages/Maintenance';
 import ReportsDashboard from './pages/ReportsDashboard';
 import ProfitReport from './pages/ProfitReport';
 import Settings from './pages/Settings';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 
 const isDevServer = window.location.port === '3000';
 axios.defaults.baseURL = isDevServer ? 'http://localhost:8001' : window.location.origin;
@@ -56,6 +57,7 @@ const NavigationLayout = () => {
   const navigate = useNavigate();
   const role = localStorage.getItem('user_role');
   const userFullName = localStorage.getItem('user_full_name') || 'User';
+  const { lang, changeLanguage, t } = useLanguage();
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
@@ -66,17 +68,17 @@ const NavigationLayout = () => {
   };
 
   const navItems = [
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['OWNER', 'CUSTOMER'] },
-    { name: 'Customers', path: '/customers', icon: Users, roles: ['OWNER'] },
-    { name: 'Bookings', path: '/bookings', icon: CalendarDays, roles: ['OWNER', 'CUSTOMER'] },
-    { name: 'Drivers', path: '/drivers', icon: UserCheck, roles: ['OWNER'] },
-    { name: 'Wages', path: '/wages', icon: IndianRupee, roles: ['OWNER'] },
-    { name: 'Payments', path: '/payments', icon: IndianRupee, roles: ['OWNER', 'CUSTOMER'] },
-    { name: 'Fuel', path: '/fuel', icon: Fuel, roles: ['OWNER'] },
-    { name: 'Expenses', path: '/expenses', icon: Receipt, roles: ['OWNER'] },
-    { name: 'Maintenance', path: '/maintenance', icon: ShieldAlert, roles: ['OWNER'] },
-    { name: 'Reports', path: '/reports', icon: BarChart3, roles: ['OWNER'] },
-    { name: 'Settings', path: '/settings', icon: SettingsIcon, roles: ['OWNER', 'CUSTOMER'] },
+    { name: t('Dashboard'), path: '/dashboard', icon: LayoutDashboard, roles: ['OWNER', 'CUSTOMER'] },
+    { name: t('Customers'), path: '/customers', icon: Users, roles: ['OWNER'] },
+    { name: t('Bookings'), path: '/bookings', icon: CalendarDays, roles: ['OWNER', 'CUSTOMER'] },
+    { name: t('Drivers'), path: '/drivers', icon: UserCheck, roles: ['OWNER'] },
+    { name: t('Wages'), path: '/wages', icon: IndianRupee, roles: ['OWNER'] },
+    { name: t('Payments'), path: '/payments', icon: IndianRupee, roles: ['OWNER', 'CUSTOMER'] },
+    { name: t('Fuel'), path: '/fuel', icon: Fuel, roles: ['OWNER'] },
+    { name: t('Expenses'), path: '/expenses', icon: Receipt, roles: ['OWNER'] },
+    { name: t('Maintenance'), path: '/maintenance', icon: ShieldAlert, roles: ['OWNER'] },
+    { name: t('Reports'), path: '/reports', icon: BarChart3, roles: ['OWNER'] },
+    { name: t('Settings'), path: '/settings', icon: SettingsIcon, roles: ['OWNER', 'CUSTOMER'] },
   ];
 
   return (
@@ -121,26 +123,50 @@ const NavigationLayout = () => {
         <div className={`sidebar-footer ${mobileMenuOpen ? 'open' : ''}`}>
           <button onClick={handleLogout} className="sidebar-logout-btn">
             <LogOut size={20} />
-            <span>Logout</span>
+            <span>{t('Logout')}</span>
           </button>
         </div>
       </aside>
 
       {/* Main Panel Content */}
       <div className="main-wrapper">
-        <header className="top-header">
+        <header className="top-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', background: 'var(--bg-sidebar)', borderBottom: '1px solid var(--border)' }}>
           <div className="page-title">
-            <h1 style={{ fontSize: '1.25rem', color: 'var(--primary)' }}>
-              {navItems.find(item => location.pathname.startsWith(item.path))?.name || 'Tractor Service Management'}
+            <h1 style={{ fontSize: '1.25rem', color: 'var(--primary)', margin: 0 }}>
+              {navItems.find(item => location.pathname.startsWith(item.path))?.name || t('Tractor Service Management')}
             </h1>
           </div>
-          <div className="user-profile-badge">
-            <div className="user-profile-info">
-              <div className="user-profile-name">{userFullName}</div>
-              <div className="user-profile-role">{role}</div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: '600' }}>🌐 Language:</span>
+              <select
+                value={lang}
+                onChange={(e) => changeLanguage(e.target.value)}
+                style={{
+                  padding: '4px 8px',
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1px solid var(--border)',
+                  fontSize: '0.85rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  background: 'white',
+                  outline: 'none'
+                }}
+              >
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ (Kannada)</option>
+              </select>
             </div>
-            <div className="avatar">
-              {userFullName.charAt(0).toUpperCase()}
+
+            <div className="user-profile-badge" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div className="user-profile-info">
+                <div className="user-profile-name">{userFullName}</div>
+                <div className="user-profile-role">{role}</div>
+              </div>
+              <div className="avatar">
+                {userFullName.charAt(0).toUpperCase()}
+              </div>
             </div>
           </div>
         </header>
@@ -222,19 +248,21 @@ function App() {
 
   return (
     <Router>
-      <WebSocketProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route 
-            path="/*" 
-            element={
-              <PrivateRoute>
-                <NavigationLayout />
-              </PrivateRoute>
-            } 
-          />
-        </Routes>
-      </WebSocketProvider>
+      <LanguageProvider>
+        <WebSocketProvider>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route 
+              path="/*" 
+              element={
+                <PrivateRoute>
+                  <NavigationLayout />
+                </PrivateRoute>
+              } 
+            />
+          </Routes>
+        </WebSocketProvider>
+      </LanguageProvider>
     </Router>
   );
 }
