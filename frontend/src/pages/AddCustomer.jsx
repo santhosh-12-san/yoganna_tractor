@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useLanguage } from '../context/LanguageContext';
 
 const AddCustomer = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -60,7 +62,7 @@ const AddCustomer = () => {
   return (
     <div className="form-container">
       <h2 style={{ marginBottom: '24px', fontSize: '1.25rem', color: 'var(--primary)' }}>
-        {isEdit ? 'Edit Customer Details' : 'Add New Customer'}
+        {isEdit ? t('Modify Driver Details') || 'Edit Customer Details' : t('Add Customer') || 'Add New Customer'}
       </h2>
 
       {error && (
@@ -79,13 +81,13 @@ const AddCustomer = () => {
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Full Name</label>
+          <label htmlFor="name">{t('Full Name') || 'Full Name'}</label>
           <input
             type="text"
             id="name"
             name="name"
             className="form-control"
-            placeholder="Enter full name"
+            placeholder={t('Full Name') || 'Enter full name'}
             value={formData.name}
             onChange={handleInputChange}
             required
@@ -93,13 +95,13 @@ const AddCustomer = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="phone">Phone Number</label>
+          <label htmlFor="phone">{t('Phone Number (Username)') || 'Phone Number'}</label>
           <input
             type="text"
             id="phone"
             name="phone"
             className="form-control"
-            placeholder="Enter phone number"
+            placeholder={t('Phone') || 'Enter phone number'}
             value={formData.phone}
             onChange={handleInputChange}
             required
@@ -107,13 +109,13 @@ const AddCustomer = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="village">Village</label>
+          <label htmlFor="village">{t('Village')}</label>
           <input
             type="text"
             id="village"
             name="village"
             className="form-control"
-            placeholder="Enter village"
+            placeholder={t('Village') || 'Enter village'}
             value={formData.village}
             onChange={handleInputChange}
             required
@@ -127,14 +129,14 @@ const AddCustomer = () => {
             onClick={() => navigate('/customers')}
             disabled={loading}
           >
-            Cancel
+            {t('Cancel')}
           </button>
           <button 
             type="submit" 
             className="btn btn-primary"
             disabled={loading}
           >
-            {loading ? 'Saving...' : 'Save Customer'}
+            {loading ? t('Processing...') : t('Save Booking')}
           </button>
         </div>
       </form>
