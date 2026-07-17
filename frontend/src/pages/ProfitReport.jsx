@@ -77,7 +77,7 @@ const ProfitReport = () => {
       </div>
 
       {/* Main KPI details cards */}
-      <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: '32px' }}>
+      <div className="metrics-grid">
         <div className="metric-card" style={{ padding: '20px' }}>
           <span className="metric-title" style={{ fontSize: '0.85rem' }}>{t('Total Income (This Month)') || 'Total Income'}</span>
           <span className="metric-value" style={{ fontSize: '1.75rem', color: 'var(--secondary)' }}>{formatCurrency(summary.totalIncome)}</span>
@@ -100,7 +100,7 @@ const ProfitReport = () => {
       </div>
 
       {/* Visual layouts */}
-      <div className="dashboard-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+      <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
         <div className="chart-card">
           <div className="card-header">
             <h2>{t('Expenses')}</h2>

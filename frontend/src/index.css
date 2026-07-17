@@ -764,3 +764,24 @@ a:hover {
     width: 100%;
   }
 }
+
+/* Custom settings layout and metrics responsive grids */
+.settings-layout {
+  grid-template-columns: 240px 1fr;
+}
+
+@media (max-width: 768px) {
+  .settings-layout {
+    grid-template-columns: 1fr;
+  }
+  .metrics-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

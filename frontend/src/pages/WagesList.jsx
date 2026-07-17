@@ -229,7 +229,7 @@ const WagesList = () => {
       )}
 
       {/* KPI Panel */}
-      <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: '32px' }}>
+      <div className="metrics-grid">
         <div className="metric-card" style={{ padding: '20px' }}>
           <span className="metric-title" style={{ fontSize: '0.85rem' }}>{t('Total Days Worked')}</span>
           <span className="metric-value" style={{ fontSize: '1.75rem', fontFamily: 'Outfit' }}>{totalDays} days</span>

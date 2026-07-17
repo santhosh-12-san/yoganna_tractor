@@ -116,7 +116,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="dashboard-grid" style={{ gridTemplateColumns: '240px 1fr', alignItems: 'flex-start' }}>
+    <div className="dashboard-grid settings-layout" style={{ alignItems: 'flex-start' }}>
       {/* Settings Navigation Menu */}
       <div className="settings-sidebar" style={{ minWidth: '220px' }}>
         <button 
