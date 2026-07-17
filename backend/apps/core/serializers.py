@@ -61,6 +61,8 @@ class BookingSerializer(serializers.ModelSerializer):
     customer_village = serializers.ReadOnlyField(source='customer.village')
     driver_name = serializers.ReadOnlyField(source='driver.name')
     customer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all(), required=False, allow_null=True)
+    engine_hours = serializers.DecimalField(max_digits=6, decimal_places=2, default=0.00, required=False)
+    time_slot = serializers.CharField(max_length=50, default='Morning', required=False)
 
     def validate(self, attrs):
         # Obtain values from input or existing instance if not provided

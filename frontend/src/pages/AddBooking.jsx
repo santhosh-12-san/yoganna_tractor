@@ -211,6 +211,12 @@ const AddBooking = () => {
     if (payload.driver === '') {
       payload.driver = null;
     }
+    if (payload.latitude === '') {
+      payload.latitude = null;
+    }
+    if (payload.longitude === '') {
+      payload.longitude = null;
+    }
 
     if (!navigator.onLine) {
       try {
