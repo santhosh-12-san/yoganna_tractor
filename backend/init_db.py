@@ -32,14 +32,14 @@ def seed_db():
 
     # 1. Create Owner Profile
     owner = User.objects.create_user(
-        phone_number='9886776655',
+        phone_number='9964808647',
         username='owner',
         email='owner@gmail.com',
         first_name='Yoganna',
         last_name='Owner',
         role='OWNER',
         village='Hirehali',
-        password='password'
+        password='yoganna'
     )
     print("Created owner user.")
     print("Database seeding completed successfully!")
