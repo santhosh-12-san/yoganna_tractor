@@ -60,6 +60,7 @@ class BookingSerializer(serializers.ModelSerializer):
     customer_phone = serializers.ReadOnlyField(source='customer.phone')
     customer_village = serializers.ReadOnlyField(source='customer.village')
     driver_name = serializers.ReadOnlyField(source='driver.name')
+    customer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = Booking

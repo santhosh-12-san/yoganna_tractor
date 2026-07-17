@@ -100,6 +100,7 @@ const AddBooking = () => {
       payload.rate_per_unit = "0.00";
       payload.advance = "0.00";
       payload.status = "Pending";
+      payload.customer = null;
     }
 
     if (payload.driver === '') {
