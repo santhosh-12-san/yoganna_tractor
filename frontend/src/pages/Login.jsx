@@ -95,7 +95,7 @@ const Login = () => {
       <div className="auth-card">
         <div className="auth-logo">
           <Tractor size={48} />
-          <h2>Tractor Work Management System</h2>
+          <h2>Yoganna Tractor Service</h2>
           <p>{isRegister ? 'Create your customer account' : 'Login to your account'}</p>
         </div>
 

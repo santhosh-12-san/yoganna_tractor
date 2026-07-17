@@ -85,7 +85,7 @@ const NavigationLayout = () => {
       <aside className="sidebar">
         <div className="sidebar-logo">
           <Tractor size={24} />
-          <span>Yoganna TWMS</span>
+          <span>Yoganna Tractor Service</span>
         </div>
         
         {/* Mobile menu toggle */}
@@ -131,7 +131,7 @@ const NavigationLayout = () => {
         <header className="top-header">
           <div className="page-title">
             <h1 style={{ fontSize: '1.25rem', color: 'var(--primary)' }}>
-              {navItems.find(item => location.pathname.startsWith(item.path))?.name || 'Tractor Work Management'}
+              {navItems.find(item => location.pathname.startsWith(item.path))?.name || 'Tractor Service Management'}
             </h1>
           </div>
           <div className="user-profile-badge">
