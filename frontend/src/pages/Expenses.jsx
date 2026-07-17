@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Plus, Trash2, Search, X } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const Expenses = () => {
+  const { t } = useLanguage();
   const [expenses, setExpenses] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -146,7 +148,7 @@ const Expenses = () => {
               />
             </div>
             <button type="submit" className="btn btn-primary" style={{ padding: '10px' }}>
-              Save Expense
+              {t('Save Booking')}
             </button>
           </form>
         </div>
@@ -168,7 +170,7 @@ const Expenses = () => {
             <input
               type="text"
               className="search-input"
-              placeholder="Search expenses..."
+              placeholder={t('Search bookings...')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{ paddingLeft: '40px' }}
@@ -177,24 +179,24 @@ const Expenses = () => {
           {!showForm && (
             <button onClick={() => setShowForm(true)} className="btn btn-primary">
               <Plus size={16} />
-              <span>Add Expense</span>
+              <span>{t('Add Expense')}</span>
             </button>
           )}
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '30px' }}>Loading expenses...</div>
+          <div style={{ textAlign: 'center', padding: '30px' }}>{t('Loading bookings...')}</div>
         ) : error ? (
           <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>
         ) : (
           <table className="data-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Actions</th>
+                <th>{t('Date')}</th>
+                <th>{t('Category')}</th>
+                <th>{t('Description')}</th>
+                <th>{t('Amount')}</th>
+                <th>{t('Actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -217,7 +219,7 @@ const Expenses = () => {
               ))}
               {filteredExpenses.length === 0 && (
                 <tr>
-                  <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No expenses recorded.</td>
+                  <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No expenses recorded.')}</td>
                 </tr>
               )}
             </tbody>

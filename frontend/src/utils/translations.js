@@ -22,6 +22,11 @@ export const translations = {
     Cancelled: "Cancelled",
     "All Status": "All Status",
     Unassigned: "Unassigned",
+    Cash: "Cash",
+    UPI: "UPI",
+    "Due Soon": "Due Soon",
+    Overdue: "Overdue",
+    Normal: "Normal",
 
     // Headers & Labels
     Status: "Status",
@@ -68,7 +73,56 @@ export const translations = {
     Latitude: "Latitude",
     Longitude: "Longitude",
     "Notes / Special Instructions": "Notes / Special Instructions",
-    "Add any specific details here...": "Add any specific details here..."
+    "Add any specific details here...": "Add any specific details here...",
+
+    // General Add Buttons
+    "Add Expense": "Add Expense",
+    "Add Payment": "Add Payment",
+    "Log Fuel": "Log Fuel",
+    "Add Maintenance Alert": "Add Maintenance Alert",
+    "Log Work / Advance": "Log Work / Advance",
+    
+    // Table Headers
+    "Paid Amount": "Paid Amount",
+    "Pending Amount": "Pending Amount",
+    Mode: "Mode",
+    Litres: "Litres",
+    "Price/Ltr": "Price/Ltr",
+    "Meter Reading": "Meter Reading",
+    Category: "Category",
+    Description: "Description",
+    Item: "Item",
+    "Last Done": "Last Done",
+    "Next Due": "Next Due",
+
+    // Wages Page
+    "Select Driver": "Select Driver",
+    "Total Days Worked": "Total Days Worked",
+    "Total Wage (+Allowances)": "Total Wage (+Allowances)",
+    "Advances Taken": "Advances Taken",
+    "Remaining Balance": "Remaining Balance",
+    "Wages Tracking & Attendance logs": "Wages Tracking & Attendance logs",
+    "Daily Wage Rate": "Daily Wage Rate",
+    Allowance: "Allowance",
+    "Advance Given": "Advance Given",
+    "Total Earned": "Total Earned",
+    
+    // Fallbacks / Empty states
+    "No maintenance items scheduled.": "No maintenance items scheduled.",
+    "No expenses recorded.": "No expenses recorded.",
+    "No fuel entries found.": "No fuel entries found.",
+    "No wage logs recorded for this driver.": "No wage logs recorded for this driver.",
+    "No payments found.": "No payments found.",
+    "Tractor Service Alerts & Expiration Schedules": "Tractor Service Alerts & Expiration Schedules",
+
+    // Dashboard
+    "Quick Actions": "Quick Actions",
+    "Recent Activity": "Recent Activity",
+    "Recent Expenses": "Recent Expenses",
+    "Recent Payments": "Recent Payments",
+    "Village Performance": "Village Performance",
+    "Tractor Engine Hours": "Tractor Engine Hours",
+    "Engine hours: ": "Engine hours: "
   },
   kn: {
     // Sidebar & General
@@ -93,6 +147,11 @@ export const translations = {
     Cancelled: "ರದ್ದಾಗಿದೆ",
     "All Status": "ಎಲ್ಲಾ ಬುಕಿಂಗ್",
     Unassigned: "ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ",
+    Cash: "ನಗದು",
+    UPI: "ಯುಪಿಐ (UPI)",
+    "Due Soon": "ಶೀಘ್ರದಲ್ಲೇ ಬರಲಿದೆ",
+    Overdue: "ಅವಧಿ ಮುಗಿದಿದೆ",
+    Normal: "ಸಾಮಾನ್ಯ",
 
     // Headers & Labels
     Status: "ಸ್ಥಿತಿ",
@@ -139,6 +198,55 @@ export const translations = {
     Latitude: "ಅಕ್ಷಾಂಶ (Latitude)",
     Longitude: "ರೇಖಾಂಶ (Longitude)",
     "Notes / Special Instructions": "ವಿಶೇಷ ಸೂಚನೆಗಳು / ಟಿಪ್ಪಣಿಗಳು",
-    "Add any specific details here...": "ಇಲ್ಲಿ ಯಾವುದೇ ನಿರ್ದಿಷ್ಟ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ..."
+    "Add any specific details here...": "ಇಲ್ಲಿ ಯಾವುದೇ ನಿರ್ದಿಷ್ಟ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ...",
+
+    // General Add Buttons
+    "Add Expense": "ಖರ್ಚು ದಾಖಲಿಸಿ",
+    "Add Payment": "ಪಾವತಿ ಸೇರಿಸಿ",
+    "Log Fuel": "ಡೀಸೆಲ್ ವೆಚ್ಚ ದಾಖಲಿಸಿ",
+    "Add Maintenance Alert": "ನಿರ್ವಹಣೆ ವೇಳಾಪಟ್ಟಿ ಸೇರಿಸಿ",
+    "Log Work / Advance": "ಕೆಲಸ / ಮುಂಗಡ ದಾಖಲಿಸಿ",
+    
+    // Table Headers
+    "Paid Amount": "ಪಾವತಿಸಿದ ಹಣ",
+    "Pending Amount": "ಬಾಕಿ ಹಣ",
+    Mode: "ವಿಧಾನ",
+    Litres: "ಲೀಟರ್‌ಗಳು",
+    "Price/Ltr": "ಲೀಟರ್ ದರ (₹)",
+    "Meter Reading": "ಮೀಟರ್ ರೀಡಿಂಗ್",
+    Category: "ಖರ್ಚಿನ ವಿವರ",
+    Description: "ವಿವರಣೆ",
+    Item: "ವಿಷಯ",
+    "Last Done": "ಕೊನೆಯದಾಗಿ ಮಾಡಿದ ಸಮಯ",
+    "Next Due": "ಮುಂದಿನ ದಿನಾಂಕ",
+
+    // Wages Page
+    "Select Driver": "ಡ್ರೈವರ್ ಆಯ್ಕೆ ಮಾಡಿ",
+    "Total Days Worked": "ಒಟ್ಟು ಕೆಲಸ ಮಾಡಿದ ದಿನಗಳು",
+    "Total Wage (+Allowances)": "ಒಟ್ಟು ಕೂಲಿ (+ಭತ್ಯೆಗಳು)",
+    "Advances Taken": "ಪಡೆದ ಒಟ್ಟು ಮುಂಗಡ",
+    "Remaining Balance": "ಬಾಕಿ ಇರುವ ಒಟ್ಟು ವೇತನ",
+    "Wages Tracking & Attendance logs": "ಕೂಲಿ ಪಾವತಿ ಮತ್ತು ಹಾಜರಾತಿ ವಿವರ",
+    "Daily Wage Rate": "ದೈನಂದಿನ ಕೂಲಿ ದರ",
+    Allowance: "ಭತ್ಯೆ",
+    "Advance Given": "ನೀಡಿದ ಮುಂಗಡ",
+    "Total Earned": "ಒಟ್ಟು ಗಳಿಕೆ",
+    
+    // Fallbacks / Empty states
+    "No maintenance items scheduled.": "ಯಾವುದೇ ನಿರ್ವಹಣೆ ನಿಗದಿಪಡಿಸಿಲ್ಲ.",
+    "No expenses recorded.": "ಯಾವುದೇ ಖರ್ಚುಗಳು ದಾಖಲಾಗಿಲ್ಲ.",
+    "No fuel entries found.": "ಯಾವುದೇ ಡೀಸೆಲ್ ದಾಖಲೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ.",
+    "No wage logs recorded for this driver.": "ಈ ಡ್ರೈವರ್‌ಗೆ ಯಾವುದೇ ಕೂಲಿ ದಾಖಲೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ.",
+    "No payments found.": "ಯಾವುದೇ ಪಾವತಿ ವಿವರಗಳು ಕಂಡುಬಂದಿಲ್ಲ.",
+    "Tractor Service Alerts & Expiration Schedules": "ಟ್ರಾಕ್ಟರ್ ಸೇವಾ ಅಲರ್ಟ್‌ಗಳು ಮತ್ತು ನಿರ್ವಹಣೆ ವೇಳಾಪಟ್ಟಿ",
+
+    // Dashboard
+    "Quick Actions": "ತ್ವರಿತ ಕ್ರಮಗಳು",
+    "Recent Activity": "ಇತ್ತೀಚಿನ ಬುಕಿಂಗ್ ವಿವರಗಳು",
+    "Recent Expenses": "ಇತ್ತೀಚಿನ ಖರ್ಚುಗಳು",
+    "Recent Payments": "ಇತ್ತೀಚಿನ ಪಾವತಿಗಳು",
+    "Village Performance": "ಗ್ರಾಮವಾರು ಕಾರ್ಯಾಚರಣೆ ಆದಾಯ",
+    "Tractor Engine Hours": "ಟ್ರಾಕ್ಟರ್ ಇಂಜಿನ್ ಚಾಲನೆಯಲ್ಲಿರುವ ಒಟ್ಟು ಗಂಟೆಗಳು",
+    "Engine hours: ": "ಎಂಜಿನ್ ಗಂಟೆಗಳು: "
   }
 };

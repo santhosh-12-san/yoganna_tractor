@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { IndianRupee, Plus, Calendar, UserCheck } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const formatCurrency = (val) => {
   return new Intl.NumberFormat('en-IN', {
@@ -12,6 +13,7 @@ const formatCurrency = (val) => {
 };
 
 const WagesList = () => {
+  const { t } = useLanguage();
   const [drivers, setDrivers] = useState([]);
   const [selectedDriver, setSelectedDriver] = useState('');
   const [wages, setWages] = useState([]);
@@ -126,7 +128,7 @@ const WagesList = () => {
     <div>
       <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap' }}>
         <div className="form-group" style={{ marginBottom: 0, minWidth: '200px' }}>
-          <label htmlFor="driver-select" style={{ fontWeight: 'bold' }}>Select Driver</label>
+          <label htmlFor="driver-select" style={{ fontWeight: '600' }}>{t('Select Driver')}</label>
           <select
             id="driver-select"
             className="form-control"
@@ -145,7 +147,7 @@ const WagesList = () => {
           style={{ alignSelf: 'flex-end' }}
         >
           <Plus size={16} />
-          <span>Log Work / Advance</span>
+          <span>{t('Log Work / Advance')}</span>
         </button>
       </div>
 
@@ -217,10 +219,10 @@ const WagesList = () => {
                 checked={formData.is_paid}
                 onChange={handleInputChange}
               />
-              <label htmlFor="is_paid" style={{ marginBottom: 0, cursor: 'pointer' }}>Paid Instantly</label>
+              <label htmlFor="is_paid" style={{ marginBottom: 0, cursor: 'pointer' }}>{t('Paid Instantly') || 'Paid Instantly'}</label>
             </div>
             <button type="submit" className="btn btn-primary" style={{ padding: '10px' }}>
-              Save Log
+              {t('Save Booking')}
             </button>
           </form>
         </div>
@@ -229,19 +231,19 @@ const WagesList = () => {
       {/* KPI Panel */}
       <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: '32px' }}>
         <div className="metric-card" style={{ padding: '20px' }}>
-          <span className="metric-title" style={{ fontSize: '0.85rem' }}>Total Days Worked</span>
+          <span className="metric-title" style={{ fontSize: '0.85rem' }}>{t('Total Days Worked')}</span>
           <span className="metric-value" style={{ fontSize: '1.75rem', fontFamily: 'Outfit' }}>{totalDays} days</span>
         </div>
         <div className="metric-card" style={{ padding: '20px' }}>
-          <span className="metric-title" style={{ fontSize: '0.85rem' }}>Total Wage (+Allowances)</span>
+          <span className="metric-title" style={{ fontSize: '0.85rem' }}>{t('Total Wage (+Allowances)')}</span>
           <span className="metric-value" style={{ fontSize: '1.75rem', color: 'var(--secondary)' }}>{formatCurrency(totalWage + totalAllowance)}</span>
         </div>
         <div className="metric-card" style={{ padding: '20px' }}>
-          <span className="metric-title" style={{ fontSize: '0.85rem' }}>Advances Taken</span>
+          <span className="metric-title" style={{ fontSize: '0.85rem' }}>{t('Advances Taken')}</span>
           <span className="metric-value" style={{ fontSize: '1.75rem', color: 'var(--warning)' }}>{formatCurrency(totalAdvances)}</span>
         </div>
         <div className="metric-card" style={{ padding: '20px' }}>
-          <span className="metric-title" style={{ fontSize: '0.85rem' }}>Remaining Balance</span>
+          <span className="metric-title" style={{ fontSize: '0.85rem' }}>{t('Remaining Balance')}</span>
           <span className="metric-value" style={{ fontSize: '1.75rem', color: 'var(--danger)' }}>{formatCurrency(remainingWage)}</span>
         </div>
       </div>
@@ -249,21 +251,21 @@ const WagesList = () => {
       {/* Wages Log Table */}
       <div className="table-container">
         <div className="table-controls">
-          <h2 style={{ fontSize: '1.1rem' }}>Wages Tracking & Attendance logs</h2>
+          <h2 style={{ fontSize: '1.1rem' }}>{t('Wages Tracking & Attendance logs')}</h2>
         </div>
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '30px' }}>Loading wages logs...</div>
+          <div style={{ textAlign: 'center', padding: '30px' }}>{t('Loading bookings...')}</div>
         ) : (
           <table className="data-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Days Worked</th>
-                <th>Daily Wage Rate</th>
-                <th>Allowance</th>
-                <th>Advance Given</th>
-                <th>Total Earned</th>
-                <th>Status</th>
+                <th>{t('Date')}</th>
+                <th>{t('Days Worked')}</th>
+                <th>{t('Daily Wage Rate')}</th>
+                <th>{t('Allowance')}</th>
+                <th>{t('Advance Given')}</th>
+                <th>{t('Total Earned')}</th>
+                <th>{t('Status')}</th>
               </tr>
             </thead>
             <tbody>
@@ -279,7 +281,7 @@ const WagesList = () => {
                     <td style={{ fontWeight: 'bold' }}>₹{totalEarned.toLocaleString('en-IN')}</td>
                     <td>
                       <span className={`badge ${w.is_paid ? 'completed' : 'pending'}`}>
-                        {w.is_paid ? 'Paid' : 'Unpaid'}
+                        {w.is_paid ? t('Completed') : t('Pending')}
                       </span>
                     </td>
                   </tr>
@@ -287,7 +289,7 @@ const WagesList = () => {
               })}
               {driverWages.length === 0 && (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No wage logs recorded for this driver.</td>
+                  <td colSpan="7" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No wage logs recorded for this driver.')}</td>
                 </tr>
               )}
             </tbody>

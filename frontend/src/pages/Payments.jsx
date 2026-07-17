@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Plus, Trash2, Search, X } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const Payments = () => {
+  const { t } = useLanguage();
   const [payments, setPayments] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -218,7 +220,7 @@ const Payments = () => {
               </select>
             </div>
             <button type="submit" className="btn btn-primary" style={{ padding: '10px' }}>
-              Save Payment
+              {t('Save Booking')}
             </button>
           </form>
         </div>
@@ -240,7 +242,7 @@ const Payments = () => {
             <input
               type="text"
               className="search-input"
-              placeholder={isOwner ? "Search payments..." : "Search payment mode..."}
+              placeholder={t('Search bookings...')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{ paddingLeft: '40px' }}
@@ -249,26 +251,26 @@ const Payments = () => {
           {isOwner && !showForm && (
             <button onClick={() => setShowForm(true)} className="btn btn-primary">
               <Plus size={16} />
-              <span>Add Payment</span>
+              <span>{t('Add Payment')}</span>
             </button>
           )}
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '30px' }}>Loading payments history...</div>
+          <div style={{ textAlign: 'center', padding: '30px' }}>{t('Loading bookings...')}</div>
         ) : error ? (
           <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>
         ) : (
           <table className="data-table">
             <thead>
               <tr>
-                <th>Date</th>
-                {isOwner && <th>Customer</th>}
-                <th>Total Amount</th>
-                <th>Paid Amount</th>
-                <th>Pending Amount</th>
-                <th>Mode</th>
-                {isOwner && <th>Actions</th>}
+                <th>{t('Date')}</th>
+                {isOwner && <th>{t('Customer')}</th>}
+                <th>{t('Total Amount')}</th>
+                <th>{t('Paid Amount')}</th>
+                <th>{t('Pending Amount')}</th>
+                <th>{t('Mode')}</th>
+                {isOwner && <th>{t('Actions')}</th>}
               </tr>
             </thead>
             <tbody>
@@ -281,7 +283,7 @@ const Payments = () => {
                   <td style={{ color: parseFloat(p.pending_amount) > 0 ? 'var(--danger)' : 'var(--text-muted)', fontWeight: parseFloat(p.pending_amount) > 0 ? 'bold' : 'normal' }}>
                     ₹{parseFloat(p.pending_amount).toLocaleString('en-IN')}
                   </td>
-                  <td>{p.mode}</td>
+                  <td>{t(p.mode)}</td>
                   {isOwner && (
                     <td>
                       <button 
@@ -297,7 +299,7 @@ const Payments = () => {
               ))}
               {filteredPayments.length === 0 && (
                 <tr>
-                  <td colSpan={isOwner ? 7 : 5} style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No payments logs found.</td>
+                  <td colSpan={isOwner ? 7 : 5} style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No payments found.')}</td>
                 </tr>
               )}
             </tbody>

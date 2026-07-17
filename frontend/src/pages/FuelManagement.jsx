@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Plus, Trash2, Search, Fuel, X } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const FuelManagement = () => {
+  const { t } = useLanguage();
   const [fuelLogs, setFuelLogs] = useState([]);
   const [drivers, setDrivers] = useState([]);
   const [search, setSearch] = useState('');
@@ -172,7 +174,7 @@ const FuelManagement = () => {
               />
             </div>
             <button type="submit" className="btn btn-primary" style={{ padding: '10px' }}>
-              Save Log
+              {t('Save Booking')}
             </button>
           </form>
         </div>
@@ -194,7 +196,7 @@ const FuelManagement = () => {
             <input
               type="text"
               className="search-input"
-              placeholder="Search fuel logs..."
+              placeholder={t('Search bookings...')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{ paddingLeft: '40px' }}
@@ -203,26 +205,26 @@ const FuelManagement = () => {
           {!showForm && (
             <button onClick={() => setShowForm(true)} className="btn btn-primary">
               <Plus size={16} />
-              <span>Log Fuel</span>
+              <span>{t('Log Fuel')}</span>
             </button>
           )}
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '30px' }}>Loading fuel logs...</div>
+          <div style={{ textAlign: 'center', padding: '30px' }}>{t('Loading bookings...')}</div>
         ) : error ? (
           <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>
         ) : (
           <table className="data-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Driver</th>
-                <th>Litres</th>
-                <th>Price/Ltr</th>
-                <th>Total Amount</th>
-                <th>Meter Reading</th>
-                <th>Actions</th>
+                <th>{t('Date')}</th>
+                <th>{t('Driver')}</th>
+                <th>{t('Litres')}</th>
+                <th>{t('Price/Ltr')}</th>
+                <th>{t('Total Amount')}</th>
+                <th>{t('Meter Reading')}</th>
+                <th>{t('Actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -247,7 +249,7 @@ const FuelManagement = () => {
               ))}
               {filteredLogs.length === 0 && (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No fuel entries found.</td>
+                  <td colSpan="7" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No fuel entries found.')}</td>
                 </tr>
               )}
             </tbody>

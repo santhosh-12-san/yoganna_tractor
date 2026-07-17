@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Plus, Trash2, ShieldAlert, X } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const Maintenance = () => {
+  const { t } = useLanguage();
   const [maintenanceItems, setMaintenanceItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -79,14 +81,14 @@ const Maintenance = () => {
       {showForm && (
         <div className="form-container" style={{ marginBottom: '24px', maxWidth: '100%' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <h3 style={{ color: 'var(--primary)', fontSize: '1.1rem' }}>Add Maintenance / Certification Alert</h3>
+            <h3 style={{ color: 'var(--primary)', fontSize: '1.1rem' }}>{t('Add Maintenance Alert')}</h3>
             <button onClick={() => setShowForm(false)} className="btn-icon" style={{ color: 'var(--danger)' }}>
               <X size={18} />
             </button>
           </div>
           <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', alignItems: 'flex-end' }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Service Item Name</label>
+              <label>{t('Item')}</label>
               <input
                 type="text"
                 name="item"
@@ -98,7 +100,7 @@ const Maintenance = () => {
               />
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Last Done Date</label>
+              <label>{t('Last Done')}</label>
               <input
                 type="date"
                 name="last_done"
@@ -109,7 +111,7 @@ const Maintenance = () => {
               />
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Next Due Date</label>
+              <label>{t('Next Due')}</label>
               <input
                 type="date"
                 name="next_due"
@@ -120,7 +122,7 @@ const Maintenance = () => {
               />
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Alert Status</label>
+              <label>{t('Status')}</label>
               <select
                 name="status"
                 className="form-control"
@@ -128,13 +130,13 @@ const Maintenance = () => {
                 onChange={handleInputChange}
                 required
               >
-                <option value="Valid">Valid</option>
-                <option value="Due Soon">Due Soon</option>
-                <option value="Overdue">Overdue</option>
+                <option value="Valid">{t('Normal')}</option>
+                <option value="Due Soon">{t('Due Soon')}</option>
+                <option value="Overdue">{t('Overdue')}</option>
               </select>
             </div>
             <button type="submit" className="btn btn-primary" style={{ padding: '10px' }}>
-              Save Alert
+              {t('Save Booking')}
             </button>
           </form>
         </div>
@@ -144,29 +146,29 @@ const Maintenance = () => {
         <div className="table-controls">
           <h2 style={{ fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <ShieldAlert size={18} style={{ color: 'var(--primary)' }} />
-            <span>Tractor Service Alerts & Expiration Schedules</span>
+            <span>{t('Tractor Service Alerts & Expiration Schedules')}</span>
           </h2>
           {!showForm && (
             <button onClick={() => setShowForm(true)} className="btn btn-primary">
               <Plus size={16} />
-              <span>Add Maintenance Alert</span>
+              <span>{t('Add Maintenance Alert')}</span>
             </button>
           )}
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '30px' }}>Loading maintenance items...</div>
+          <div style={{ textAlign: 'center', padding: '30px' }}>{t('Loading bookings...')}</div>
         ) : error ? (
           <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>
         ) : (
           <table className="data-table">
             <thead>
               <tr>
-                <th>Item</th>
-                <th>Last Done</th>
-                <th>Next Due</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>{t('Item')}</th>
+                <th>{t('Last Done')}</th>
+                <th>{t('Next Due')}</th>
+                <th>{t('Status')}</th>
+                <th>{t('Actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -177,7 +179,7 @@ const Maintenance = () => {
                   <td>{new Date(item.next_due).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
                   <td>
                     <span className={`badge ${item.status.toLowerCase().replace(" ", "-")}`}>
-                      {item.status}
+                      {t(item.status)}
                     </span>
                   </td>
                   <td>
@@ -193,7 +195,7 @@ const Maintenance = () => {
               ))}
               {maintenanceItems.length === 0 && (
                 <tr>
-                  <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No maintenance items scheduled.</td>
+                  <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No maintenance items scheduled.')}</td>
                 </tr>
               )}
             </tbody>

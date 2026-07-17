@@ -14,6 +14,7 @@ import {
   ArcElement
 } from 'chart.js';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useLanguage } from '../context/LanguageContext';
 
 ChartJS.register(
   CategoryScale,
@@ -36,6 +37,7 @@ const formatCurrency = (val) => {
 };
 
 const Dashboard = () => {
+  const { t } = useLanguage();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -65,8 +67,9 @@ const Dashboard = () => {
     }
   }, [lastMessage]);
 
-  if (loading) return <div style={{ textAlign: 'center', padding: '50px' }}>Loading dashboard...</div>;
-  if (error) return <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>;
+  if (loading) {
+    return <div style={{ textAlign: 'center', padding: '50px', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>{t('Loading bookings...')}</div>;
+  }if (error) return <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>;
   if (!data) return null;
 
   const isOwner = data.role === 'OWNER';
@@ -132,7 +135,7 @@ const Dashboard = () => {
 
             <div className="metric-card">
               <div className="metric-header">
-                <span className="metric-title">Today's Bookings</span>
+                <span className="metric-title">{t("Today's Bookings") || "Today's Bookings"}</span>
                 <div className="metric-icon-wrapper">
                   <Calendar size={20} />
                 </div>
@@ -146,7 +149,7 @@ const Dashboard = () => {
 
             <div className="metric-card">
               <div className="metric-header">
-                <span className="metric-title">Today's Earnings</span>
+                <span className="metric-title">{t("Today's Earnings") || "Today's Earnings"}</span>
                 <div className="metric-icon-wrapper">
                   <IndianRupee size={20} />
                 </div>
@@ -160,7 +163,7 @@ const Dashboard = () => {
 
             <div className="metric-card">
               <div className="metric-header">
-                <span className="metric-title">Pending Payments</span>
+                <span className="metric-title">{t("Pending Payments") || "Pending Payments"}</span>
                 <div className="metric-icon-wrapper">
                   <Clock size={20} />
                 </div>
@@ -176,19 +179,19 @@ const Dashboard = () => {
           {/* Secondary stats */}
           <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', marginBottom: '32px' }}>
             <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
-              <span className="metric-title" style={{ fontSize: '0.8rem' }}>Fuel Expense (This Month)</span>
+              <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Fuel Expense (This Month)") || "Fuel Expense"}</span>
               <span className="metric-value" style={{ fontSize: '1.4rem', color: '#6b7280' }}>{formatCurrency(summary.fuelExpense)}</span>
             </div>
             <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
-              <span className="metric-title" style={{ fontSize: '0.8rem' }}>Maintenance Expense</span>
+              <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Maintenance Expense") || "Maintenance Expense"}</span>
               <span className="metric-value" style={{ fontSize: '1.4rem', color: '#6b7280' }}>{formatCurrency(summary.maintenanceExpense)}</span>
             </div>
             <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
-              <span className="metric-title" style={{ fontSize: '0.8rem' }}>Total Income (This Month)</span>
+              <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Total Income (This Month)") || "Total Income"}</span>
               <span className="metric-value" style={{ fontSize: '1.4rem', color: 'var(--primary)' }}>{formatCurrency(summary.totalIncome)}</span>
             </div>
             <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
-              <span className="metric-title" style={{ fontSize: '0.8rem' }}>Profit (This Month)</span>
+              <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Profit (This Month)") || "Profit"}</span>
               <span className="metric-value" style={{ fontSize: '1.4rem', color: 'var(--secondary)' }}>{formatCurrency(summary.netProfit)}</span>
             </div>
           </div>
@@ -196,7 +199,7 @@ const Dashboard = () => {
           <div className="dashboard-grid">
             <div className="chart-card">
               <div className="card-header">
-                <h2>Income Overview</h2>
+                <h2>{t("Income Overview") || "Income Overview"}</h2>
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>June 2025</span>
               </div>
               <div style={{ height: '300px', position: 'relative' }}>
@@ -219,7 +222,7 @@ const Dashboard = () => {
 
             <div className="chart-card">
               <div className="card-header">
-                <h2>Top Work Types</h2>
+                <h2>{t("Top Work Types") || "Top Work Types"}</h2>
               </div>
               <div style={{ height: '240px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 {doughnutChartData && (
@@ -244,28 +247,28 @@ const Dashboard = () => {
           {/* Recent Bookings */}
           <div className="table-container">
             <div className="table-controls">
-              <h2 style={{ fontSize: '1.15rem' }}>Recent Bookings</h2>
+              <h2 style={{ fontSize: '1.15rem' }}>{t('Recent Activity') || 'Recent Bookings'}</h2>
             </div>
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>Customer</th>
-                  <th>Work Type</th>
-                  <th>Acres/Hours</th>
-                  <th>Total Amount</th>
-                  <th>Status</th>
+                  <th>{t('Customer')}</th>
+                  <th>{t('Work Type')}</th>
+                  <th>{t('Acres/Hours')}</th>
+                  <th>{t('Amount')}</th>
+                  <th>{t('Status')}</th>
                 </tr>
               </thead>
               <tbody>
                 {recentBookings.map((b) => (
                   <tr key={b.id}>
                     <td style={{ fontWeight: '600' }}>{b.customer_name}</td>
-                    <td>{b.work_type}</td>
+                    <td>{t(b.work_type)}</td>
                     <td>{b.acres_hours}</td>
                     <td>{formatCurrency(b.total_amount)}</td>
                     <td>
                       <span className={`badge ${b.status.toLowerCase().replace(" ", "-")}`}>
-                        {b.status}
+                        {t(b.status)}
                       </span>
                     </td>
                   </tr>
@@ -282,7 +285,7 @@ const Dashboard = () => {
           <div className="metrics-grid">
             <div className="metric-card">
               <div className="metric-header">
-                <span className="metric-title">Total Bookings</span>
+                <span className="metric-title">{t('Total Bookings')}</span>
                 <div className="metric-icon-wrapper">
                   <Calendar size={20} />
                 </div>
@@ -292,7 +295,7 @@ const Dashboard = () => {
 
             <div className="metric-card">
               <div className="metric-header">
-                <span className="metric-title">Completed Bookings</span>
+                <span className="metric-title">{t('Completed Bookings')}</span>
                 <div className="metric-icon-wrapper">
                   <Calendar size={20} style={{ color: 'var(--primary)' }} />
                 </div>
@@ -302,7 +305,7 @@ const Dashboard = () => {
 
             <div className="metric-card">
               <div className="metric-header">
-                <span className="metric-title">Pending Bookings</span>
+                <span className="metric-title">{t('Pending Bookings')}</span>
                 <div className="metric-icon-wrapper">
                   <Clock size={20} style={{ color: 'var(--warning)' }} />
                 </div>
@@ -312,7 +315,7 @@ const Dashboard = () => {
 
             <div className="metric-card">
               <div className="metric-header">
-                <span className="metric-title">Pending Payments</span>
+                <span className="metric-title">{t('Pending Payments')}</span>
                 <div className="metric-icon-wrapper">
                   <IndianRupee size={20} style={{ color: 'var(--danger)' }} />
                 </div>
@@ -324,35 +327,35 @@ const Dashboard = () => {
           {/* Recent Bookings Specific to Customer */}
           <div className="table-container">
             <div className="table-controls">
-              <h2 style={{ fontSize: '1.15rem' }}>Your Bookings History</h2>
+              <h2 style={{ fontSize: '1.15rem' }}>{t('Your Bookings History')}</h2>
             </div>
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Work Type</th>
-                  <th>Acres/Hours</th>
-                  <th>Total Amount</th>
-                  <th>Status</th>
+                  <th>{t('Date')}</th>
+                  <th>{t('Work Type')}</th>
+                  <th>{t('Acres/Hours')}</th>
+                  <th>{t('Amount')}</th>
+                  <th>{t('Status')}</th>
                 </tr>
               </thead>
               <tbody>
                 {recentBookings.map((b) => (
                   <tr key={b.id}>
                     <td>{new Date(b.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                    <td>{b.work_type}</td>
+                    <td>{t(b.work_type)}</td>
                     <td>{b.acres_hours}</td>
                     <td>{formatCurrency(b.total_amount)}</td>
                     <td>
                       <span className={`badge ${b.status.toLowerCase().replace(" ", "-")}`}>
-                        {b.status}
+                        {t(b.status)}
                       </span>
                     </td>
                   </tr>
                 ))}
                 {recentBookings.length === 0 && (
                   <tr>
-                    <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No bookings found. Request your first tractor service today!</td>
+                    <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No bookings found. Request your first tractor service today!') || 'No bookings found. Request your first tractor service today!'}</td>
                   </tr>
                 )}
               </tbody>
