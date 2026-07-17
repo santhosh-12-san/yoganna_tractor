@@ -65,6 +65,9 @@ class Booking(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     notes = models.TextField(blank=True, null=True)
+    engine_hours = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.total_amount = self.acres_hours * self.rate_per_unit
@@ -159,6 +162,8 @@ class Maintenance(models.Model):
     last_done = models.DateField()
     next_due = models.DateField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Valid')
+    last_service_hours = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    next_service_hours = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return f"{self.item} (Due: {self.next_due})"

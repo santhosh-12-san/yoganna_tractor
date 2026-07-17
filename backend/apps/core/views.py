@@ -164,6 +164,7 @@ class BookingViewSet(viewsets.ModelViewSet):
         broadcast_dashboard_update("BOOKING_CREATED", BookingSerializer(instance).data)
 
     def perform_update(self, serializer):
+        old_status = serializer.instance.status
         instance = serializer.save()
         # Sync with Payment
         payment = Payment.objects.filter(booking=instance).first()
@@ -171,6 +172,28 @@ class BookingViewSet(viewsets.ModelViewSet):
             payment.total_amount = instance.total_amount
             payment.save()
         broadcast_dashboard_update("BOOKING_UPDATED", BookingSerializer(instance).data)
+
+        # Dispatch status transition notifications
+        new_status = instance.status
+        if old_status != new_status and instance.customer:
+            from .notifications import send_notification
+            cust_name = instance.customer.name
+            phone = instance.customer.phone
+            work = instance.work_type
+            
+            if new_status == 'In Progress':
+                drv = instance.driver.name if instance.driver else 'Unassigned'
+                msg = f"Hi {cust_name}, your tractor service request for {work} has started. Driver: {drv}."
+                send_notification(phone, msg, mode='sms')
+                send_notification(phone, msg, mode='whatsapp')
+            elif new_status == 'Completed':
+                msg = f"Hi {cust_name}, your {work} work is completed. Total Amount: Rs. {instance.total_amount}. View details at: http://54.165.242.164/bookings"
+                send_notification(phone, msg, mode='sms')
+                send_notification(phone, msg, mode='whatsapp')
+            elif new_status == 'Cancelled':
+                msg = f"Hi {cust_name}, your tractor service request for {work} on {instance.date} has been cancelled."
+                send_notification(phone, msg, mode='sms')
+                send_notification(phone, msg, mode='whatsapp')
 
     def perform_destroy(self, instance):
         data = BookingSerializer(instance).data

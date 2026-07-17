@@ -174,3 +174,9 @@ else:
             'BACKEND': 'channels.layers.InMemoryChannelLayer',
         },
     }
+
+# Twilio Notification Configuration
+TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID', '')
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN', '')
+TWILIO_FROM_SMS = os.environ.get('TWILIO_FROM_SMS', '')
+TWILIO_FROM_WHATSAPP = os.environ.get('TWILIO_FROM_WHATSAPP', '')
