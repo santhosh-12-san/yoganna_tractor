@@ -8,6 +8,7 @@ const AddBooking = () => {
   const [formData, setFormData] = useState({
     customer: '',
     date: new Date().toISOString().split('T')[0],
+    time_slot: 'Morning',
     work_type: 'Ploughing',
     acres_hours: '',
     rate_per_unit: '',
@@ -65,6 +66,7 @@ const AddBooking = () => {
           setFormData({
             customer: b.customer,
             date: b.date,
+            time_slot: b.time_slot || 'Morning',
             work_type: b.work_type,
             acres_hours: b.acres_hours,
             rate_per_unit: b.rate_per_unit,
@@ -291,6 +293,22 @@ const AddBooking = () => {
             onChange={handleInputChange}
             required
           />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="time_slot">{t('Time Slot')}</label>
+          <select
+            id="time_slot"
+            name="time_slot"
+            className="form-control"
+            value={formData.time_slot}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="Morning">{t('Morning')}</option>
+            <option value="Afternoon">{t('Afternoon')}</option>
+            <option value="Evening">{t('Evening')}</option>
+          </select>
         </div>
 
         <div className="form-group">

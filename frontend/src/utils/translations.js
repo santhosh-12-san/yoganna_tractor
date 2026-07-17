@@ -41,6 +41,10 @@ export const translations = {
     Phone: "Phone",
     Village: "Village",
     "Daily Wage": "Daily Wage",
+    "Time Slot": "Time Slot",
+    Morning: "Morning (08:00 AM - 12:00 PM)",
+    Afternoon: "Afternoon (12:00 PM - 04:00 PM)",
+    Evening: "Evening (04:00 PM - 08:00 PM)",
 
     // Work Types Values
     Ploughing: "Ploughing",
@@ -221,6 +225,10 @@ export const translations = {
     Phone: "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
     Village: "ಗ್ರಾಮ",
     "Daily Wage": "ದೈನಂದಿನ ಕೂಲಿ",
+    "Time Slot": "ಸಮಯದ ವಿವರ (Time Slot)",
+    Morning: "ಬೆಳಗ್ಗೆ (08:00 AM - 12:00 PM)",
+    Afternoon: "ಮಧ್ಯಾಹ್ನ (12:00 PM - 04:00 PM)",
+    Evening: "ಸಂಜೆ (04:00 PM - 08:00 PM)",
 
     // Work Types Values
     Ploughing: "ಉಳುಮೆ (Ploughing)",

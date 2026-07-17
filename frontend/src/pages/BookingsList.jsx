@@ -205,7 +205,23 @@ const BookingsList = () => {
             {filteredBookings.map((b, idx) => (
               <tr key={b.id}>
                 <td>{idx + 1}</td>
-                <td>{new Date(b.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                 <td>
+                  {new Date(b.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                  {b.time_slot && (
+                    <span style={{ 
+                      fontSize: '0.75rem', 
+                      padding: '2px 6px', 
+                      background: 'var(--primary-light)', 
+                      color: 'var(--primary)', 
+                      borderRadius: 'var(--radius-sm)', 
+                      display: 'inline-block', 
+                      marginLeft: '6px', 
+                      fontWeight: '600' 
+                    }}>
+                      {t(b.time_slot)}
+                    </span>
+                  )}
+                 </td>
                 {isOwner && <td style={{ fontWeight: '600' }}>{b.customer_name}</td>}
                 <td>{t(b.work_type)}</td>
                 <td>{b.acres_hours}</td>
