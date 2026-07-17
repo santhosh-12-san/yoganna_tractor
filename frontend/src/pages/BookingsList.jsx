@@ -214,7 +214,7 @@ const BookingsList = () => {
                 <td>
                   {isOwner ? (
                     <div className="action-buttons" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                      {b.status === 'Pending' && (
+                      {b.status?.toLowerCase() === 'pending' && (
                         <button 
                           onClick={() => handleStartWork(b.id)} 
                           className="btn"
@@ -225,7 +225,7 @@ const BookingsList = () => {
                           <span>Start</span>
                         </button>
                       )}
-                      {b.status === 'In Progress' && (
+                      {b.status?.toLowerCase() === 'in progress' && (
                         <button 
                           onClick={() => openCompletionModal(b)} 
                           className="btn"
