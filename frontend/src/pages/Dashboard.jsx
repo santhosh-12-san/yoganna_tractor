@@ -121,7 +121,7 @@ const Dashboard = () => {
           <div className="metrics-grid">
             <div className="metric-card">
               <div className="metric-header">
-                <span className="metric-title">Total Customers</span>
+                <span className="metric-title">{t('Total Customers')}</span>
                 <div className="metric-icon-wrapper">
                   <Users size={20} />
                 </div>

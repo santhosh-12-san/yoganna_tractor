@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { User, Shield, Key, Database, Check } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const Settings = () => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('profile');
   const [formData, setFormData] = useState({
     name: '',
@@ -116,14 +118,14 @@ const Settings = () => {
   return (
     <div className="dashboard-grid" style={{ gridTemplateColumns: '240px 1fr', alignItems: 'flex-start' }}>
       {/* Settings Navigation Menu */}
-      <div className="table-container" style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: 0 }}>
+      <div className="settings-sidebar" style={{ minWidth: '220px' }}>
         <button 
           onClick={() => { setActiveTab('profile'); setSuccessMsg(''); setErrorMsg(''); }}
           className={`sidebar-item ${activeTab === 'profile' ? 'active' : ''}`}
           style={{ width: '100%', border: 'none', background: 'transparent', textAlign: 'left', cursor: 'pointer' }}
         >
           <User size={18} />
-          <span>Profile Information</span>
+          <span>{t('Profile Information')}</span>
         </button>
 
         <button 
@@ -132,7 +134,7 @@ const Settings = () => {
           style={{ width: '100%', border: 'none', background: 'transparent', textAlign: 'left', cursor: 'pointer' }}
         >
           <Key size={18} />
-          <span>Change Password</span>
+          <span>{t('Change Password')}</span>
         </button>
 
         {isOwner && (
@@ -142,7 +144,7 @@ const Settings = () => {
             style={{ width: '100%', border: 'none', background: 'transparent', textAlign: 'left', cursor: 'pointer' }}
           >
             <Database size={18} />
-            <span>Backup & Restore</span>
+            <span>{t('Backup & Restore')}</span>
           </button>
         )}
       </div>
@@ -183,10 +185,10 @@ const Settings = () => {
 
         {activeTab === 'profile' && (
           <form onSubmit={handleProfileSubmit}>
-            <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>Profile Details</h3>
+            <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>{t('Profile Details')}</h3>
             
             <div className="form-group">
-              <label>Full Name</label>
+              <label>{t('Full Name')}</label>
               <input
                 type="text"
                 name="name"
@@ -198,7 +200,7 @@ const Settings = () => {
             </div>
 
             <div className="form-group">
-              <label>Role</label>
+              <label>{t('Role')}</label>
               <input
                 type="text"
                 className="form-control"
@@ -209,7 +211,7 @@ const Settings = () => {
             </div>
 
             <div className="form-group">
-              <label>Phone Number (Username)</label>
+              <label>{t('Phone Number (Username)')}</label>
               <input
                 type="text"
                 className="form-control"
@@ -220,7 +222,7 @@ const Settings = () => {
             </div>
 
             <div className="form-group">
-              <label>Email Address</label>
+              <label>{t('Email Address')}</label>
               <input
                 type="email"
                 name="email"
@@ -232,7 +234,7 @@ const Settings = () => {
             </div>
 
             <div className="form-group">
-              <label>Village</label>
+              <label>{t('Village')}</label>
               <input
                 type="text"
                 name="village"
@@ -243,17 +245,17 @@ const Settings = () => {
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={loading} style={{ marginTop: '16px' }}>
-              {loading ? 'Saving...' : 'Update Profile'}
+              {loading ? t('Processing...') : t('Update Profile')}
             </button>
           </form>
         )}
 
         {activeTab === 'password' && (
           <form onSubmit={handlePasswordSubmit}>
-            <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>Change Account Password</h3>
+            <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>{t('Change Account Password')}</h3>
 
             <div className="form-group">
-              <label>Old Password</label>
+              <label>{t('Old Password')}</label>
               <input
                 type="password"
                 name="old_password"
@@ -265,7 +267,7 @@ const Settings = () => {
             </div>
 
             <div className="form-group">
-              <label>New Password</label>
+              <label>{t('New Password')}</label>
               <input
                 type="password"
                 name="new_password"
@@ -277,7 +279,7 @@ const Settings = () => {
             </div>
 
             <div className="form-group">
-              <label>Confirm New Password</label>
+              <label>{t('Confirm New Password')}</label>
               <input
                 type="password"
                 name="confirm_password"
@@ -289,20 +291,20 @@ const Settings = () => {
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={loading} style={{ marginTop: '16px' }}>
-              {loading ? 'Processing...' : 'Change Password'}
+              {loading ? t('Processing...') : t('Change Password')}
             </button>
           </form>
         )}
 
         {activeTab === 'backup' && isOwner && (
           <div>
-            <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>Backup & Recovery Systems</h3>
+            <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>{t('Backup & Recovery Systems')}</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '24px' }}>
               Schedule automated backups of database tables (bookings, drivers logs, finances, payments) or perform raw dumps.
             </p>
             <div style={{ display: 'flex', gap: '16px' }}>
-              <button onClick={triggerBackup} className="btn btn-primary">Dump SQL Database</button>
-              <button onClick={triggerRestore} className="btn btn-secondary">Restore from File</button>
+              <button onClick={triggerBackup} className="btn btn-primary">{t('Dump SQL Database')}</button>
+              <button onClick={triggerRestore} className="btn btn-secondary">{t('Restore from File')}</button>
             </div>
           </div>
         )}

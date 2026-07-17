@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FileDown, BarChart, ChevronRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -23,6 +24,7 @@ ChartJS.register(
 );
 
 const ReportsDashboard = () => {
+  const { t } = useLanguage();
   const [reportType, setReportType] = useState('profit'); // 'profit', 'driver', 'expense'
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -52,7 +54,7 @@ const ReportsDashboard = () => {
     window.open(exportUrl, '_blank');
   };
 
-  if (loading) return <div style={{ textAlign: 'center', padding: '50px' }}>Loading reports data...</div>;
+  if (loading) return <div style={{ textAlign: 'center', padding: '50px' }}>{t('Loading bookings...')}</div>;
   if (error) return <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>;
   if (!reportData) return null;
 
@@ -61,7 +63,7 @@ const ReportsDashboard = () => {
     labels: Array.from({ length: 30 }, (_, i) => i + 1), // June 1 - 30
     datasets: [
       {
-        label: 'Daily income (₹)',
+        label: t('Daily Income Chart') + ' (₹)',
         data: [
           10000, 12000, 8000, 15000, 11000, 9000, 14000, 16000, 12000, 13000,
           15000, 17000, 11000, 12000, 18000, 14000, 15000, 16000, 22000, 24000,
@@ -83,16 +85,16 @@ const ReportsDashboard = () => {
             onChange={(e) => setReportType(e.target.value)}
             style={{ width: '220px', padding: '9px 12px' }}
           >
-            <option value="profit">Profit Report</option>
-            <option value="driver">Driver Report</option>
-            <option value="expense">Expense Report</option>
+            <option value="profit">{t('Profit Report')}</option>
+            <option value="driver">{t('Driver Wages Report')}</option>
+            <option value="expense">{t('Expenses Report')}</option>
           </select>
           {reportType === 'profit' && (
             <button 
               onClick={() => navigate('/reports/profit')} 
               className="btn btn-secondary"
             >
-              <span>View Profit Breakdowns</span>
+              <span>{t('View Profit Breakdowns')}</span>
               <ChevronRight size={16} />
             </button>
           )}
@@ -101,11 +103,11 @@ const ReportsDashboard = () => {
         <div style={{ display: 'flex', gap: '12px' }}>
           <button onClick={() => handleExport('pdf')} className="btn btn-secondary">
             <FileDown size={16} />
-            <span>Export PDF</span>
+            <span>{t('Export PDF')}</span>
           </button>
           <button onClick={() => handleExport('excel')} className="btn btn-primary">
             <FileDown size={16} />
-            <span>Export Excel</span>
+            <span>{t('Export Excel')}</span>
           </button>
         </div>
       </div>
@@ -113,7 +115,7 @@ const ReportsDashboard = () => {
       {reportType === 'profit' && (
         <div className="chart-card" style={{ marginBottom: '32px' }}>
           <div className="card-header">
-            <h2>Daily Income Chart</h2>
+            <h2>{t('Daily Income Chart')}</h2>
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>June 2025 (Total: ₹1,25,000)</span>
           </div>
           <div style={{ height: '350px', position: 'relative' }}>
@@ -139,26 +141,26 @@ const ReportsDashboard = () => {
       <div className="table-container">
         <div className="table-controls">
           <h2 style={{ fontSize: '1.1rem' }}>
-            {reportType === 'profit' ? 'Profit Summary Metrics' : reportType === 'driver' ? 'Driver Wages Summary' : 'Expense Listing'}
+            {reportType === 'profit' ? t('Profit Report') : reportType === 'driver' ? t('Driver Wages Report') : t('Expenses Report')}
           </h2>
         </div>
 
         {reportType === 'profit' && (
           <div style={{ padding: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
             <div style={{ padding: '16px', background: '#fcfdfc', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Total Bookings</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t('Total Bookings')}</div>
               <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{reportData.metrics?.totalBookings}</div>
             </div>
             <div style={{ padding: '16px', background: '#fcfdfc', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Completed Services</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t('Completed Bookings')}</div>
               <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--primary)' }}>{reportData.metrics?.completedBookings}</div>
             </div>
             <div style={{ padding: '16px', background: '#fcfdfc', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Cancelled Bookings</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t('Cancelled')}</div>
               <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--danger)' }}>{reportData.metrics?.cancelledBookings}</div>
             </div>
             <div style={{ padding: '16px', background: '#fcfdfc', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Total Income</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t('Total Amount')}</div>
               <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--secondary)' }}>₹{reportData.summary?.totalIncome.toLocaleString('en-IN')}</div>
             </div>
           </div>
@@ -166,15 +168,15 @@ const ReportsDashboard = () => {
 
         {reportType === 'profit' && reportData.villages && (
           <div style={{ padding: '0 24px 24px 24px' }}>
-            <h3 style={{ fontSize: '1.05rem', marginBottom: '16px', color: 'var(--text-primary)' }}>Village-wise Operating Performance</h3>
+            <h3 style={{ fontSize: '1.05rem', marginBottom: '16px', color: 'var(--text-primary)' }}>{t('Village-wise Operating Performance')}</h3>
             <div className="table-responsive">
               <table className="data-table">
                 <thead>
                   <tr>
-                    <th>Village Name</th>
-                    <th>Bookings Count</th>
-                    <th>Hours Worked</th>
-                    <th>Revenue Generated</th>
+                    <th>{t('Village Name')}</th>
+                    <th>{t('Bookings Count')}</th>
+                    <th>{t('Hours Worked')}</th>
+                    <th>{t('Revenue Generated')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -202,10 +204,10 @@ const ReportsDashboard = () => {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Driver Name</th>
-                <th>Days Worked</th>
-                <th>Wages Earned</th>
-                <th>Advances Taken</th>
+                <th>{t('Driver')}</th>
+                <th>{t('Days Worked')}</th>
+                <th>{t('Total Earned')}</th>
+                <th>{t('Advances Taken')}</th>
               </tr>
             </thead>
             <tbody>
@@ -225,10 +227,10 @@ const ReportsDashboard = () => {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Amount</th>
+                <th>{t('Date')}</th>
+                <th>{t('Category')}</th>
+                <th>{t('Description')}</th>
+                <th>{t('Amount')}</th>
               </tr>
             </thead>
             <tbody>

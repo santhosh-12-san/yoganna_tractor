@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Plus, Edit2, Trash2, Search, UserCheck, X } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const DriversList = () => {
+  const { t } = useLanguage();
   const [drivers, setDrivers] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -112,7 +114,7 @@ const DriversList = () => {
         <div className="form-container" style={{ marginBottom: '24px', maxWidth: '100%' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
             <h3 style={{ color: 'var(--primary)', fontSize: '1.1rem' }}>
-              {editId ? 'Modify Driver Details' : 'Register New Driver'}
+              {editId ? t('Modify Driver Details') || 'Modify Driver Details' : t('Register New Driver') || 'Register New Driver'}
             </h3>
             <button onClick={handleCancelForm} className="btn-icon" style={{ color: 'var(--danger)' }}>
               <X size={18} />
@@ -120,7 +122,7 @@ const DriversList = () => {
           </div>
           <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', alignItems: 'flex-end' }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Name</label>
+              <label>{t('Name')}</label>
               <input
                 type="text"
                 name="name"
@@ -132,7 +134,7 @@ const DriversList = () => {
               />
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Phone</label>
+              <label>{t('Phone')}</label>
               <input
                 type="text"
                 name="phone"
@@ -144,7 +146,7 @@ const DriversList = () => {
               />
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Village</label>
+              <label>{t('Village')}</label>
               <input
                 type="text"
                 name="village"
@@ -156,7 +158,7 @@ const DriversList = () => {
               />
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Daily Wage (₹)</label>
+              <label>{t('Daily Wage') + ' (₹)'}</label>
               <input
                 type="number"
                 name="daily_wage"
@@ -175,11 +177,11 @@ const DriversList = () => {
                 checked={formData.is_active}
                 onChange={handleInputChange}
               />
-              <label htmlFor="is_active" style={{ marginBottom: 0, cursor: 'pointer' }}>Active Status</label>
+              <label htmlFor="is_active" style={{ marginBottom: 0, cursor: 'pointer' }}>{t('Active Status') || 'Active Status'}</label>
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button type="submit" className="btn btn-primary" style={{ flex: 1, padding: '10px' }}>
-                Save
+                {t('Save Booking')}
               </button>
             </div>
           </form>
@@ -202,7 +204,7 @@ const DriversList = () => {
             <input
               type="text"
               className="search-input"
-              placeholder="Search drivers..."
+              placeholder={t('Search drivers...')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{ paddingLeft: '40px' }}
@@ -211,13 +213,13 @@ const DriversList = () => {
           {!showForm && (
             <button onClick={() => setShowForm(true)} className="btn btn-primary">
               <Plus size={16} />
-              <span>Add Driver</span>
+              <span>{t('Add Driver')}</span>
             </button>
           )}
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '30px' }}>Loading drivers...</div>
+          <div style={{ textAlign: 'center', padding: '30px' }}>{t('Loading bookings...')}</div>
         ) : error ? (
           <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>
         ) : (
@@ -225,12 +227,12 @@ const DriversList = () => {
             <thead>
               <tr>
                 <th>#</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Village</th>
-                <th>Daily Wage</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>{t('Name')}</th>
+                <th>{t('Phone')}</th>
+                <th>{t('Village')}</th>
+                <th>{t('Daily Wage')}</th>
+                <th>{t('Status')}</th>
+                <th>{t('Actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -243,7 +245,7 @@ const DriversList = () => {
                   <td>₹{parseFloat(d.daily_wage).toLocaleString('en-IN')}</td>
                   <td>
                     <span className={`badge ${d.is_active ? 'completed' : 'cancelled'}`}>
-                      {d.is_active ? 'Active' : 'Inactive'}
+                      {d.is_active ? t('Normal') : t('Cancelled')}
                     </span>
                   </td>
                   <td>
@@ -268,7 +270,7 @@ const DriversList = () => {
               ))}
               {filteredDrivers.length === 0 && (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No drivers found.</td>
+                  <td colSpan="7" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No drivers found.')}</td>
                 </tr>
               )}
             </tbody>

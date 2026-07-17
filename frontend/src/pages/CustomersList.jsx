@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Plus, Edit2, Trash2, Search } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const CustomersList = () => {
+  const { t } = useLanguage();
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -71,7 +73,7 @@ const CustomersList = () => {
           <input
             type="text"
             className="search-input"
-            placeholder="Search customers..."
+            placeholder={t('Search customers...')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{ paddingLeft: '40px' }}
@@ -79,12 +81,12 @@ const CustomersList = () => {
         </div>
         <Link to="/customers/add" className="btn btn-primary">
           <Plus size={16} />
-          <span>Add Customer</span>
+          <span>{t('Add Customer')}</span>
         </Link>
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '30px' }}>Loading customers...</div>
+        <div style={{ textAlign: 'center', padding: '30px' }}>{t('Loading bookings...')}</div>
       ) : error ? (
         <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>
       ) : (
@@ -92,10 +94,10 @@ const CustomersList = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Village</th>
-              <th>Actions</th>
+              <th>{t('Name')}</th>
+              <th>{t('Phone')}</th>
+              <th>{t('Village')}</th>
+              <th>{t('Actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -127,7 +129,7 @@ const CustomersList = () => {
             ))}
             {filteredCustomers.length === 0 && (
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No customers found.</td>
+                <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No customers found.')}</td>
               </tr>
             )}
           </tbody>
