@@ -182,7 +182,8 @@ export const translations = {
     "Bookings Count": "Bookings Count",
     "Hours Worked": "Hours Worked",
     "Revenue Generated": "Revenue Generated",
-    "Village-wise Operating Performance": "Village-wise Operating Performance"
+    "Village-wise Operating Performance": "Village-wise Operating Performance",
+    "This time is already booked on this date. Please select another time or date.": "This time is already booked on this date. Please select another time or date."
   },
   kn: {
     // Sidebar & General
@@ -367,6 +368,7 @@ export const translations = {
     "Bookings Count": "ಒಟ್ಟು ಬುಕಿಂಗ್ಸ್",
     "Hours Worked": "ಒಟ್ಟು ಕೆಲಸದ ಸಮಯ",
     "Revenue Generated": "ಒಟ್ಟು ಗಳಿಸಿದ ಆದಾಯ",
-    "Village-wise Operating Performance": "ಗ್ರಾಮವಾರು ಕಾರ್ಯಾಚರಣೆ ಹಾಗೂ ಲಾಭ ವಿವರ"
+    "Village-wise Operating Performance": "ಗ್ರಾಮವಾರು ಕಾರ್ಯಾಚರಣೆ ಹಾಗೂ ಲಾಭ ವಿವರ",
+    "This time is already booked on this date. Please select another time or date.": "ಈ ದಿನಾಂಕ ಮತ್ತು ಸಮಯದ ಬುಕಿಂಗ್ ಈಗಾಗಲೇ ಮಾಡಲಾಗಿದೆ. ದಯವಿಟ್ಟು ಬೇರೆ ಸಮಯ ಅಥವಾ ದಿನಾಂಕವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ."
   }
 };

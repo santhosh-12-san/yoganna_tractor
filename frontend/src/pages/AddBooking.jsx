@@ -169,7 +169,7 @@ const AddBooking = () => {
           marginBottom: '20px',
           fontWeight: '500'
         }}>
-          {error}
+          {t(error)}
         </div>
       )}
 
