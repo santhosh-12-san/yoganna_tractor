@@ -86,43 +86,41 @@ const AddBooking = () => {
   useEffect(() => {
     if (loadingBooking) return;
     
-    let mapInstance;
-    const initMap = () => {
-      if (!window.L) {
-        setTimeout(initMap, 200);
-        return;
-      }
-      
-      const L = window.L;
-      const initialLat = parseFloat(formData.latitude) || 13.3379;
-      const initialLng = parseFloat(formData.longitude) || 77.1173;
-      
-      mapInstance = L.map('field-map').setView([initialLat, initialLng], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-      }).addTo(mapInstance);
-      
-      let markerInstance;
-      if (formData.latitude && formData.longitude) {
-        markerInstance = L.marker([initialLat, initialLng]).addTo(mapInstance);
-      }
-      
-      mapInstance.on('click', (e) => {
-        const { lat, lng } = e.latlng;
-        setFormData(prev => ({
-          ...prev,
-          latitude: lat.toFixed(6),
-          longitude: lng.toFixed(6)
-        }));
-        if (markerInstance) {
-          markerInstance.setLatLng(e.latlng);
-        } else {
-          markerInstance = L.marker(e.latlng).addTo(mapInstance);
-        }
-      });
-    };
+    const container = document.getElementById('field-map');
+    if (!container || container._leaflet_id) return;
 
-    initMap();
+    const L = window.L;
+    if (!L) {
+      console.warn("Leaflet library not available on window object.");
+      return;
+    }
+
+    const initialLat = parseFloat(formData.latitude) || 13.3379;
+    const initialLng = parseFloat(formData.longitude) || 77.1173;
+    
+    const mapInstance = L.map('field-map').setView([initialLat, initialLng], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(mapInstance);
+    
+    let markerInstance;
+    if (formData.latitude && formData.longitude) {
+      markerInstance = L.marker([initialLat, initialLng]).addTo(mapInstance);
+    }
+    
+    mapInstance.on('click', (e) => {
+      const { lat, lng } = e.latlng;
+      setFormData(prev => ({
+        ...prev,
+        latitude: lat.toFixed(6),
+        longitude: lng.toFixed(6)
+      }));
+      if (markerInstance) {
+        markerInstance.setLatLng(e.latlng);
+      } else {
+        markerInstance = L.marker(e.latlng).addTo(mapInstance);
+      }
+    });
 
     return () => {
       if (mapInstance) {
