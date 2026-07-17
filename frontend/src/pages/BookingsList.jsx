@@ -139,7 +139,7 @@ const BookingsList = () => {
             <input
               type="text"
               className="search-input"
-              placeholder={isOwner ? "Search bookings..." : "Search work type..."}
+              placeholder={isOwner ? t('Search bookings...') : t('Search work type...')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{ paddingLeft: '40px', minWidth: '200px' }}
@@ -160,11 +160,11 @@ const BookingsList = () => {
             onChange={(e) => setStatusFilter(e.target.value)}
             style={{ width: '150px', padding: '9px 12px' }}
           >
-            <option value="All">All Status</option>
-            <option value="Pending">Pending</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-            <option value="Cancelled">Cancelled</option>
+            <option value="All">{t('All Status')}</option>
+            <option value="Pending">{t('Pending')}</option>
+            <option value="In Progress">{t('In Progress')}</option>
+            <option value="Completed">{t('Completed')}</option>
+            <option value="Cancelled">{t('Cancelled')}</option>
           </select>
         </div>
 
@@ -182,7 +182,7 @@ const BookingsList = () => {
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '30px' }}>Loading bookings...</div>
+        <div style={{ textAlign: 'center', padding: '30px' }}>{t('Loading bookings...')}</div>
       ) : error ? (
         <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>
       ) : (
@@ -263,7 +263,7 @@ const BookingsList = () => {
                         className="btn btn-danger" 
                         style={{ padding: '4px 8px', fontSize: '0.75rem' }}
                       >
-                        Cancel
+                        {t('Cancel')}
                       </button>
                     )
                   )}
@@ -272,7 +272,7 @@ const BookingsList = () => {
             ))}
             {filteredBookings.length === 0 && (
               <tr>
-                <td colSpan={isOwner ? 9 : 8} style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No bookings found.</td>
+                <td colSpan={isOwner ? 9 : 8} style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No bookings found.')}</td>
               </tr>
             )}
           </tbody>
