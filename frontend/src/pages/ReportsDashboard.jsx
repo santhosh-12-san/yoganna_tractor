@@ -160,6 +160,39 @@ const ReportsDashboard = () => {
             <div style={{ padding: '16px', background: '#fcfdfc', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Total Income</div>
               <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--secondary)' }}>₹{reportData.summary?.totalIncome.toLocaleString('en-IN')}</div>
+          </div>
+        )}
+
+        {reportType === 'profit' && reportData.villages && (
+          <div style={{ padding: '0 24px 24px 24px' }}>
+            <h3 style={{ fontSize: '1.05rem', marginBottom: '16px', color: 'var(--text-primary)' }}>Village-wise Operating Performance</h3>
+            <div className="table-responsive">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Village Name</th>
+                    <th>Bookings Count</th>
+                    <th>Hours Worked</th>
+                    <th>Revenue Generated</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reportData.villages.length > 0 ? (
+                    reportData.villages.map((vl, idx) => (
+                      <tr key={idx}>
+                        <td style={{ fontWeight: '600' }}>{vl.village}</td>
+                        <td>{vl.bookings}</td>
+                        <td>{parseFloat(vl.hours).toFixed(2)} hrs</td>
+                        <td style={{ color: 'var(--primary)', fontWeight: 'bold' }}>₹{parseFloat(vl.revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={4} style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>No village data available yet.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         )}

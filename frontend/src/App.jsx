@@ -180,6 +180,46 @@ const NavigationLayout = () => {
 };
 
 function App() {
+  useEffect(() => {
+    const syncOfflineData = async () => {
+      if (!navigator.onLine) return;
+      const token = localStorage.getItem('access_token');
+      if (!token) return;
+      
+      try {
+        const { getOfflineBookings, deleteOfflineBooking } = await import('./utils/offlineDb');
+        const bookings = await getOfflineBookings();
+        if (bookings.length === 0) return;
+        
+        console.log(`Syncing ${bookings.length} offline bookings...`);
+        for (const b of bookings) {
+          const payload = { ...b };
+          const tempId = payload.tempId;
+          delete payload.tempId;
+          
+          try {
+            await axios.post('/api/bookings/', payload);
+            await deleteOfflineBooking(tempId);
+          } catch (err) {
+            console.error("Failed to sync offline booking:", err);
+          }
+        }
+        alert("Online Sync: Offline booking requests have been synchronized successfully!");
+        if (window.location.pathname === '/bookings') {
+          window.location.reload();
+        }
+      } catch (err) {
+        console.error("Auto sync failure:", err);
+      }
+    };
+
+    syncOfflineData();
+    window.addEventListener('online', syncOfflineData);
+    return () => {
+      window.removeEventListener('online', syncOfflineData);
+    };
+  }, []);
+
   return (
     <Router>
       <WebSocketProvider>

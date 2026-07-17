@@ -195,6 +195,24 @@ class BookingViewSet(viewsets.ModelViewSet):
                 send_notification(phone, msg, mode='sms')
                 send_notification(phone, msg, mode='whatsapp')
 
+        # Check maintenance running hour thresholds on completion
+        if new_status == 'Completed':
+            from django.db.models import Sum
+            total_hours = Booking.objects.filter(status='Completed').aggregate(val=Sum('engine_hours'))['val'] or 0
+            
+            # Check Maintenance alerts
+            for alert in Maintenance.objects.all():
+                if alert.next_service_hours:
+                    if total_hours >= alert.next_service_hours:
+                        alert.status = 'Overdue'
+                    elif alert.next_service_hours - total_hours <= 25:
+                        alert.status = 'Due Soon'
+                    else:
+                        alert.status = 'Valid'
+                    alert.save()
+                    from .serializers import MaintenanceSerializer
+                    broadcast_dashboard_update("MAINTENANCE_UPDATED", MaintenanceSerializer(alert).data)
+
     def perform_destroy(self, instance):
         data = BookingSerializer(instance).data
         Payment.objects.filter(booking=instance).delete()
@@ -469,6 +487,22 @@ class ReportsView(APIView):
             cancelled = Booking.objects.filter(status='Cancelled').count()
             customers_count = Customer.objects.count()
 
+            # Village analytics
+            village_summary = Booking.objects.filter(status='Completed').values('customer__village').annotate(
+                total_revenue=Sum('total_amount'),
+                total_bookings=Count('id'),
+                total_hours=Sum('engine_hours')
+            ).order_by('-total_revenue')
+            
+            villages = [
+                {
+                    'village': item['customer__village'] or 'Unassigned',
+                    'revenue': float(item['total_revenue'] or 0.00),
+                    'bookings': item['total_bookings'] or 0,
+                    'hours': float(item['total_hours'] or 0.00)
+                } for item in village_summary
+            ]
+
             return Response({
                 'report_type': 'profit',
                 'summary': {
@@ -478,6 +512,7 @@ class ReportsView(APIView):
                     'profitPercentage': float(profit_percentage)
                 },
                 'breakdown': breakdown,
+                'villages': villages,
                 'metrics': {
                     'totalBookings': bookings_count,
                     'completedBookings': completed,

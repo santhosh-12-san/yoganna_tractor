@@ -12,7 +12,9 @@ const AddBooking = () => {
     driver: '',
     advance: '0.00',
     status: 'Pending',
-    notes: ''
+    notes: '',
+    latitude: '',
+    longitude: ''
   });
 
   const [customers, setCustomers] = useState([]);
@@ -25,6 +27,9 @@ const AddBooking = () => {
 
   const role = localStorage.getItem('user_role');
   const isOwner = role === 'OWNER';
+
+  const [loadingBooking, setLoadingBooking] = useState(isEdit);
+  const [map, setMap] = useState(null);
 
   useEffect(() => {
     // If Owner, fetch customers and drivers lists for dropdowns
@@ -61,16 +66,70 @@ const AddBooking = () => {
             driver: b.driver || '',
             advance: b.advance,
             status: b.status,
-            notes: b.notes || ''
+            notes: b.notes || '',
+            latitude: b.latitude || '',
+            longitude: b.longitude || ''
           });
         } catch (err) {
           console.error("Error fetching booking detail:", err);
           setError("Could not load booking details.");
+        } finally {
+          setLoadingBooking(false);
         }
       };
       fetchBooking();
+    } else {
+      setLoadingBooking(false);
     }
   }, [id, isEdit]);
+
+  useEffect(() => {
+    if (loadingBooking) return;
+    
+    let mapInstance;
+    const initMap = () => {
+      if (!window.L) {
+        setTimeout(initMap, 200);
+        return;
+      }
+      
+      const L = window.L;
+      const initialLat = parseFloat(formData.latitude) || 13.3379;
+      const initialLng = parseFloat(formData.longitude) || 77.1173;
+      
+      mapInstance = L.map('field-map').setView([initialLat, initialLng], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(mapInstance);
+      
+      let markerInstance;
+      if (formData.latitude && formData.longitude) {
+        markerInstance = L.marker([initialLat, initialLng]).addTo(mapInstance);
+      }
+      
+      mapInstance.on('click', (e) => {
+        const { lat, lng } = e.latlng;
+        setFormData(prev => ({
+          ...prev,
+          latitude: lat.toFixed(6),
+          longitude: lng.toFixed(6)
+        }));
+        if (markerInstance) {
+          markerInstance.setLatLng(e.latlng);
+        } else {
+          markerInstance = L.marker(e.latlng).addTo(mapInstance);
+        }
+      });
+    };
+
+    initMap();
+
+    return () => {
+      if (mapInstance) {
+        mapInstance.remove();
+      }
+    };
+  }, [loadingBooking]);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -105,6 +164,21 @@ const AddBooking = () => {
 
     if (payload.driver === '') {
       payload.driver = null;
+    }
+
+    if (!navigator.onLine) {
+      try {
+        const { saveOfflineBooking } = await import('../utils/offlineDb');
+        await saveOfflineBooking(payload);
+        alert("Saved offline! Your request has been queued locally and will sync automatically when you go online.");
+        navigate('/bookings');
+      } catch (err) {
+        console.error("IndexedDB error:", err);
+        setError("Device is offline, and failed to save request locally.");
+      } finally {
+        setLoading(false);
+      }
+      return;
     }
 
     try {
@@ -282,6 +356,15 @@ const AddBooking = () => {
             </div>
           </>
         )}
+
+        <div className="form-group" style={{ gridColumn: 'span 2' }}>
+          <label>Field Location (Click on the map to pin location)</label>
+          <div id="field-map" style={{ height: '320px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginBottom: '12px', zIndex: 1 }}></div>
+          <div style={{ display: 'flex', gap: '16px', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+            <span><strong>Latitude:</strong> {formData.latitude || 'Not selected'}</span>
+            <span><strong>Longitude:</strong> {formData.longitude || 'Not selected'}</span>
+          </div>
+        </div>
 
         <div className="form-group">
           <label htmlFor="notes">Notes / Special Instructions</label>

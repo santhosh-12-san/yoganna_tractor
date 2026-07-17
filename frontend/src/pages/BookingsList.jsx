@@ -15,7 +15,8 @@ const BookingsList = () => {
   const [completeFormData, setCompleteFormData] = useState({
     acres_hours: '',
     rate_per_unit: '',
-    advance: '0.00'
+    advance: '0.00',
+    engine_hours: ''
   });
   const navigate = useNavigate();
   const role = localStorage.getItem('user_role');
@@ -84,7 +85,8 @@ const BookingsList = () => {
     setCompleteFormData({
       acres_hours: booking.acres_hours,
       rate_per_unit: booking.rate_per_unit || '',
-      advance: booking.advance || '0.00'
+      advance: booking.advance || '0.00',
+      engine_hours: booking.engine_hours || booking.acres_hours || ''
     });
   };
 
@@ -95,7 +97,8 @@ const BookingsList = () => {
         status: 'Completed',
         acres_hours: completeFormData.acres_hours,
         rate_per_unit: completeFormData.rate_per_unit,
-        advance: completeFormData.advance
+        advance: completeFormData.advance,
+        engine_hours: completeFormData.engine_hours
       });
       setCompletingBooking(null);
       fetchBookings();
@@ -306,6 +309,18 @@ const BookingsList = () => {
                   className="form-control"
                   value={completeFormData.acres_hours}
                   onChange={(e) => setCompleteFormData({ ...completeFormData, acres_hours: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="modal_engine_hours">Tractor Engine Hours Spent</label>
+                <input
+                  id="modal_engine_hours"
+                  type="number"
+                  step="0.01"
+                  className="form-control"
+                  value={completeFormData.engine_hours}
+                  onChange={(e) => setCompleteFormData({ ...completeFormData, engine_hours: e.target.value })}
                   required
                 />
               </div>
