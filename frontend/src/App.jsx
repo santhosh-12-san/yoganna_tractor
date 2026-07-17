@@ -85,7 +85,7 @@ const NavigationLayout = () => {
       <aside className="sidebar">
         <div className="sidebar-logo">
           <Tractor size={24} />
-          <span>Yoganna Tractor Service</span>
+          <span>Yoganna Tractor Services</span>
         </div>
         
         {/* Mobile menu toggle */}
