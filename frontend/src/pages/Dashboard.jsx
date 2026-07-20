@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Users, Calendar, IndianRupee, Clock, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { 
+  Users, Calendar, IndianRupee, Clock, ArrowUpRight, ArrowDownRight,
+  ChevronLeft, ChevronRight, Sparkles, ShieldCheck, Award, Zap 
+} from 'lucide-react';
 import { Line, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -38,10 +42,49 @@ const formatCurrency = (val) => {
 
 const Dashboard = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { lastMessage } = useWebSocket();
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const offers = [
+    {
+      id: 1,
+      title: t('Monsoon Special Ploughing Offer'),
+      subtitle: t('20% OFF on Heavy Ploughing & Rotavator Work'),
+      badge: 'SEASON SPECIAL 20% OFF',
+      image: '/images/offer1.jpg'
+    },
+    {
+      id: 2,
+      title: t('High Yield Seed Sowing Package'),
+      subtitle: t('Discounted Per-Acre Rates for Seed Sowing'),
+      badge: 'BEST FARMING PRICE',
+      image: '/images/offer2.jpg'
+    },
+    {
+      id: 3,
+      title: t('24/7 Priority Village Tractor Service'),
+      subtitle: t('Fast Driver & Tractor Arrival at Your Farm'),
+      badge: 'FAST 24/7 ARRIVAL',
+      image: '/images/offer3.jpg'
+    }
+  ];
+
+  useEffect(() => {
+    if (isHovered) return;
+    const timer = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % offers.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [isHovered, offers.length]);
+
+  const nextSlide = () => setCurrentSlide((currentSlide + 1) % offers.length);
+  const prevSlide = () => setCurrentSlide((currentSlide - 1 + offers.length) % offers.length);
 
   const fetchDashboardData = async () => {
     try {
@@ -113,6 +156,90 @@ const Dashboard = () => {
 
   return (
     <div>
+      {/* Modern 3-Slide Promotional Offer Carousel */}
+      <div 
+        className="carousel-container"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {offers.map((offer, idx) => (
+          <div 
+            key={offer.id} 
+            className={`carousel-slide ${idx === currentSlide ? 'active' : ''}`}
+          >
+            <img src={offer.image} alt={offer.title} className="carousel-image" />
+            <div className="carousel-overlay">
+              <span className="carousel-badge">{offer.badge}</span>
+              <h2 className="carousel-title">{offer.title}</h2>
+              <p className="carousel-desc">{offer.subtitle}</p>
+              <button onClick={() => navigate('/bookings/add')} className="carousel-cta">
+                <span>{t('Book Service Now')}</span>
+                <ArrowUpRight size={18} />
+              </button>
+            </div>
+          </div>
+        ))}
+
+        <button className="carousel-arrow prev" onClick={prevSlide} aria-label="Previous Offer">
+          <ChevronLeft size={24} />
+        </button>
+        <button className="carousel-arrow next" onClick={nextSlide} aria-label="Next Offer">
+          <ChevronRight size={24} />
+        </button>
+
+        <div className="carousel-dots">
+          {offers.map((_, idx) => (
+            <button
+              key={idx}
+              className={`carousel-dot ${idx === currentSlide ? 'active' : ''}`}
+              onClick={() => setCurrentSlide(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Tractor Service Advantages Grid */}
+      <section className="advantages-section" itemScope itemType="https://schema.org/OfferCatalog">
+        <h2 className="advantages-heading">
+          <Sparkles size={22} style={{ color: 'var(--secondary)' }} />
+          <span>{t('Why Choose Yoganna Tractor Services')}</span>
+        </h2>
+        <div className="advantages-grid">
+          <div className="advantage-card">
+            <div className="advantage-icon-wrapper">
+              <Clock size={24} />
+            </div>
+            <h3 className="advantage-title">{t('Guaranteed On-Time Field Work')}</h3>
+            <p className="advantage-desc">{t('We arrive directly at your farm as scheduled without delays.')}</p>
+          </div>
+
+          <div className="advantage-card">
+            <div className="advantage-icon-wrapper">
+              <Award size={24} />
+            </div>
+            <h3 className="advantage-title">{t('Skilled & Experienced Drivers')}</h3>
+            <p className="advantage-desc">{t('Trained operators for precise ploughing and rotavator operations.')}</p>
+          </div>
+
+          <div className="advantage-card">
+            <div className="advantage-icon-wrapper">
+              <ShieldCheck size={24} />
+            </div>
+            <h3 className="advantage-title">{t('Best Transparent Pricing')}</h3>
+            <p className="advantage-desc">{t('Affordable hourly and per-acre rates with zero hidden charges.')}</p>
+          </div>
+
+          <div className="advantage-card">
+            <div className="advantage-icon-wrapper">
+              <Zap size={24} />
+            </div>
+            <h3 className="advantage-title">{t('Fast Online Booking')}</h3>
+            <p className="advantage-desc">{t('Easy one-click booking and live status tracking in Kannada.')}</p>
+          </div>
+        </div>
+      </section>
+
       {isOwner ? (
         // ----------------------------------
         // OWNER DASHBOARD

@@ -183,7 +183,24 @@ export const translations = {
     "Hours Worked": "Hours Worked",
     "Revenue Generated": "Revenue Generated",
     "Village-wise Operating Performance": "Village-wise Operating Performance",
-    "This time is already booked on this date. Please select another time or date.": "This time is already booked on this date. Please select another time or date."
+    "This time is already booked on this date. Please select another time or date.": "This time is already booked on this date. Please select another time or date.",
+    "Special Tractor Offers & Season Discounts": "Special Tractor Offers & Season Discounts",
+    "Monsoon Special Ploughing Offer": "Monsoon Special Ploughing Offer",
+    "20% OFF on Heavy Ploughing & Rotavator Work": "20% OFF on Heavy Ploughing & Rotavator Work",
+    "High Yield Seed Sowing Package": "High Yield Seed Sowing Package",
+    "Discounted Per-Acre Rates for Seed Sowing": "Discounted Per-Acre Rates for Seed Sowing",
+    "24/7 Priority Village Tractor Service": "24/7 Priority Village Tractor Service",
+    "Fast Driver & Tractor Arrival at Your Farm": "Fast Driver & Tractor Arrival at Your Farm",
+    "Book Service Now": "Book Service Now",
+    "Why Choose Yoganna Tractor Services": "Why Choose Yoganna Tractor Services",
+    "Guaranteed On-Time Field Work": "Guaranteed On-Time Field Work",
+    "We arrive directly at your farm as scheduled without delays.": "We arrive directly at your farm as scheduled without delays.",
+    "Skilled & Experienced Drivers": "Skilled & Experienced Drivers",
+    "Trained operators for precise ploughing and rotavator operations.": "Trained operators for precise ploughing and rotavator operations.",
+    "Best Transparent Pricing": "Best Transparent Pricing",
+    "Affordable hourly and per-acre rates with zero hidden charges.": "Affordable hourly and per-acre rates with zero hidden charges.",
+    "Fast Online Booking": "Fast Online Booking",
+    "Easy one-click booking and live status tracking in Kannada.": "Easy one-click booking and live status tracking in Kannada."
   },
   kn: {
     // Sidebar & General
@@ -369,6 +386,23 @@ export const translations = {
     "Hours Worked": "ಒಟ್ಟು ಕೆಲಸದ ಸಮಯ",
     "Revenue Generated": "ಒಟ್ಟು ಗಳಿಸಿದ ಆದಾಯ",
     "Village-wise Operating Performance": "ಗ್ರಾಮವಾರು ಕಾರ್ಯಾಚರಣೆ ಹಾಗೂ ಲಾಭ ವಿವರ",
-    "This time is already booked on this date. Please select another time or date.": "ಈ ದಿನಾಂಕ ಮತ್ತು ಸಮಯದ ಬುಕಿಂಗ್ ಈಗಾಗಲೇ ಮಾಡಲಾಗಿದೆ. ದಯವಿಟ್ಟು ಬೇರೆ ಸಮಯ ಅಥವಾ ದಿನಾಂಕವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ."
+    "This time is already booked on this date. Please select another time or date.": "ಈ ದಿನಾಂಕ ಮತ್ತು ಸಮಯದ ಬುಕಿಂಗ್ ಈಗಾಗಲೇ ಮಾಡಲಾಗಿದೆ. ದಯವಿಟ್ಟು ಬೇರೆ ಸಮಯ ಅಥವಾ ದಿನಾಂಕವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ.",
+    "Special Tractor Offers & Season Discounts": "ವಿಶೇಷ ಟ್ರಾಕ್ಟರ್ ಆಫರ್‌ಗಳು ಮತ್ತು ರಿಯಾಯಿತಿಗಳು",
+    "Monsoon Special Ploughing Offer": "ಮುಂಗಾರು ವಿಶೇಷ ಉಳುಮೆ ಆಫರ್",
+    "20% OFF on Heavy Ploughing & Rotavator Work": "ಉಳುಮೆ ಮತ್ತು ರೋಟವೇಟರ್ ಕೆಲಸಕ್ಕೆ ೨೦% ರಿಯಾಯಿತಿ",
+    "High Yield Seed Sowing Package": "ಬೀಜ ಬಿತ್ತನೆ ರಿಯಾಯಿತಿ ಪ್ಯಾಕೇಜ್",
+    "Discounted Per-Acre Rates for Seed Sowing": "ಬೀಜ ಬಿತ್ತನೆ ಮತ್ತು ಭೂಮಿ ಹದಗೊಳಿಸಲು ವಿಶೇಷ ದರ",
+    "24/7 Priority Village Tractor Service": "೨೪/೭ ಆದ್ಯತೆಯ ಗ್ರಾಮ ಟ್ರಾಕ್ಟರ್ ಸೇವೆ",
+    "Fast Driver & Tractor Arrival at Your Farm": "ನಿಮ್ಮ ತೋಟ/ಹೊಲಕ್ಕೆ ತಕ್ಷಣದ ಟ್ರಾಕ್ಟರ್ ಮತ್ತು ಡ್ರೈವರ್ ಆಗಮನ",
+    "Book Service Now": "ಇಂದೇ ಬುಕಿಂಗ್ ಮಾಡಿ",
+    "Why Choose Yoganna Tractor Services": "ಯೋಗಣ್ಣ ಟ್ರಾಕ್ಟರ್ ಸೇವೆಯ ಪ್ರಮುಖ ಅನುಕೂಲಗಳು",
+    "Guaranteed On-Time Field Work": "ಸಮಯಕ್ಕೆ ಸರಿಯಾದ ಶೇತದ ಸೇವೆ",
+    "We arrive directly at your farm as scheduled without delays.": "ಯಾವುದೇ ವಿಳಂಬವಿಲ್ಲದೆ ನಿಗದಿತ ಸಮಯಕ್ಕೆ ನಿಮ್ಮ ತೋಟಕ್ಕೆ ತಲುಪುತ್ತೇವೆ.",
+    "Skilled & Experienced Drivers": "ಅನುಭವಸ್ಥ ನುರಿತ ಚಾಲಕರು",
+    "Trained operators for precise ploughing and rotavator operations.": "ಉಳುಮೆ ಮತ್ತು ರೋಟವೇಟರ್ ಕೆಲಸದಲ್ಲಿ ನಿಪುಣರಾದ ಚಾಲಕರು.",
+    "Best Transparent Pricing": "ಅತಿ ಕಡಿಮೆ ನ್ಯಾಯಯುತ ದರಗಳು",
+    "Affordable hourly and per-acre rates with zero hidden charges.": "ಯಾವುದೇ ಗುಪ್ತ ಶುಲ್ಕವಿಲ್ಲದೆ ಕೈಗೆಟುಕುವ ಎಕರೆ ಹಾಗೂ ಗಂಟೆಯ ದರಗಳು.",
+    "Fast Online Booking": "ಸುಲಭ ಹಾಗೂ ತ್ವರಿತ ಬುಕಿಂಗ್",
+    "Easy one-click booking and live status tracking in Kannada.": "ಕನ್ನಡದಲ್ಲೇ ಸುಲಭವಾಗಿ ಬುಕಿಂಗ್ ಮಾಡಿ ನೇರ ಸ್ಥಿತಿ ತಿಳಿಯಿರಿ."
   }
 };
