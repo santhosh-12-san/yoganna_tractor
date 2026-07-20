@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Plus, Edit2, Trash2, Search, Calendar, RefreshCw, Play, Check } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Calendar, RefreshCw, Play, Check, MessageSquare } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useLanguage } from '../context/LanguageContext';
 import { SkeletonTable } from '../components/SkeletonLoader';
@@ -25,6 +25,25 @@ const BookingsList = () => {
   const role = localStorage.getItem('user_role');
   const isOwner = role === 'OWNER';
   const { lastMessage } = useWebSocket();
+
+  const handleSendWhatsAppBooking = (b) => {
+    let rawPhone = b.customer_phone || b.customer?.phone || '';
+    if (!rawPhone) {
+      alert("Customer mobile number is missing for this booking.");
+      return;
+    }
+
+    const cleanPhone = rawPhone.replace(/\D/g, '');
+    const formattedPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+    
+    const dateStr = new Date(b.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    const total = parseFloat(b.total_amount || 0).toLocaleString('en-IN');
+    
+    const message = `ನಮಸ್ಕಾರ ${b.customer_name || 'ಗ್ರಾಹಕರೇ'}! 🚜\n\nಯೋಗಣ್ಣ ಟ್ರಾಕ್ಟರ್ ಬುಕಿಂಗ್ ವಿವರಗಳು (${dateStr}):\n---------------------------\n• ಕೆಲಸ: ${b.work_type}\n• ಎಕರೆ / ಗಂಟೆ: ${b.acres_hours}\n• ಒಟ್ಟು ದರ: ₹${total}\n• ಚಾಲಕ: ${b.driver_name || 'ನಿಯೋಜಿಸಲಾಗಿದೆ'}\n• ಸ್ಥಿತಿ: ${b.status}\n---------------------------\nಧನ್ಯವಾದಗಳು! ಯೋಗಣ್ಣ ಟ್ರಾಕ್ಟರ್ ಸೇವೆಗಳು.`;
+
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${formattedPhone}&text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   const fetchBookings = async () => {
     try {
@@ -264,6 +283,14 @@ const BookingsList = () => {
                           <span>{t('Complete')}</span>
                         </button>
                       )}
+                      <button 
+                        onClick={() => handleSendWhatsAppBooking(b)} 
+                        className="btn-icon"
+                        style={{ background: 'rgba(37, 211, 102, 0.2)', color: '#25d366', border: '1px solid rgba(37, 211, 102, 0.4)' }}
+                        title={t('Send WhatsApp Booking Details')}
+                      >
+                        <MessageSquare size={16} />
+                      </button>
                       <button 
                         onClick={() => navigate(`/bookings/edit/${b.id}`)} 
                         className="btn-icon"

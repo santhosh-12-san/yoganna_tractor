@@ -111,7 +111,17 @@ const Payments = () => {
   };
 
   const handleSendWhatsAppReceipt = (p) => {
-    const rawPhone = p.customer_phone || p.customer?.phone || '';
+    let rawPhone = p.customer_phone || p.customer?.phone || '';
+    if (!rawPhone && p.customer && customers.length > 0) {
+      const foundCustomer = customers.find(c => c.id === p.customer || c.name === p.customer_name);
+      if (foundCustomer) rawPhone = foundCustomer.phone;
+    }
+    
+    if (!rawPhone) {
+      alert("Customer mobile number is missing for this payment record.");
+      return;
+    }
+
     const cleanPhone = rawPhone.replace(/\D/g, '');
     const formattedPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     
@@ -122,7 +132,7 @@ const Payments = () => {
     
     const message = `ನಮಸ್ಕಾರ ${p.customer_name || 'ಗ್ರಾಹಕರೇ'}! 🚜\n\nಯೋಗಣ್ಣ ಟ್ರಾಕ್ಟರ್ ಸೇವೆಯ ಪಾವತಿ ರಶೀದಿ (${dateStr}):\n---------------------------\n• ಒಟ್ಟು ದರ: ₹${total}\n• ಪಾವತಿಸಿದ ಮೊತ್ತ: ₹${paid}\n• ಬಾಕಿ ಮೊತ್ತ: ₹${pending}\n• ಪಾವತಿ ವಿಧಾನ: ${p.mode}\n---------------------------\nಧನ್ಯವಾದಗಳು! ಯೋಗಣ್ಣ ಟ್ರಾಕ್ಟರ್ ಸೇವೆಗಳು.`;
 
-    const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${formattedPhone}&text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
