@@ -21,7 +21,24 @@ const FarmWeatherWidget = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const fetchLiveWeather = async (lat = 12.52, lon = 76.90) => {
+  const fetchIpLocationFallback = async () => {
+    try {
+      const res = await axios.get('https://ipwho.is/');
+      if (res.data && res.data.success && res.data.latitude && res.data.longitude) {
+        const place = res.data.city || res.data.region || 'Bengaluru';
+        const state = res.data.region || 'Karnataka';
+        setLocationName(`${place}, ${state}`);
+        fetchLiveWeather(res.data.latitude, res.data.longitude);
+        return;
+      }
+    } catch (err) {
+      console.error("IP geolocation failed:", err);
+    }
+    setLocationName('Bengaluru, Karnataka');
+    fetchLiveWeather(12.97, 77.59);
+  };
+
+  const fetchLiveWeather = async (lat = 12.97, lon = 77.59) => {
     try {
       const [weatherRes, geoRes] = await Promise.all([
         axios.get(
@@ -39,8 +56,6 @@ const FarmWeatherWidget = () => {
         const state = geoRes.data.principalSubdivision || 'Karnataka';
         if (place) {
           setLocationName(`${place}, ${state}`);
-        } else {
-          setLocationName(`Mandya, Karnataka`);
         }
       }
     } catch (err) {
@@ -56,10 +71,14 @@ const FarmWeatherWidget = () => {
         (pos) => {
           fetchLiveWeather(pos.coords.latitude, pos.coords.longitude);
         },
-        () => fetchLiveWeather()
+        (err) => {
+          console.log("HTML5 Geolocation unavailable, using IP location fallback:", err);
+          fetchIpLocationFallback();
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
       );
     } else {
-      fetchLiveWeather();
+      fetchIpLocationFallback();
     }
   }, []);
 
