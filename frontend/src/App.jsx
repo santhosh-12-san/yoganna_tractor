@@ -24,6 +24,8 @@ import ProfitReport from './pages/ProfitReport';
 import Settings from './pages/Settings';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import FarmWeatherWidget from './components/FarmWeatherWidget';
+import FloatingParticles from './components/FloatingParticles';
+import QuickFabMenu from './components/QuickFabMenu';
 
 const isDevServer = window.location.port === '3000';
 axios.defaults.baseURL = isDevServer ? 'http://localhost:8001' : window.location.origin;
@@ -203,15 +205,11 @@ const NavigationLayout = () => {
         </main>
       </div>
 
-      {/* Floating Quick Action Booking Button */}
-      <button 
-        className="fab-booking-btn" 
-        onClick={() => navigate('/bookings/add')}
-        title={t('New Booking')}
-      >
-        <Plus size={22} />
-        <span>{t('New Booking')}</span>
-      </button>
+      {/* Ambient Agricultural Dust Particle Field */}
+      <FloatingParticles />
+
+      {/* Floating Radial Quick Action Booking Menu */}
+      <QuickFabMenu />
     </div>
   );
 };

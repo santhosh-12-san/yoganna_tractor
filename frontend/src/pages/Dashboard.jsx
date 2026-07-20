@@ -20,6 +20,7 @@ import {
 import { useWebSocket } from '../context/WebSocketContext';
 import { useLanguage } from '../context/LanguageContext';
 import AnimatedCounter from '../components/AnimatedCounter';
+import TiltCard from '../components/TiltCard';
 
 ChartJS.register(
   CategoryScale,
@@ -207,37 +208,37 @@ const Dashboard = () => {
           <span>{t('Why Choose Yoganna Tractor Services')}</span>
         </h2>
         <div className="advantages-grid">
-          <div className="advantage-card">
+          <TiltCard className="advantage-card">
             <div className="advantage-icon-wrapper">
               <Clock size={24} />
             </div>
             <h3 className="advantage-title">{t('Guaranteed On-Time Field Work')}</h3>
             <p className="advantage-desc">{t('We arrive directly at your farm as scheduled without delays.')}</p>
-          </div>
+          </TiltCard>
 
-          <div className="advantage-card">
+          <TiltCard className="advantage-card">
             <div className="advantage-icon-wrapper">
               <Award size={24} />
             </div>
             <h3 className="advantage-title">{t('Skilled & Experienced Drivers')}</h3>
             <p className="advantage-desc">{t('Trained operators for precise ploughing and rotavator operations.')}</p>
-          </div>
+          </TiltCard>
 
-          <div className="advantage-card">
+          <TiltCard className="advantage-card">
             <div className="advantage-icon-wrapper">
               <ShieldCheck size={24} />
             </div>
             <h3 className="advantage-title">{t('Best Transparent Pricing')}</h3>
             <p className="advantage-desc">{t('Affordable hourly and per-acre rates with zero hidden charges.')}</p>
-          </div>
+          </TiltCard>
 
-          <div className="advantage-card">
+          <TiltCard className="advantage-card">
             <div className="advantage-icon-wrapper">
               <Zap size={24} />
             </div>
             <h3 className="advantage-title">{t('Fast Online Booking')}</h3>
             <p className="advantage-desc">{t('Easy one-click booking and live status tracking in Kannada.')}</p>
-          </div>
+          </TiltCard>
         </div>
       </section>
 
@@ -247,7 +248,7 @@ const Dashboard = () => {
         // ----------------------------------
         <>
           <div className="metrics-grid">
-            <div className="metric-card">
+            <TiltCard className="metric-card">
               <div className="metric-header">
                 <span className="metric-title">{t('Total Customers')}</span>
                 <div className="metric-icon-wrapper">
@@ -259,9 +260,9 @@ const Dashboard = () => {
                 <ArrowUpRight size={14} />
                 <span>+12% This Month</span>
               </span>
-            </div>
+            </TiltCard>
 
-            <div className="metric-card">
+            <TiltCard className="metric-card">
               <div className="metric-header">
                 <span className="metric-title">{t("Today's Bookings") || "Today's Bookings"}</span>
                 <div className="metric-icon-wrapper">
@@ -273,9 +274,9 @@ const Dashboard = () => {
                 <ArrowUpRight size={14} />
                 <span>+2 New</span>
               </span>
-            </div>
+            </TiltCard>
 
-            <div className="metric-card">
+            <TiltCard className="metric-card">
               <div className="metric-header">
                 <span className="metric-title">{t("Today's Earnings") || "Today's Earnings"}</span>
                 <div className="metric-icon-wrapper">
@@ -287,9 +288,9 @@ const Dashboard = () => {
                 <ArrowUpRight size={14} />
                 <span>+18%</span>
               </span>
-            </div>
+            </TiltCard>
 
-            <div className="metric-card">
+            <TiltCard className="metric-card">
               <div className="metric-header">
                 <span className="metric-title">{t("Pending Payments") || "Pending Payments"}</span>
                 <div className="metric-icon-wrapper">
@@ -301,7 +302,7 @@ const Dashboard = () => {
                 <ArrowUpRight size={14} />
                 <span>+4%</span>
               </span>
-            </div>
+            </TiltCard>
           </div>
 
           {/* Secondary stats */}
