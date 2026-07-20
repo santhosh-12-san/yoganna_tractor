@@ -4,6 +4,9 @@ const FloatingParticles = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return; // Completely disable canvas animation loop on mobile screens for 60fps butter-smooth speed
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -16,7 +19,8 @@ const FloatingParticles = () => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const particles = Array.from({ length: 45 }).map(() => ({
+    const particleCount = 20;
+    const particles = Array.from({ length: particleCount }).map(() => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       radius: Math.random() * 2 + 1,
@@ -42,9 +46,7 @@ const FloatingParticles = () => {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(249, 171, 0, ${p.opacity})`; // Golden agricultural amber sparkle
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = 'rgba(249, 171, 0, 0.4)';
+        ctx.fillStyle = `rgba(249, 171, 0, ${p.opacity})`;
         ctx.fill();
       });
 

@@ -2599,9 +2599,36 @@ select option, .form-control option, .form-select option {
 }
 
 /* -------------------------------------------------------------
-   MOBILE RESPONSIVE POLISH & HARDWARE ACCELERATION
+   MOBILE RESPONSIVE POLISH & HARDWARE ACCELERATION (60 FPS SPEED)
 ------------------------------------------------------------- */
 @media (max-width: 768px) {
+  /* Disable heavy continuous background repaints & Gaussian blur animations on mobile */
+  .ambient-orb {
+    display: none !important;
+  }
+
+  .tractor-bg-layer {
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* Eliminate expensive backdrop-filter blur on mobile screens to prevent GPU scroll stutter */
+  .chart-card, .activity-card, .table-container, .form-container, .modal-content, .metric-card, .sidebar, .top-header, .figma-dark-dashboard {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #0b1a13 !important;
+  }
+
+  .content-body {
+    padding: 16px !important;
+  }
+
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+  }
+
   .figma-dark-dashboard {
     padding: 16px;
     margin-bottom: 16px;
