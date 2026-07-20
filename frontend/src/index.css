@@ -277,22 +277,54 @@ a:hover {
 
 /* Header */
 .top-header {
-  height: 70px;
-  background: rgba(255, 255, 255, 0.85);
+  min-height: 70px;
+  height: auto;
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(224, 224, 224, 0.7);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 12px 32px;
   position: sticky;
   top: 0;
-  z-index: 90;
+  z-index: 100;
+  gap: 16px;
+}
+
+.top-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+
+.lang-selector-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 20px;
+  height: 38px;
+  box-sizing: border-box;
+}
+
+.lang-select-dropdown {
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  color: var(--text-primary);
 }
 
 .page-title h1 {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
+  font-weight: 800;
 }
 
 .user-profile-badge {
@@ -300,6 +332,7 @@ a:hover {
   align-items: center;
   gap: 12px;
   cursor: pointer;
+  height: 38px;
 }
 
 .user-profile-info {
@@ -1339,16 +1372,49 @@ a:hover {
 }
 
 /* Weather Modal Styles */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 35, 21, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: modalOverlayFade 0.3s ease forwards;
+}
+
+@keyframes modalOverlayFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .weather-modal-card {
-  width: 90%;
+  width: 95%;
   max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
   padding: 28px;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.95);
   border-radius: var(--radius-lg);
-  box-shadow: 0 24px 48px rgba(6, 35, 21, 0.2);
+  box-shadow: 0 24px 60px rgba(6, 35, 21, 0.3);
+  animation: modalScaleSpring 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes modalScaleSpring {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .weather-modal-header {

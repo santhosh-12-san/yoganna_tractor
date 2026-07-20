@@ -141,28 +141,19 @@ const NavigationLayout = () => {
       <div className="main-wrapper">
         <header className="top-header">
           <div className="page-title">
-            <h1 style={{ fontSize: '1.25rem', color: 'var(--primary)', margin: 0 }}>
+            <h1 style={{ fontSize: '1.2rem', color: 'var(--primary)', margin: 0, whiteSpace: 'nowrap' }}>
               {navItems.find(item => location.pathname.startsWith(item.path))?.name || t('Tractor Service Management')}
             </h1>
           </div>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+          <div className="top-header-right">
             <FarmWeatherWidget />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: '600' }}>🌐 Language:</span>
+            <div className="lang-selector-box">
+              <span className="lang-label">🌐</span>
               <select
                 value={lang}
                 onChange={(e) => changeLanguage(e.target.value)}
-                style={{
-                  padding: '4px 8px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border)',
-                  fontSize: '0.85rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  background: 'white',
-                  outline: 'none'
-                }}
+                className="lang-select-dropdown"
               >
                 <option value="en">English</option>
                 <option value="kn">ಕನ್ನಡ (Kannada)</option>
