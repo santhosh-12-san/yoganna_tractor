@@ -214,7 +214,9 @@ export const translations = {
     "Day After": "Day After",
     "Sunny & Clear": "Sunny & Clear",
     "Scattered Clouds": "Scattered Clouds",
-    "Light Monsoon Rain": "Light Monsoon Rain"
+    "Light Monsoon Rain": "Light Monsoon Rain",
+    "Update Location": "Update Location",
+    "Detecting...": "Detecting..."
   },
   kn: {
     // Sidebar & General
@@ -431,6 +433,8 @@ export const translations = {
     "Day After": "ನಾಡಿದ್ದು",
     "Sunny & Clear": "ಬಿಸಿಲಿನಿಂದ ಕೂಡಿದ ವಾತಾವರಣ",
     "Scattered Clouds": "ಭಾಗಶಃ ಮೋಡ ಕವಿದ ವಾತಾವರಣ",
-    "Light Monsoon Rain": "ಹಗುರ ಮುಂಗಾರು ಮಳೆ"
+    "Light Monsoon Rain": "ಹಗುರ ಮುಂಗಾರು ಮಳೆ",
+    "Update Location": "ಸ್ಥಳವನ್ನು ನವೀಕರಿಸಿ",
+    "Detecting...": "ಪತ್ತೆಹಚ್ಚಲಾಗುತ್ತಿದೆ..."
   }
 };

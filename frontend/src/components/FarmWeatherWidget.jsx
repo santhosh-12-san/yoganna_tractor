@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Sun, CloudSun, CloudRain, Wind, Droplets, Gauge, Sparkles, X, ChevronDown, MapPin } from 'lucide-react';
+import { Sun, CloudSun, CloudRain, Wind, Droplets, Gauge, Sparkles, X, ChevronDown, MapPin, RefreshCw } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 const FarmWeatherWidget = () => {
@@ -8,6 +8,7 @@ const FarmWeatherWidget = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [detecting, setDetecting] = useState(false);
   const [locationName, setLocationName] = useState('Karnataka (Mandya)');
   const widgetRef = useRef(null);
 
@@ -62,6 +63,24 @@ const FarmWeatherWidget = () => {
       console.error("Error fetching live weather & location:", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const detectUserLocation = () => {
+    setDetecting(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          fetchLiveWeather(pos.coords.latitude, pos.coords.longitude).finally(() => setDetecting(false));
+        },
+        (err) => {
+          console.log("GPS error, trying IP location:", err);
+          fetchIpLocationFallback().finally(() => setDetecting(false));
+        },
+        { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+      );
+    } else {
+      fetchIpLocationFallback().finally(() => setDetecting(false));
     }
   };
 
@@ -135,9 +154,19 @@ const FarmWeatherWidget = () => {
                 <h2 style={{ fontSize: '1.05rem', margin: 0, color: 'var(--primary-dark)' }}>
                   {t('Farm Weather & Soil Conditions')}
                 </h2>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <MapPin size={12} />
-                  <span>{locationName}</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                    <MapPin size={12} style={{ color: 'var(--primary)' }} />
+                    <span style={{ fontWeight: '600' }}>{locationName}</span>
+                  </span>
+                  <button 
+                    onClick={detectUserLocation} 
+                    className="location-refresh-btn"
+                    title={t('Update Location')}
+                  >
+                    <RefreshCw size={11} className={detecting ? 'spinSlow' : ''} />
+                    <span>{detecting ? t('Detecting...') : t('Update Location')}</span>
+                  </button>
                 </span>
               </div>
             </div>

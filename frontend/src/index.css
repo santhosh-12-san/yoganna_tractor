@@ -1389,6 +1389,26 @@ a:hover {
   animation: dropdownSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.location-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--primary-light);
+  border: 1px solid rgba(14, 98, 63, 0.2);
+  color: var(--primary-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.location-refresh-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
 @keyframes dropdownSlideDown {
   from {
     opacity: 0;
