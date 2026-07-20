@@ -315,16 +315,20 @@ const BookingsList = () => {
           zIndex: 1000
         }}>
           <div style={{
-            backgroundColor: 'white',
-            padding: '24px',
+            backgroundColor: 'rgba(12, 24, 18, 0.96)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            padding: '28px',
             borderRadius: 'var(--radius-md)',
-            width: '400px',
-            boxShadow: 'var(--shadow-lg)'
+            width: '420px',
+            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)',
+            color: '#ffffff'
           }}>
-            <h3 style={{ marginBottom: '16px', color: 'var(--primary)' }}>{t('Complete Booking & Invoice')}</h3>
+            <h3 style={{ marginBottom: '20px', color: '#4ade80', fontSize: '1.2rem', fontWeight: '800' }}>{t('Complete Booking & Invoice')}</h3>
             <form onSubmit={handleCompleteWorkSubmit}>
               <div className="form-group">
-                <label htmlFor="modal_acres_hours">{t('Actual Acres / Hours')}</label>
+                <label htmlFor="modal_acres_hours" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{t('Actual Acres / Hours')}</label>
                 <input
                   id="modal_acres_hours"
                   type="number"
@@ -336,7 +340,7 @@ const BookingsList = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="modal_engine_hours">{t('Tractor Engine Hours Spent')}</label>
+                <label htmlFor="modal_engine_hours" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{t('Tractor Engine Hours Spent')}</label>
                 <input
                   id="modal_engine_hours"
                   type="number"
@@ -348,7 +352,7 @@ const BookingsList = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="modal_rate_per_unit">{t('Rate per Unit (₹)')}</label>
+                <label htmlFor="modal_rate_per_unit" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{t('Rate per Unit (₹)')}</label>
                 <input
                   id="modal_rate_per_unit"
                   type="number"
@@ -360,7 +364,7 @@ const BookingsList = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="modal_advance">{t('Advance Payment Received (₹)')}</label>
+                <label htmlFor="modal_advance" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{t('Advance Payment Received (₹)')}</label>
                 <input
                   id="modal_advance"
                   type="number"
@@ -371,19 +375,18 @@ const BookingsList = () => {
                   required
                 />
               </div>
-              <div style={{ margin: '16px 0', padding: '12px', background: 'var(--bg-light)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
-                <div style={{ display: 'flex', justifycontent: 'space-between', fontWeight: '600' }}>
+              <div style={{ margin: '20px 0', padding: '16px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '700', fontSize: '1.05rem', color: '#ffffff' }}>
                   <span>{t('Total Amount')}:</span>
-                  <span style={{ color: 'var(--primary)' }}>
+                  <span style={{ color: '#4ade80', fontSize: '1.2rem', fontWeight: '900' }}>
                     ₹{(parseFloat(completeFormData.acres_hours) * parseFloat(completeFormData.rate_per_unit) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '20px' }}>
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '24px' }}>
                 <button
                   type="button"
-                  className="btn"
-                  style={{ backgroundColor: 'var(--border)', color: 'var(--text-primary)' }}
+                  className="btn btn-secondary"
                   onClick={() => setCompletingBooking(null)}
                 >
                   {t('Cancel')}
