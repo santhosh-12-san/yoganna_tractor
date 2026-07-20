@@ -29,8 +29,7 @@ const BookingsList = () => {
   const handleSendWhatsAppBooking = (b) => {
     let rawPhone = b.customer_phone || b.customer?.phone || '';
     if (!rawPhone) {
-      alert("Customer mobile number is missing for this booking.");
-      return;
+      rawPhone = '9964808647';
     }
 
     const cleanPhone = rawPhone.replace(/\D/g, '');

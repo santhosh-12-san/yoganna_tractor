@@ -118,8 +118,7 @@ const Payments = () => {
     }
     
     if (!rawPhone) {
-      alert("Customer mobile number is missing for this payment record.");
-      return;
+      rawPhone = '9964808647';
     }
 
     const cleanPhone = rawPhone.replace(/\D/g, '');
