@@ -131,20 +131,30 @@ body {
   100% { transform: translate(-70px, 50px) scale(0.92); }
 }
 
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #06120b;
+  background-image: radial-gradient(rgba(52, 168, 83, 0.12) 1.2px, transparent 1.2px);
+  background-size: 28px 28px;
+  color: #f1f5f9;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Outfit', sans-serif;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 a {
-  color: var(--primary);
+  color: #4ade80;
   text-decoration: none;
   transition: var(--transition);
 }
 
 a:hover {
-  color: var(--primary-dark);
+  color: #86efac;
 }
 
 /* Scrollbar styling */
@@ -156,11 +166,11 @@ a:hover {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /* App Container Layout */
@@ -170,13 +180,13 @@ a:hover {
   position: relative;
 }
 
-/* Sidebar Navigation */
+/* Sidebar Navigation - Figma Dark Glassmorphism */
 .sidebar {
   width: 260px;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-right: 1px solid rgba(224, 224, 224, 0.7);
+  background: rgba(10, 20, 15, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -191,18 +201,18 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 12px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-logo svg {
-  color: var(--primary);
+  color: #4ade80;
 }
 
 .sidebar-logo span {
   font-family: 'Outfit', sans-serif;
   font-size: 1.25rem;
   font-weight: 800;
-  color: var(--primary);
+  color: #ffffff;
   letter-spacing: -0.5px;
 }
 
@@ -221,21 +231,22 @@ a:hover {
   gap: 12px;
   padding: 12px 16px;
   border-radius: var(--radius-sm);
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.65);
   font-weight: 500;
   font-size: 0.925rem;
   transition: var(--transition);
 }
 
 .sidebar-item:hover {
-  background: var(--bg-main);
-  color: var(--primary);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
 .sidebar-item.active {
-  background: var(--primary-light);
-  color: var(--primary);
+  background: #0e623f;
+  color: #ffffff;
   font-weight: 600;
+  box-shadow: 0 4px 14px rgba(14, 98, 63, 0.5);
 }
 
 .sidebar-item svg {
@@ -245,7 +256,7 @@ a:hover {
 
 .sidebar-footer {
   padding: 16px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-logout-btn {
@@ -257,14 +268,15 @@ a:hover {
   border-radius: var(--radius-sm);
   background: transparent;
   border: none;
-  color: var(--danger);
+  color: #fca5a5;
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
 }
 
 .sidebar-logout-btn:hover {
-  background: var(--danger-light);
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
 }
 
 /* Main Content Area */
@@ -272,17 +284,17 @@ a:hover {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Prevents flex items from breaking table overflow */
+  min-width: 0;
 }
 
-/* Header */
+/* Header - Figma Dark Glassmorphism */
 .top-header {
   min-height: 70px;
   height: auto;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(224, 224, 224, 0.7);
+  background: rgba(10, 20, 15, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -304,8 +316,8 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 4px 10px;
   border-radius: 20px;
   height: 38px;
@@ -319,12 +331,18 @@ a:hover {
   font-weight: 600;
   cursor: pointer;
   outline: none;
-  color: var(--text-primary);
+  color: #ffffff;
+}
+
+.lang-select-dropdown option {
+  background: #0d1a13;
+  color: #ffffff;
 }
 
 .page-title h1 {
   font-size: 1.35rem;
   font-weight: 800;
+  color: #ffffff !important;
 }
 
 .user-profile-badge {
@@ -454,12 +472,14 @@ a:hover {
   }
 }
 
-.chart-card, .activity-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+.chart-card, .activity-card, .table-container, .form-container, .modal-content {
+  background: rgba(15, 25, 20, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4) !important;
+  color: #ffffff !important;
 }
 
 .card-header {
@@ -471,21 +491,18 @@ a:hover {
 
 .card-header h2 {
   font-size: 1.15rem;
+  color: #ffffff !important;
 }
 
-/* Tables styling */
+/* Tables styling - Figma Dark Glassmorphism */
 .table-container {
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
   overflow: hidden;
   margin-bottom: 24px;
 }
 
 .table-controls {
   padding: 20px 24px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -493,19 +510,24 @@ a:hover {
   gap: 16px;
 }
 
-.search-input {
+.search-input, .form-control, .form-select {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
   padding: 10px 16px;
-  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
   outline: none;
-  min-width: 250px;
-  transition: var(--transition);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.search-input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--primary-light);
+.search-input::placeholder, .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.search-input:focus, .form-control:focus, .form-select:focus {
+  border-color: #34a853 !important;
+  box-shadow: 0 0 12px rgba(52, 168, 83, 0.3) !important;
 }
 
 .data-table {
@@ -515,19 +537,23 @@ a:hover {
 }
 
 .data-table th {
-  background: var(--bg-main);
+  background: rgba(255, 255, 255, 0.06) !important;
   padding: 14px 20px;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--text-secondary);
-  border-bottom: 1px solid var(--border);
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
 .data-table td {
   padding: 16px 20px;
   font-size: 0.9rem;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+.data-table tr:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
 }
 
 .data-table tr:hover {
