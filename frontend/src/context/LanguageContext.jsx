@@ -20,7 +20,9 @@ export const LanguageProvider = ({ children }) => {
 
   return (
     <LanguageContext.Provider value={{ lang, changeLanguage, t }}>
-      {children}
+      <div key={lang} className="lang-trans-container">
+        {children}
+      </div>
     </LanguageContext.Provider>
   );
 };

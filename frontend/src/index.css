@@ -415,18 +415,80 @@ a:hover {
 .badge {
   display: inline-flex;
   align-items: center;
+  gap: 4px;
   padding: 4px 10px;
   border-radius: var(--radius-full);
   font-size: 0.775rem;
   font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.badge.completed { background: var(--primary-light); color: var(--primary); }
-.badge.in-progress { background: var(--info-light); color: var(--info); }
-.badge.pending { background: var(--warning-light); color: var(--warning); }
+.badge.completed { 
+  background: var(--primary-light); 
+  color: var(--primary); 
+}
+.badge.completed::before {
+  content: '✓';
+  display: inline-block;
+  font-weight: 800;
+  margin-right: 2px;
+}
+
+.badge.in-progress { 
+  background: var(--info-light); 
+  color: var(--info); 
+}
+.badge.in-progress::before {
+  content: '🚜';
+  display: inline-block;
+  font-size: 0.85rem;
+  animation: tractorBouncing 1.2s infinite ease-in-out;
+}
+
+@keyframes tractorBouncing {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-2px) rotate(-4deg); }
+}
+
+.badge.pending { 
+  background: var(--warning-light); 
+  color: var(--warning); 
+}
+.badge.pending::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--warning);
+  display: inline-block;
+  margin-right: 4px;
+  animation: pulseDot 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.3); }
+}
+
 .badge.cancelled { background: var(--danger-light); color: var(--danger); }
 .badge.due-soon { background: var(--warning-light); color: var(--warning); }
 .badge.valid { background: var(--primary-light); color: var(--primary); }
+
+/* Language Transition Fade Effect */
+.lang-trans-container {
+  animation: langFadeIn 0.35s ease-in-out forwards;
+}
+
+@keyframes langFadeIn {
+  from {
+    opacity: 0.3;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .action-buttons {
   display: flex;

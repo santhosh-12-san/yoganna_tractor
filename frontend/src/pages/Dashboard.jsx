@@ -19,6 +19,7 @@ import {
 } from 'chart.js';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useLanguage } from '../context/LanguageContext';
+import AnimatedCounter from '../components/AnimatedCounter';
 
 ChartJS.register(
   CategoryScale,
@@ -253,7 +254,7 @@ const Dashboard = () => {
                   <Users size={20} />
                 </div>
               </div>
-              <span className="metric-value">{summary.totalCustomers}</span>
+              <span className="metric-value"><AnimatedCounter value={summary.totalCustomers} /></span>
               <span className="metric-trend trend-up">
                 <ArrowUpRight size={14} />
                 <span>+12% This Month</span>
@@ -267,7 +268,7 @@ const Dashboard = () => {
                   <Calendar size={20} />
                 </div>
               </div>
-              <span className="metric-value">{summary.todayBookings}</span>
+              <span className="metric-value"><AnimatedCounter value={summary.todayBookings} /></span>
               <span className="metric-trend trend-up">
                 <ArrowUpRight size={14} />
                 <span>+2 New</span>
@@ -281,7 +282,7 @@ const Dashboard = () => {
                   <IndianRupee size={20} />
                 </div>
               </div>
-              <span className="metric-value">{formatCurrency(summary.todayEarnings)}</span>
+              <span className="metric-value"><AnimatedCounter value={summary.todayEarnings} isCurrency={true} /></span>
               <span className="metric-trend trend-up">
                 <ArrowUpRight size={14} />
                 <span>+18%</span>
@@ -295,7 +296,7 @@ const Dashboard = () => {
                   <Clock size={20} />
                 </div>
               </div>
-              <span className="metric-value">{formatCurrency(summary.pendingPayments)}</span>
+              <span className="metric-value"><AnimatedCounter value={summary.pendingPayments} isCurrency={true} /></span>
               <span className="metric-trend trend-up">
                 <ArrowUpRight size={14} />
                 <span>+4%</span>
@@ -307,19 +308,19 @@ const Dashboard = () => {
           <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', marginBottom: '32px' }}>
             <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
               <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Fuel Expense (This Month)") || "Fuel Expense"}</span>
-              <span className="metric-value" style={{ fontSize: '1.4rem', color: '#6b7280' }}>{formatCurrency(summary.fuelExpense)}</span>
+              <span className="metric-value" style={{ fontSize: '1.4rem', color: '#6b7280' }}><AnimatedCounter value={summary.fuelExpense} isCurrency={true} /></span>
             </div>
             <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
               <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Maintenance Expense") || "Maintenance Expense"}</span>
-              <span className="metric-value" style={{ fontSize: '1.4rem', color: '#6b7280' }}>{formatCurrency(summary.maintenanceExpense)}</span>
+              <span className="metric-value" style={{ fontSize: '1.4rem', color: '#6b7280' }}><AnimatedCounter value={summary.maintenanceExpense} isCurrency={true} /></span>
             </div>
             <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
               <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Total Income (This Month)") || "Total Income"}</span>
-              <span className="metric-value" style={{ fontSize: '1.4rem', color: 'var(--primary)' }}>{formatCurrency(summary.totalIncome)}</span>
+              <span className="metric-value" style={{ fontSize: '1.4rem', color: 'var(--primary)' }}><AnimatedCounter value={summary.totalIncome} isCurrency={true} /></span>
             </div>
             <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
               <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Profit (This Month)") || "Profit"}</span>
-              <span className="metric-value" style={{ fontSize: '1.4rem', color: 'var(--secondary)' }}>{formatCurrency(summary.netProfit)}</span>
+              <span className="metric-value" style={{ fontSize: '1.4rem', color: 'var(--secondary)' }}><AnimatedCounter value={summary.netProfit} isCurrency={true} /></span>
             </div>
           </div>
 
