@@ -59,6 +59,25 @@ body {
   z-index: 0;
 }
 
+/* Animated Cinematic Tractor Wallpaper Background Layer */
+.tractor-bg-layer {
+  position: absolute;
+  inset: -50px;
+  background-image: url('/images/tractor_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.16;
+  filter: saturate(1.2) contrast(1.1);
+  animation: kenBurnsPan 45s infinite alternate ease-in-out;
+  will-change: transform;
+}
+
+@keyframes kenBurnsPan {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.08) translate(-15px, -10px); }
+  100% { transform: scale(1.04) translate(15px, 10px); }
+}
+
 .ambient-orb {
   position: absolute;
   border-radius: 50%;
