@@ -1371,6 +1371,35 @@ a:hover {
   box-shadow: 0 4px 12px rgba(14, 98, 63, 0.15);
 }
 
+/* Weather Header Dropdown Card */
+.weather-dropdown-card {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 380px;
+  max-width: 92vw;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(220, 220, 220, 0.9);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 40px rgba(6, 35, 21, 0.25);
+  padding: 20px;
+  z-index: 99999;
+  animation: dropdownSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes dropdownSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* Weather Modal Styles */
 .modal-overlay {
   position: fixed;

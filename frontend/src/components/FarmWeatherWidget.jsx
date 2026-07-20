@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Sun, CloudSun, CloudRain, Wind, Droplets, Gauge, Sparkles, X, ChevronRight, MapPin } from 'lucide-react';
+import { Sun, CloudSun, CloudRain, Wind, Droplets, Gauge, Sparkles, X, ChevronDown, MapPin } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 const FarmWeatherWidget = () => {
   const { t } = useLanguage();
-  const [showModal, setShowModal] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [locationName, setLocationName] = useState('Karnataka (Mandya)');
+  const widgetRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (widgetRef.current && !widgetRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const fetchLiveWeather = async (lat = 12.52, lon = 76.90) => {
     try {
@@ -30,9 +41,7 @@ const FarmWeatherWidget = () => {
           setLocationName('Your Farm Location');
           fetchLiveWeather(pos.coords.latitude, pos.coords.longitude);
         },
-        () => {
-          fetchLiveWeather();
-        }
+        () => fetchLiveWeather()
       );
     } else {
       fetchLiveWeather();
@@ -65,12 +74,12 @@ const FarmWeatherWidget = () => {
   ];
 
   return (
-    <>
+    <div className="weather-widget-container" ref={widgetRef} style={{ position: 'relative' }}>
       {/* Clickable Header Weather Pill */}
       <div 
-        className="weather-widget clickable" 
-        onClick={() => setShowModal(true)}
-        title="Click to view real live weather & farm soil details"
+        className={`weather-widget clickable ${showDropdown ? 'active' : ''}`}
+        onClick={() => setShowDropdown(!showDropdown)}
+        title="Click to view live weather & farm soil details"
       >
         <div className="weather-icon-wrapper">
           <IconComponent className="weather-icon sun-spin" size={18} style={{ color: weatherInfo.color }} />
@@ -79,101 +88,99 @@ const FarmWeatherWidget = () => {
           <span className="weather-temp">{currentTemp}°C</span>
           <span className="weather-desc">{weatherInfo.text}</span>
         </div>
-        <ChevronRight size={14} style={{ color: 'var(--primary)', opacity: 0.7 }} />
+        <ChevronDown size={14} style={{ color: 'var(--primary)', opacity: 0.7, transform: showDropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
       </div>
 
-      {/* Interactive Weather Details Modal */}
-      {showModal && (
-        <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-card weather-modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="weather-modal-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <CloudSun size={24} style={{ color: 'var(--warning)' }} />
-                <div>
-                  <h2 style={{ fontSize: '1.15rem', margin: 0, color: 'var(--primary-dark)' }}>
-                    {t('Farm Weather & Soil Conditions')}
-                  </h2>
-                  <span style={{ fontSize: '0.775rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <MapPin size={12} />
-                    <span>{locationName}</span>
-                  </span>
-                </div>
-              </div>
-              <button className="modal-close-btn" onClick={() => setShowModal(false)} aria-label="Close Weather Details">
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="weather-hero-banner">
-              <div className="weather-hero-left">
-                <span className="weather-big-temp">{currentTemp}°C</span>
-                <span className="weather-big-condition">{weatherInfo.text}</span>
-              </div>
-              <div className="weather-hero-right">
-                <span className="weather-soil-badge">
-                  <Sparkles size={14} />
-                  <span>{t('Excellent for Ploughing & Rotavator')}</span>
+      {/* Attached Header Dropdown Card */}
+      {showDropdown && (
+        <div className="weather-dropdown-card">
+          <div className="weather-modal-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <CloudSun size={20} style={{ color: 'var(--warning)' }} />
+              <div>
+                <h2 style={{ fontSize: '1.05rem', margin: 0, color: 'var(--primary-dark)' }}>
+                  {t('Farm Weather & Soil Conditions')}
+                </h2>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <MapPin size={12} />
+                  <span>{locationName}</span>
                 </span>
               </div>
             </div>
+            <button className="modal-close-btn" onClick={() => setShowDropdown(false)} aria-label="Close Weather Details">
+              <X size={18} />
+            </button>
+          </div>
 
-            {/* Farm Weather Metrics Grid */}
-            <div className="weather-metrics-grid">
-              <div className="weather-metric-item">
-                <div className="weather-item-icon"><Wind size={20} /></div>
-                <div className="weather-item-data">
-                  <span className="weather-item-label">{t('Wind Speed')}</span>
-                  <span className="weather-item-val">{currentWind} km/h</span>
-                </div>
-              </div>
+          <div className="weather-hero-banner" style={{ padding: '14px 18px', marginBottom: '16px' }}>
+            <div className="weather-hero-left">
+              <span className="weather-big-temp" style={{ fontSize: '2.1rem' }}>{currentTemp}°C</span>
+              <span className="weather-big-condition" style={{ fontSize: '0.85rem' }}>{weatherInfo.text}</span>
+            </div>
+            <div className="weather-hero-right">
+              <span className="weather-soil-badge" style={{ fontSize: '0.75rem', padding: '6px 10px' }}>
+                <Sparkles size={12} />
+                <span>{t('Excellent for Ploughing & Rotavator')}</span>
+              </span>
+            </div>
+          </div>
 
-              <div className="weather-metric-item">
-                <div className="weather-item-icon"><Droplets size={20} /></div>
-                <div className="weather-item-data">
-                  <span className="weather-item-label">{t('Humidity')}</span>
-                  <span className="weather-item-val">{currentHumidity}%</span>
-                </div>
-              </div>
-
-              <div className="weather-metric-item">
-                <div className="weather-item-icon"><Sun size={20} /></div>
-                <div className="weather-item-data">
-                  <span className="weather-item-label">{t('UV Index')}</span>
-                  <span className="weather-item-val">6 (Moderate)</span>
-                </div>
-              </div>
-
-              <div className="weather-metric-item">
-                <div className="weather-item-icon"><Gauge size={20} /></div>
-                <div className="weather-item-data">
-                  <span className="weather-item-label">{t('Soil Moisture Rating')}</span>
-                  <span className="weather-item-val">Optimal (68%)</span>
-                </div>
+          {/* Metrics Grid */}
+          <div className="weather-metrics-grid" style={{ marginBottom: '16px' }}>
+            <div className="weather-metric-item" style={{ padding: '10px 12px' }}>
+              <div className="weather-item-icon" style={{ width: '32px', height: '32px' }}><Wind size={16} /></div>
+              <div className="weather-item-data">
+                <span className="weather-item-label">{t('Wind Speed')}</span>
+                <span className="weather-item-val" style={{ fontSize: '0.85rem' }}>{currentWind} km/h</span>
               </div>
             </div>
 
-            {/* 3-Day Farming Forecast */}
-            <div className="weather-forecast-section">
-              <h3 className="weather-forecast-title">{t('3-Day Farming Forecast')}</h3>
-              <div className="weather-forecast-grid">
-                {dailyForecast.map((item, idx) => {
-                  const dayDetails = getWeatherDetails(item.code);
-                  const DayIcon = dayDetails.icon;
-                  return (
-                    <div key={idx} className={`forecast-day-card ${idx === 0 ? 'active' : ''}`}>
-                      <span className="forecast-day-title">{item.dayLabel}</span>
-                      <DayIcon size={24} style={{ color: dayDetails.color }} />
-                      <span className="forecast-temp">{item.maxTemp}° / {item.minTemp}°C</span>
-                      <span className="forecast-desc">{dayDetails.text}</span>
-                    </div>
-                  );
-                })}
+            <div className="weather-metric-item" style={{ padding: '10px 12px' }}>
+              <div className="weather-item-icon" style={{ width: '32px', height: '32px' }}><Droplets size={16} /></div>
+              <div className="weather-item-data">
+                <span className="weather-item-label">{t('Humidity')}</span>
+                <span className="weather-item-val" style={{ fontSize: '0.85rem' }}>{currentHumidity}%</span>
               </div>
+            </div>
+
+            <div className="weather-metric-item" style={{ padding: '10px 12px' }}>
+              <div className="weather-item-icon" style={{ width: '32px', height: '32px' }}><Sun size={16} /></div>
+              <div className="weather-item-data">
+                <span className="weather-item-label">{t('UV Index')}</span>
+                <span className="weather-item-val" style={{ fontSize: '0.85rem' }}>6 (Moderate)</span>
+              </div>
+            </div>
+
+            <div className="weather-metric-item" style={{ padding: '10px 12px' }}>
+              <div className="weather-item-icon" style={{ width: '32px', height: '32px' }}><Gauge size={16} /></div>
+              <div className="weather-item-data">
+                <span className="weather-item-label">{t('Soil Moisture Rating')}</span>
+                <span className="weather-item-val" style={{ fontSize: '0.85rem' }}>Optimal (68%)</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 3-Day Farming Forecast */}
+          <div className="weather-forecast-section">
+            <h3 className="weather-forecast-title" style={{ fontSize: '0.9rem', marginBottom: '8px' }}>{t('3-Day Farming Forecast')}</h3>
+            <div className="weather-forecast-grid">
+              {dailyForecast.map((item, idx) => {
+                const dayDetails = getWeatherDetails(item.code);
+                const DayIcon = dayDetails.icon;
+                return (
+                  <div key={idx} className={`forecast-day-card ${idx === 0 ? 'active' : ''}`} style={{ padding: '10px 8px' }}>
+                    <span className="forecast-day-title" style={{ fontSize: '0.75rem' }}>{item.dayLabel}</span>
+                    <DayIcon size={20} style={{ color: dayDetails.color }} />
+                    <span className="forecast-temp" style={{ fontSize: '0.85rem' }}>{item.maxTemp}° / {item.minTemp}°C</span>
+                    <span className="forecast-desc" style={{ fontSize: '0.7rem' }}>{dayDetails.text}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
