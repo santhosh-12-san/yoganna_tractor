@@ -201,7 +201,20 @@ export const translations = {
     "Affordable hourly and per-acre rates with zero hidden charges.": "Affordable hourly and per-acre rates with zero hidden charges.",
     "Fast Online Booking": "Fast Online Booking",
     "Easy one-click booking and live status tracking in Kannada.": "Easy one-click booking and live status tracking in Kannada.",
-    "Ideal Field Work Weather": "Ideal Field Work Weather"
+    "Ideal Field Work Weather": "Ideal Field Work Weather",
+    "Farm Weather & Soil Conditions": "Farm Weather & Soil Conditions",
+    "Soil Moisture Rating": "Soil Moisture Rating",
+    "Excellent for Ploughing & Rotavator": "Excellent for Ploughing & Rotavator",
+    "Wind Speed": "Wind Speed",
+    "Humidity": "Humidity",
+    "UV Index": "UV Index",
+    "3-Day Farming Forecast": "3-Day Farming Forecast",
+    "Today": "Today",
+    "Tomorrow": "Tomorrow",
+    "Day After": "Day After",
+    "Sunny & Clear": "Sunny & Clear",
+    "Scattered Clouds": "Scattered Clouds",
+    "Light Monsoon Rain": "Light Monsoon Rain"
   },
   kn: {
     // Sidebar & General
@@ -405,6 +418,19 @@ export const translations = {
     "Affordable hourly and per-acre rates with zero hidden charges.": "ಯಾವುದೇ ಗುಪ್ತ ಶುಲ್ಕವಿಲ್ಲದೆ ಕೈಗೆಟುಕುವ ಎಕರೆ ಹಾಗೂ ಗಂಟೆಯ ದರಗಳು.",
     "Fast Online Booking": "ಸುಲಭ ಹಾಗೂ ತ್ವರಿತ ಬುಕಿಂಗ್",
     "Easy one-click booking and live status tracking in Kannada.": "ಕನ್ನಡದಲ್ಲೇ ಸುಲಭವಾಗಿ ಬುಕಿಂಗ್ ಮಾಡಿ ನೇರ ಸ್ಥಿತಿ ತಿಳಿಯಿರಿ.",
-    "Ideal Field Work Weather": "ಉತ್ತಮ ಕೃಷಿ ಕೆಲಸದ ಹವಾಮಾನ"
+    "Ideal Field Work Weather": "ಉತ್ತಮ ಕೃಷಿ ಕೆಲಸದ ಹವಾಮಾನ",
+    "Farm Weather & Soil Conditions": "ರೈತರ ಹವಾಮಾನ ಮತ್ತು ಮಣ್ಣಿನ ವಿವರಗಳು",
+    "Soil Moisture Rating": "ಮಣ್ಣಿನ ತೇವಾಂಶ ಮಟ್ಟ",
+    "Excellent for Ploughing & Rotavator": "ಉಳುಮೆ ಮತ್ತು ರೋಟವೇಟರ್‌ಗೆ ಅತ್ಯುತ್ತಮ ಸಮಯ",
+    "Wind Speed": "ಗಾಳಿಯ ವೇಗ",
+    "Humidity": "ಆರ್ದ್ರತೆ / ತೇವಾಂಶ",
+    "UV Index": "ಯುವಿ ಸೂಚಿ",
+    "3-Day Farming Forecast": "೩ ದಿನಗಳ ಕೃಷಿ ಮುನ್ಸೂಚನೆ",
+    "Today": "ಇಂದು",
+    "Tomorrow": "ನಾಳೆ",
+    "Day After": "ನಾಡಿದ್ದು",
+    "Sunny & Clear": "ಬಿಸಿಲಿನಿಂದ ಕೂಡಿದ ವಾತಾವರಣ",
+    "Scattered Clouds": "ಭಾಗಶಃ ಮೋಡ ಕವಿದ ವಾತಾವರಣ",
+    "Light Monsoon Rain": "ಹಗುರ ಮುಂಗಾರು ಮಳೆ"
   }
 };
