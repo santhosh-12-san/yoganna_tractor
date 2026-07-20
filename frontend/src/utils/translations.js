@@ -200,7 +200,8 @@ export const translations = {
     "Best Transparent Pricing": "Best Transparent Pricing",
     "Affordable hourly and per-acre rates with zero hidden charges.": "Affordable hourly and per-acre rates with zero hidden charges.",
     "Fast Online Booking": "Fast Online Booking",
-    "Easy one-click booking and live status tracking in Kannada.": "Easy one-click booking and live status tracking in Kannada."
+    "Easy one-click booking and live status tracking in Kannada.": "Easy one-click booking and live status tracking in Kannada.",
+    "Ideal Field Work Weather": "Ideal Field Work Weather"
   },
   kn: {
     // Sidebar & General
@@ -403,6 +404,7 @@ export const translations = {
     "Best Transparent Pricing": "ಅತಿ ಕಡಿಮೆ ನ್ಯಾಯಯುತ ದರಗಳು",
     "Affordable hourly and per-acre rates with zero hidden charges.": "ಯಾವುದೇ ಗುಪ್ತ ಶುಲ್ಕವಿಲ್ಲದೆ ಕೈಗೆಟುಕುವ ಎಕರೆ ಹಾಗೂ ಗಂಟೆಯ ದರಗಳು.",
     "Fast Online Booking": "ಸುಲಭ ಹಾಗೂ ತ್ವರಿತ ಬುಕಿಂಗ್",
-    "Easy one-click booking and live status tracking in Kannada.": "ಕನ್ನಡದಲ್ಲೇ ಸುಲಭವಾಗಿ ಬುಕಿಂಗ್ ಮಾಡಿ ನೇರ ಸ್ಥಿತಿ ತಿಳಿಯಿರಿ."
+    "Easy one-click booking and live status tracking in Kannada.": "ಕನ್ನಡದಲ್ಲೇ ಸುಲಭವಾಗಿ ಬುಕಿಂಗ್ ಮಾಡಿ ನೇರ ಸ್ಥಿತಿ ತಿಳಿಯಿರಿ.",
+    "Ideal Field Work Weather": "ಉತ್ತಮ ಕೃಷಿ ಕೆಲಸದ ಹವಾಮಾನ"
   }
 };

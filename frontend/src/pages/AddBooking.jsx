@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useLanguage } from '../context/LanguageContext';
+import { triggerConfetti } from '../utils/confetti';
 
 const AddBooking = () => {
   const { t } = useLanguage();
@@ -143,6 +144,7 @@ const AddBooking = () => {
         await axios.put(`/api/bookings/${id}/`, payload);
       } else {
         await axios.post('/api/bookings/', payload);
+        triggerConfetti();
       }
       navigate('/bookings');
     } catch (err) {

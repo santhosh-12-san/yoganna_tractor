@@ -23,6 +23,7 @@ import ReportsDashboard from './pages/ReportsDashboard';
 import ProfitReport from './pages/ProfitReport';
 import Settings from './pages/Settings';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
+import FarmWeatherWidget from './components/FarmWeatherWidget';
 
 const isDevServer = window.location.port === '3000';
 axios.defaults.baseURL = isDevServer ? 'http://localhost:8001' : window.location.origin;
@@ -146,6 +147,7 @@ const NavigationLayout = () => {
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+            <FarmWeatherWidget />
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: '600' }}>🌐 Language:</span>
               <select

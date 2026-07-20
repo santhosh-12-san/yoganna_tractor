@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Plus, Edit2, Trash2, Search, Calendar, RefreshCw, Play, Check } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useLanguage } from '../context/LanguageContext';
+import { SkeletonTable } from '../components/SkeletonLoader';
 
 const BookingsList = () => {
   const { t } = useLanguage();
@@ -120,6 +121,10 @@ const BookingsList = () => {
 
     return matchesSearch && matchesStatus && matchesDate;
   });
+
+  if (loading) {
+    return <SkeletonTable rows={6} />;
+  }
 
   return (
     <div className="table-container">
