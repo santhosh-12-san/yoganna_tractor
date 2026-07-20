@@ -1374,18 +1374,15 @@ a:hover {
 /* Weather Modal Styles */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(6, 35, 21, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  inset: 0;
+  background: rgba(6, 35, 21, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  z-index: 100000;
-  padding: 30px 20px;
+  align-items: center;
+  z-index: 999999;
+  padding: 24px;
   overflow-y: auto;
   animation: modalOverlayFade 0.3s ease forwards;
 }
@@ -1398,17 +1395,17 @@ a:hover {
 .weather-modal-card {
   width: 100%;
   max-width: 500px;
-  margin: auto 0;
+  max-height: 80vh;
+  margin: 0;
   padding: 24px;
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.95);
   border-radius: var(--radius-lg);
-  box-shadow: 0 24px 60px rgba(6, 35, 21, 0.35);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
   animation: modalScaleSpring 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   position: relative;
-  max-height: calc(100vh - 60px);
   overflow-y: auto;
 }
 
