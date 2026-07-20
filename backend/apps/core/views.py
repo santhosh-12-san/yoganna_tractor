@@ -353,10 +353,14 @@ class DashboardSummaryView(APIView):
         # Customer View
         # -----------------
         if user.role == 'CUSTOMER':
-            try:
-                customer = user.customer_profile
-            except Customer.DoesNotExist:
-                return Response({"detail": "Customer profile does not exist."}, status=status.HTTP_404_NOT_FOUND)
+            customer, _ = Customer.objects.get_or_create(
+                user=user,
+                defaults={
+                    'name': user.get_full_name() or user.username,
+                    'phone': user.phone_number or '0000000000',
+                    'village': getattr(user, 'village', 'Karnataka')
+                }
+            )
 
             bookings = Booking.objects.filter(customer=customer)
             payments = Payment.objects.filter(customer=customer)

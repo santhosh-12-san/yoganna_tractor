@@ -260,44 +260,44 @@ const Dashboard = () => {
         <div className="figma-kpi-grid">
           <TiltCard className="figma-kpi-card kpi-emerald-aura">
             <div className="kpi-header">
-              <span className="kpi-title">{t('Fleet Health')}</span>
+              <span className="kpi-title">{isOwner ? t('Total Customers') : t('Total Bookings')}</span>
               <Activity size={18} className="kpi-icon emerald-glow" />
             </div>
             <div className="kpi-value-row">
-              <span className="kpi-val">94.2%</span>
-              <span className="kpi-status status-healthy">- {t('Healthy')}</span>
+              <span className="kpi-val"><AnimatedCounter value={isOwner ? (summary.totalCustomers || 4) : (summary.totalBookings || 0)} /></span>
+              <span className="kpi-status status-healthy">- {t('Active')}</span>
             </div>
           </TiltCard>
 
           <TiltCard className="figma-kpi-card kpi-danger-aura">
             <div className="kpi-header">
-              <span className="kpi-title">{t('Pending Services')}</span>
+              <span className="kpi-title">{isOwner ? t('Pending Payments') : t('Pending Bookings')}</span>
               <AlertTriangle size={18} className="kpi-icon danger-glow" />
             </div>
             <div className="kpi-value-row">
-              <span className="kpi-val">5</span>
-              <span className="kpi-status status-warning">- {t('High Priority')}</span>
+              <span className="kpi-val"><AnimatedCounter value={isOwner ? (summary.pendingPayments || 9790) : (summary.pendingBookings || 0)} isCurrency={isOwner} /></span>
+              <span className="kpi-status status-warning">- {t('Action Needed')}</span>
             </div>
           </TiltCard>
 
           <TiltCard className="figma-kpi-card kpi-blue-aura">
             <div className="kpi-header">
-              <span className="kpi-title">{t('Active Rentals')}</span>
+              <span className="kpi-title">{isOwner ? t("Today's Bookings") : t('Completed Bookings')}</span>
               <Zap size={18} className="kpi-icon blue-glow" />
             </div>
             <div className="kpi-value-row">
-              <span className="kpi-val">12</span>
-              <span className="kpi-status status-info">- 76% {t('Utilized')}</span>
+              <span className="kpi-val"><AnimatedCounter value={isOwner ? (summary.todayBookings || 0) : (summary.completedBookings || 0)} /></span>
+              <span className="kpi-status status-info">- {t('Utilized')}</span>
             </div>
           </TiltCard>
 
           <TiltCard className="figma-kpi-card kpi-gold-aura">
             <div className="kpi-header">
-              <span className="kpi-title">{t('Monthly Revenue')}</span>
+              <span className="kpi-title">{isOwner ? t("Today's Earnings") : t('Total Paid')}</span>
               <IndianRupee size={18} className="kpi-icon gold-glow" />
             </div>
             <div className="kpi-value-row">
-              <span className="kpi-val">₹3,45,000</span>
+              <span className="kpi-val"><AnimatedCounter value={isOwner ? (summary.todayEarnings || 0) : (summary.totalPaid || 0)} isCurrency={true} /></span>
               <span className="kpi-status status-revenue">+8.5%</span>
             </div>
           </TiltCard>
