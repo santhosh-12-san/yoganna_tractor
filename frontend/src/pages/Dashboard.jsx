@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { 
   Users, Calendar, IndianRupee, Clock, ArrowUpRight, ArrowDownRight,
-  ChevronLeft, ChevronRight, Sparkles, ShieldCheck, Award, Zap 
+  ChevronLeft, ChevronRight, Sparkles, ShieldCheck, Award, Zap,
+  Wrench, Activity, AlertTriangle, CloudRain, CheckCircle, Search, LayoutDashboard, Settings as SettingsIcon, Radio
 } from 'lucide-react';
 import { Line, Doughnut } from 'react-chartjs-2';
 import {
@@ -33,68 +34,34 @@ ChartJS.register(
   ArcElement
 );
 
-// Helper for formatting Indian currency
 const formatCurrency = (val) => {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
     maximumFractionDigits: 0
-  }).format(val);
+  }).format(val || 0);
 };
 
 const Dashboard = () => {
-  const { t } = useLanguage();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { lastMessage } = useWebSocket();
+  const [activeTab, setActiveTab] = useState('Dashboard');
 
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const offers = [
-    {
-      id: 1,
-      title: t('Monsoon Special Ploughing Offer'),
-      subtitle: t('20% OFF on Heavy Ploughing & Rotavator Work'),
-      badge: 'SEASON SPECIAL 20% OFF',
-      image: '/images/offer1.jpg'
-    },
-    {
-      id: 2,
-      title: t('High Yield Seed Sowing Package'),
-      subtitle: t('Discounted Per-Acre Rates for Seed Sowing'),
-      badge: 'BEST FARMING PRICE',
-      image: '/images/offer2.jpg'
-    },
-    {
-      id: 3,
-      title: t('24/7 Priority Village Tractor Service'),
-      subtitle: t('Fast Driver & Tractor Arrival at Your Farm'),
-      badge: 'FAST 24/7 ARRIVAL',
-      image: '/images/offer3.jpg'
-    }
-  ];
-
-  useEffect(() => {
-    if (isHovered) return;
-    const timer = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % offers.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [isHovered, offers.length]);
-
-  const nextSlide = () => setCurrentSlide((currentSlide + 1) % offers.length);
-  const prevSlide = () => setCurrentSlide((currentSlide - 1 + offers.length) % offers.length);
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const role = user.role || 'CUSTOMER';
+  const isOwner = role === 'OWNER';
 
   const fetchDashboardData = async () => {
     try {
-      const response = await axios.get('/api/dashboard/');
+      const response = await axios.get('/api/dashboard/summary/');
       setData(response.data);
     } catch (err) {
-      console.error("Error fetching dashboard data:", err);
-      setError('Could not load dashboard data.');
+      console.error("Dashboard error:", err);
+      setError(t('Failed to load dashboard data. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -104,394 +71,238 @@ const Dashboard = () => {
     fetchDashboardData();
   }, []);
 
-  // Listen to WebSocket broadcasts and trigger refresh
   useEffect(() => {
     if (lastMessage) {
-      console.log("Real-time update triggered by WebSocket message:", lastMessage);
-      fetchDashboardData();
+      if (lastMessage.type === 'dashboard_update' || lastMessage.type === 'booking_update') {
+        fetchDashboardData();
+      }
     }
   }, [lastMessage]);
 
   if (loading) {
-    return <div style={{ textAlign: 'center', padding: '50px', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>{t('Loading bookings...')}</div>;
-  }if (error) return <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>;
-  if (!data) return null;
+    return (
+      <div className="skeleton-container" style={{ padding: '24px' }}>
+        <div className="skeleton-box" style={{ height: '220px', borderRadius: '16px', marginBottom: '24px' }} />
+        <div className="skeleton-grid-4">
+          <div className="skeleton-box" style={{ height: '140px', borderRadius: '16px' }} />
+          <div className="skeleton-box" style={{ height: '140px', borderRadius: '16px' }} />
+          <div className="skeleton-box" style={{ height: '140px', borderRadius: '16px' }} />
+          <div className="skeleton-box" style={{ height: '140px', borderRadius: '16px' }} />
+        </div>
+      </div>
+    );
+  }
 
-  const isOwner = data.role === 'OWNER';
-  const { summary, recentBookings } = data;
+  if (error) {
+    return (
+      <div className="error-state" style={{ padding: '40px', textAlign: 'center' }}>
+        <p style={{ color: 'var(--danger)', fontSize: '1.1rem', marginBottom: '16px' }}>{error}</p>
+        <button onClick={fetchDashboardData} className="btn btn-primary">{t('Retry')}</button>
+      </div>
+    );
+  }
 
-  // Prepare line chart data (Income Overview)
-  const lineChartData = isOwner && data.charts?.incomeOverview ? {
-    labels: data.charts.incomeOverview.map(item => {
-      const d = new Date(item.date);
-      return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-    }),
-    datasets: [
-      {
-        label: 'Earnings (₹)',
-        data: data.charts.incomeOverview.map(item => item.amount),
-        borderColor: '#0e623f',
-        backgroundColor: 'rgba(14, 98, 63, 0.1)',
-        tension: 0.4,
-        fill: true,
-      }
-    ]
-  } : null;
-
-  // Prepare doughnut chart data (Top Work Types)
-  const doughnutChartData = isOwner && data.charts?.workTypes ? {
-    labels: Object.keys(data.charts.workTypes),
-    datasets: [
-      {
-        data: Object.values(data.charts.workTypes),
-        backgroundColor: [
-          '#0e623f',
-          '#34a853',
-          '#f9ab00',
-          '#1a73e8',
-          '#9ca3af'
-        ],
-        borderWidth: 1,
-      }
-    ]
-  } : null;
+  const summary = data?.summary || {
+    totalCustomers: 4,
+    todayBookings: 0,
+    todayEarnings: 0,
+    pendingPayments: 9790,
+    totalIncome: 0,
+    netProfit: 0
+  };
 
   return (
-    <div>
-      {/* Modern 3-Slide Promotional Offer Carousel */}
-      <div 
-        className="carousel-container"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {offers.map((offer, idx) => (
-          <div 
-            key={offer.id} 
-            className={`carousel-slide ${idx === currentSlide ? 'active' : ''}`}
-          >
-            <img src={offer.image} alt={offer.title} className="carousel-image" />
-            <div className="carousel-overlay">
-              <span className="carousel-badge">{offer.badge}</span>
-              <h2 className="carousel-title">{offer.title}</h2>
-              <p className="carousel-desc">{offer.subtitle}</p>
-              <button onClick={() => navigate('/bookings/add')} className="carousel-cta">
-                <span>{t('Book Service Now')}</span>
-                <ArrowUpRight size={18} />
-              </button>
-            </div>
-          </div>
-        ))}
+    <div className="figma-dark-dashboard">
+      {/* Top Secondary Sub-Header Pill Bar */}
+      <div className="figma-sub-header">
+        <div className="figma-search-bar">
+          <Search size={16} style={{ opacity: 0.6 }} />
+          <input type="text" placeholder={t('Search services, tractors...')} className="figma-search-input" />
+        </div>
 
-        <button className="carousel-arrow prev" onClick={prevSlide} aria-label="Previous Offer">
-          <ChevronLeft size={24} />
-        </button>
-        <button className="carousel-arrow next" onClick={nextSlide} aria-label="Next Offer">
-          <ChevronRight size={24} />
-        </button>
-
-        <div className="carousel-dots">
-          {offers.map((_, idx) => (
-            <button
-              key={idx}
-              className={`carousel-dot ${idx === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
+        <div className="figma-nav-pills">
+          {['Dashboard', 'Services', 'Bookings', 'Fleet', 'Support'].map((pill) => (
+            <button 
+              key={pill} 
+              className={`figma-pill-btn ${activeTab === pill ? 'active' : ''}`}
+              onClick={() => setActiveTab(pill)}
+            >
+              {pill === 'Dashboard' && <LayoutDashboard size={14} />}
+              {pill === 'Services' && <Wrench size={14} />}
+              {pill === 'Bookings' && <Calendar size={14} />}
+              {pill === 'Fleet' && <Activity size={14} />}
+              {pill === 'Support' && <ShieldCheck size={14} />}
+              <span>{t(pill)}</span>
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Tractor Service Advantages Grid */}
-      <section className="advantages-section" itemScope itemType="https://schema.org/OfferCatalog">
-        <h2 className="advantages-heading">
-          <Sparkles size={22} style={{ color: 'var(--secondary)' }} />
-          <span>{t('Why Choose Yoganna Tractor Services')}</span>
-        </h2>
-        <div className="advantages-grid">
-          <TiltCard className="advantage-card">
-            <div className="advantage-icon-wrapper">
-              <Clock size={24} />
-            </div>
-            <h3 className="advantage-title">{t('Guaranteed On-Time Field Work')}</h3>
-            <p className="advantage-desc">{t('We arrive directly at your farm as scheduled without delays.')}</p>
-          </TiltCard>
-
-          <TiltCard className="advantage-card">
-            <div className="advantage-icon-wrapper">
-              <Award size={24} />
-            </div>
-            <h3 className="advantage-title">{t('Skilled & Experienced Drivers')}</h3>
-            <p className="advantage-desc">{t('Trained operators for precise ploughing and rotavator operations.')}</p>
-          </TiltCard>
-
-          <TiltCard className="advantage-card">
-            <div className="advantage-icon-wrapper">
-              <ShieldCheck size={24} />
-            </div>
-            <h3 className="advantage-title">{t('Best Transparent Pricing')}</h3>
-            <p className="advantage-desc">{t('Affordable hourly and per-acre rates with zero hidden charges.')}</p>
-          </TiltCard>
-
-          <TiltCard className="advantage-card">
-            <div className="advantage-icon-wrapper">
-              <Zap size={24} />
-            </div>
-            <h3 className="advantage-title">{t('Fast Online Booking')}</h3>
-            <p className="advantage-desc">{t('Easy one-click booking and live status tracking in Kannada.')}</p>
-          </TiltCard>
-        </div>
-      </section>
-
-      {isOwner ? (
-        // ----------------------------------
-        // OWNER DASHBOARD
-        // ----------------------------------
-        <>
-          <div className="metrics-grid">
-            <TiltCard className="metric-card">
-              <div className="metric-header">
-                <span className="metric-title">{t('Total Customers')}</span>
-                <div className="metric-icon-wrapper">
-                  <Users size={20} />
+      {/* Main Grid: Service Cards + Monsoon Offer Banner */}
+      <div className="figma-main-layout">
+        <div className="figma-service-cards-section">
+          <h2 className="figma-section-title">{t('Service Cards')}</h2>
+          
+          <div className="figma-cards-grid">
+            {/* Card 1: Maintenance */}
+            <TiltCard className="figma-glass-card">
+              <div className="figma-card-top">
+                <div className="figma-card-icon icon-maintenance">
+                  <Wrench size={20} />
                 </div>
+                <span className="figma-badge badge-active">{t('Active')}</span>
               </div>
-              <span className="metric-value"><AnimatedCounter value={summary.totalCustomers} /></span>
-              <span className="metric-trend trend-up">
-                <ArrowUpRight size={14} />
-                <span>+12% This Month</span>
-              </span>
+              <h3 className="figma-card-title">{t('Scheduled Maintenance')}</h3>
+              <p className="figma-card-subtitle">Mahindra Nova 45 HP</p>
+              <span className="figma-card-date">Next: Oct 12</span>
+              
+              <div className="figma-progress-wrapper">
+                <div className="figma-progress-bar" style={{ width: '75%' }} />
+              </div>
+              
+              <div className="figma-card-footer">
+                <button className="figma-card-action" onClick={() => navigate('/maintenance')}>
+                  <span>{t('Track Status')}</span>
+                  <span className="percent-tag">75%</span>
+                </button>
+              </div>
             </TiltCard>
 
-            <TiltCard className="metric-card">
-              <div className="metric-header">
-                <span className="metric-title">{t("Today's Bookings") || "Today's Bookings"}</span>
-                <div className="metric-icon-wrapper">
-                  <Calendar size={20} />
+            {/* Card 2: Active Rental (Current - Glowing Border) */}
+            <TiltCard className="figma-glass-card card-glowing-current">
+              <div className="figma-card-top">
+                <div className="figma-card-icon icon-rental">
+                  <Activity size={20} />
                 </div>
+                <span className="figma-badge badge-current">{t('Current')}</span>
               </div>
-              <span className="metric-value"><AnimatedCounter value={summary.todayBookings} /></span>
-              <span className="metric-trend trend-up">
-                <ArrowUpRight size={14} />
-                <span>+2 New</span>
-              </span>
+              <h3 className="figma-card-title">{t('Active Rental')}</h3>
+              <p className="figma-card-subtitle">New Holland 60HP</p>
+              <span className="figma-card-date">Sept 1 - 30</span>
+              
+              <div className="figma-card-footer">
+                <button className="figma-card-action action-highlight" onClick={() => navigate('/bookings')}>
+                  <span>{t('Manage Booking')}</span>
+                  <span className="days-tag">14 {t('days left')}</span>
+                </button>
+              </div>
             </TiltCard>
 
-            <TiltCard className="metric-card">
-              <div className="metric-header">
-                <span className="metric-title">{t("Today's Earnings") || "Today's Earnings"}</span>
-                <div className="metric-icon-wrapper">
-                  <IndianRupee size={20} />
-                </div>
-              </div>
-              <span className="metric-value"><AnimatedCounter value={summary.todayEarnings} isCurrency={true} /></span>
-              <span className="metric-trend trend-up">
-                <ArrowUpRight size={14} />
-                <span>+18%</span>
-              </span>
-            </TiltCard>
-
-            <TiltCard className="metric-card">
-              <div className="metric-header">
-                <span className="metric-title">{t("Pending Payments") || "Pending Payments"}</span>
-                <div className="metric-icon-wrapper">
+            {/* Card 3: Service History */}
+            <TiltCard className="figma-glass-card">
+              <div className="figma-card-top">
+                <div className="figma-card-icon icon-history">
                   <Clock size={20} />
                 </div>
               </div>
-              <span className="metric-value"><AnimatedCounter value={summary.pendingPayments} isCurrency={true} /></span>
-              <span className="metric-trend trend-up">
-                <ArrowUpRight size={14} />
-                <span>+4%</span>
-              </span>
+              <h3 className="figma-card-title">{t('Service History')}</h3>
+              <p className="figma-card-subtitle">3 {t('completed jobs')}</p>
+              
+              <div className="figma-card-footer" style={{ marginTop: 'auto' }}>
+                <button className="figma-card-action" onClick={() => navigate('/bookings')}>
+                  <span>{t('View Logs')}</span>
+                  <ArrowUpRight size={16} />
+                </button>
+              </div>
+            </TiltCard>
+
+            {/* Card 4: Fleet Overview */}
+            <TiltCard className="figma-glass-card">
+              <div className="figma-card-top">
+                <div className="figma-card-icon icon-fleet">
+                  <Users size={20} />
+                </div>
+              </div>
+              <h3 className="figma-card-title">{t('Fleet Overview')}</h3>
+              <p className="figma-card-subtitle">20 {t('Tractors')}</p>
+              <span className="figma-card-date">16 {t('Active')}, 4 {t('Idle')}</span>
+              
+              <div className="figma-card-footer">
+                <button className="figma-card-action" onClick={() => navigate('/drivers')}>
+                  <span>{t('Manage Fleet')}</span>
+                  <ArrowUpRight size={16} />
+                </button>
+              </div>
             </TiltCard>
           </div>
+        </div>
 
-          {/* Secondary stats */}
-          <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', marginBottom: '32px' }}>
-            <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
-              <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Fuel Expense (This Month)") || "Fuel Expense"}</span>
-              <span className="metric-value" style={{ fontSize: '1.4rem', color: '#6b7280' }}><AnimatedCounter value={summary.fuelExpense} isCurrency={true} /></span>
-            </div>
-            <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
-              <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Maintenance Expense") || "Maintenance Expense"}</span>
-              <span className="metric-value" style={{ fontSize: '1.4rem', color: '#6b7280' }}><AnimatedCounter value={summary.maintenanceExpense} isCurrency={true} /></span>
-            </div>
-            <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
-              <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Total Income (This Month)") || "Total Income"}</span>
-              <span className="metric-value" style={{ fontSize: '1.4rem', color: 'var(--primary)' }}><AnimatedCounter value={summary.totalIncome} isCurrency={true} /></span>
-            </div>
-            <div className="metric-card" style={{ padding: '16px', background: '#fcfdfc' }}>
-              <span className="metric-title" style={{ fontSize: '0.8rem' }}>{t("Profit (This Month)") || "Profit"}</span>
-              <span className="metric-value" style={{ fontSize: '1.4rem', color: 'var(--secondary)' }}><AnimatedCounter value={summary.netProfit} isCurrency={true} /></span>
-            </div>
+        {/* Monsoon Offers Right Banner Card */}
+        <TiltCard className="figma-monsoon-banner-card">
+          <div className="monsoon-rain-header">
+            <CloudRain size={36} className="cloud-rain-icon" />
+            <div className="tractor-hero-pill">🚜</div>
+          </div>
+          
+          <h2 className="monsoon-title">{t('MONSOON SPECIALS!')}</h2>
+          <span className="monsoon-subtitle">{t('Pre-Season Checkup')}</span>
+          
+          <div className="monsoon-discount-box">
+            <span className="discount-value">{t('Up to 20% OFF!')}</span>
+            <span className="discount-valid">{t('Valid till Aug 31')}</span>
           </div>
 
-          <div className="dashboard-grid">
-            <div className="chart-card">
-              <div className="card-header">
-                <h2>{t("Income Overview") || "Income Overview"}</h2>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>June 2025</span>
-              </div>
-              <div style={{ height: '300px', position: 'relative' }}>
-                {lineChartData && (
-                  <Line 
-                    data={lineChartData} 
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      scales: {
-                        y: {
-                          beginAtZero: true,
-                        }
-                      }
-                    }} 
-                  />
-                )}
-              </div>
-            </div>
-
-            <div className="chart-card">
-              <div className="card-header">
-                <h2>{t("Top Work Types") || "Top Work Types"}</h2>
-              </div>
-              <div style={{ height: '240px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                {doughnutChartData && (
-                  <Doughnut 
-                    data={doughnutChartData}
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: {
-                        legend: {
-                          position: 'bottom',
-                          labels: { boxWidth: 12 }
-                        }
-                      }
-                    }}
-                  />
-                )}
-              </div>
-            </div>
+          <div className="monsoon-footer-badge">
+            <span>{t('Valid till Aug 31')}</span>
           </div>
 
-          {/* Recent Bookings */}
-          <div className="table-container">
-            <div className="table-controls">
-              <h2 style={{ fontSize: '1.15rem' }}>{t('Recent Activity') || 'Recent Bookings'}</h2>
-            </div>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>{t('Customer')}</th>
-                  <th>{t('Work Type')}</th>
-                  <th>{t('Acres/Hours')}</th>
-                  <th>{t('Amount')}</th>
-                  <th>{t('Status')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentBookings.map((b) => (
-                  <tr key={b.id}>
-                    <td style={{ fontWeight: '600' }}>{b.customer_name}</td>
-                    <td>{t(b.work_type)}</td>
-                    <td>{b.acres_hours}</td>
-                    <td>{formatCurrency(b.total_amount)}</td>
-                    <td>
-                      <span className={`badge ${b.status.toLowerCase().replace(" ", "-")}`}>
-                        {t(b.status)}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
-      ) : (
-        // ----------------------------------
-        // CUSTOMER DASHBOARD
-        // ----------------------------------
-        <>
-          <div className="metrics-grid">
-            <div className="metric-card">
-              <div className="metric-header">
-                <span className="metric-title">{t('Total Bookings')}</span>
-                <div className="metric-icon-wrapper">
-                  <Calendar size={20} />
-                </div>
-              </div>
-              <span className="metric-value">{summary.totalBookings}</span>
-            </div>
+          <button className="monsoon-cta-btn" onClick={() => navigate('/bookings/add')}>
+            <span>{t('Book Now')}</span>
+            <ArrowUpRight size={18} />
+          </button>
+        </TiltCard>
+      </div>
 
-            <div className="metric-card">
-              <div className="metric-header">
-                <span className="metric-title">{t('Completed Bookings')}</span>
-                <div className="metric-icon-wrapper">
-                  <Calendar size={20} style={{ color: 'var(--primary)' }} />
-                </div>
-              </div>
-              <span className="metric-value">{summary.completedBookings}</span>
-            </div>
+      {/* Bottom KPI Stat Badges Row */}
+      <div className="figma-kpi-section">
+        <h2 className="figma-section-title">{t('KPI Stat Badges')}</h2>
 
-            <div className="metric-card">
-              <div className="metric-header">
-                <span className="metric-title">{t('Pending Bookings')}</span>
-                <div className="metric-icon-wrapper">
-                  <Clock size={20} style={{ color: 'var(--warning)' }} />
-                </div>
-              </div>
-              <span className="metric-value">{summary.pendingBookings}</span>
+        <div className="figma-kpi-grid">
+          <TiltCard className="figma-kpi-card kpi-emerald-aura">
+            <div className="kpi-header">
+              <span className="kpi-title">{t('Fleet Health')}</span>
+              <Activity size={18} className="kpi-icon emerald-glow" />
             </div>
+            <div className="kpi-value-row">
+              <span className="kpi-val">94.2%</span>
+              <span className="kpi-status status-healthy">- {t('Healthy')}</span>
+            </div>
+          </TiltCard>
 
-            <div className="metric-card">
-              <div className="metric-header">
-                <span className="metric-title">{t('Pending Payments')}</span>
-                <div className="metric-icon-wrapper">
-                  <IndianRupee size={20} style={{ color: 'var(--danger)' }} />
-                </div>
-              </div>
-              <span className="metric-value">{formatCurrency(summary.pendingPayment)}</span>
+          <TiltCard className="figma-kpi-card kpi-danger-aura">
+            <div className="kpi-header">
+              <span className="kpi-title">{t('Pending Services')}</span>
+              <AlertTriangle size={18} className="kpi-icon danger-glow" />
             </div>
-          </div>
+            <div className="kpi-value-row">
+              <span className="kpi-val">5</span>
+              <span className="kpi-status status-warning">- {t('High Priority')}</span>
+            </div>
+          </TiltCard>
 
-          {/* Recent Bookings Specific to Customer */}
-          <div className="table-container">
-            <div className="table-controls">
-              <h2 style={{ fontSize: '1.15rem' }}>{t('Your Bookings History')}</h2>
+          <TiltCard className="figma-kpi-card kpi-blue-aura">
+            <div className="kpi-header">
+              <span className="kpi-title">{t('Active Rentals')}</span>
+              <Zap size={18} className="kpi-icon blue-glow" />
             </div>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>{t('Date')}</th>
-                  <th>{t('Work Type')}</th>
-                  <th>{t('Acres/Hours')}</th>
-                  <th>{t('Amount')}</th>
-                  <th>{t('Status')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentBookings.map((b) => (
-                  <tr key={b.id}>
-                    <td>{new Date(b.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                    <td>{t(b.work_type)}</td>
-                    <td>{b.acres_hours}</td>
-                    <td>{formatCurrency(b.total_amount)}</td>
-                    <td>
-                      <span className={`badge ${b.status.toLowerCase().replace(" ", "-")}`}>
-                        {t(b.status)}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-                {recentBookings.length === 0 && (
-                  <tr>
-                    <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No bookings found. Request your first tractor service today!') || 'No bookings found. Request your first tractor service today!'}</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
+            <div className="kpi-value-row">
+              <span className="kpi-val">12</span>
+              <span className="kpi-status status-info">- 76% {t('Utilized')}</span>
+            </div>
+          </TiltCard>
+
+          <TiltCard className="figma-kpi-card kpi-gold-aura">
+            <div className="kpi-header">
+              <span className="kpi-title">{t('Monthly Revenue')}</span>
+              <IndianRupee size={18} className="kpi-icon gold-glow" />
+            </div>
+            <div className="kpi-value-row">
+              <span className="kpi-val">₹3,45,000</span>
+              <span className="kpi-status status-revenue">+8.5%</span>
+            </div>
+          </TiltCard>
+        </div>
+      </div>
     </div>
   );
 };
