@@ -196,18 +196,27 @@ const Dashboard = () => {
         </div>
 
         <div className="figma-nav-pills">
-          {['Dashboard', 'Services', 'Bookings', 'Fleet', 'Support'].map((pill) => (
+          {[
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Services', path: '/bookings/add' },
+            { name: 'Bookings', path: '/bookings' },
+            { name: 'Fleet', path: '/drivers' },
+            { name: 'Support', path: '/settings' }
+          ].map((pill) => (
             <button 
-              key={pill} 
-              className={`figma-pill-btn ${activeTab === pill ? 'active' : ''}`}
-              onClick={() => setActiveTab(pill)}
+              key={pill.name} 
+              className={`figma-pill-btn ${activeTab === pill.name ? 'active' : ''}`}
+              onClick={() => {
+                setActiveTab(pill.name);
+                navigate(pill.path);
+              }}
             >
-              {pill === 'Dashboard' && <LayoutDashboard size={14} />}
-              {pill === 'Services' && <Wrench size={14} />}
-              {pill === 'Bookings' && <Calendar size={14} />}
-              {pill === 'Fleet' && <Activity size={14} />}
-              {pill === 'Support' && <ShieldCheck size={14} />}
-              <span>{t(pill)}</span>
+              {pill.name === 'Dashboard' && <LayoutDashboard size={14} />}
+              {pill.name === 'Services' && <Wrench size={14} />}
+              {pill.name === 'Bookings' && <Calendar size={14} />}
+              {pill.name === 'Fleet' && <Activity size={14} />}
+              {pill.name === 'Support' && <ShieldCheck size={14} />}
+              <span>{t(pill.name)}</span>
             </button>
           ))}
         </div>
@@ -217,7 +226,7 @@ const Dashboard = () => {
       <div className="offers-carousel-wrapper" style={{ marginBottom: '28px' }}>
         <div className="offer-slide active">
           <div className="offer-content">
-            <span className="offer-tag"><Sparkles size={14} style={{ display: 'inline', marginRight: '4px' }} />{OFFERS[currentOfferIndex].tag}</span>
+            <span className="offer-tag"><Sparkles size={14} style={{ display: 'inline', marginRight: '4px' }} />{t(OFFERS[currentOfferIndex].tag)}</span>
             <h2 className="offer-title">{t(OFFERS[currentOfferIndex].title)}</h2>
             <p className="offer-desc">{t(OFFERS[currentOfferIndex].desc)}</p>
             <button className="btn btn-primary offer-cta" onClick={() => navigate('/bookings/add')}>
