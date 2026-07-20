@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Plus, Trash2, Search, X } from 'lucide-react';
+import { Plus, Trash2, Search, X, MessageSquare } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -110,6 +110,22 @@ const Payments = () => {
     }
   };
 
+  const handleSendWhatsAppReceipt = (p) => {
+    const rawPhone = p.customer_phone || p.customer?.phone || '';
+    const cleanPhone = rawPhone.replace(/\D/g, '');
+    const formattedPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+    
+    const dateStr = new Date(p.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    const total = parseFloat(p.total_amount).toLocaleString('en-IN');
+    const paid = parseFloat(p.paid_amount).toLocaleString('en-IN');
+    const pending = parseFloat(p.pending_amount).toLocaleString('en-IN');
+    
+    const message = `ನಮಸ್ಕಾರ ${p.customer_name || 'ಗ್ರಾಹಕರೇ'}! 🚜\n\nಯೋಗಣ್ಣ ಟ್ರಾಕ್ಟರ್ ಸೇವೆಯ ಪಾವತಿ ರಶೀದಿ (${dateStr}):\n---------------------------\n• ಒಟ್ಟು ದರ: ₹${total}\n• ಪಾವತಿಸಿದ ಮೊತ್ತ: ₹${paid}\n• ಬಾಕಿ ಮೊತ್ತ: ₹${pending}\n• ಪಾವತಿ ವಿಧಾನ: ${p.mode}\n---------------------------\nಧನ್ಯವಾದಗಳು! ಯೋಗಣ್ಣ ಟ್ರಾಕ್ಟರ್ ಸೇವೆಗಳು.`;
+
+    const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this payment transaction?")) {
       try {
@@ -151,32 +167,35 @@ const Payments = () => {
               />
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Select Unpaid Booking (Optional)</label>
+              <label>Select Booking</label>
               <select
                 name="booking"
                 className="form-control"
                 value={formData.booking}
                 onChange={handleInputChange}
               >
-                <option value="">-- Direct Customer Payment --</option>
+                <option value="">-- Manual Payment (No Booking) --</option>
                 {bookings.map(b => (
-                  <option key={b.id} value={b.id}>{b.customer_name} - {b.work_type} (₹{parseFloat(b.total_amount).toLocaleString('en-IN')})</option>
+                  <option key={b.id} value={b.id}>
+                    #{b.id} - {b.customer_name} ({b.work_type} - ₹{b.total_amount})
+                  </option>
                 ))}
               </select>
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label>Select Customer</label>
+              <label>Customer</label>
               <select
                 name="customer"
                 className="form-control"
                 value={formData.customer}
                 onChange={handleInputChange}
                 required
-                disabled={!!formData.booking} // Locked if booking is selected
               >
-                <option value="">-- Choose Customer --</option>
+                <option value="">-- Select Customer --</option>
                 {customers.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
+                  <option key={c.id} value={c.id}>
+                    {c.name} ({c.phone})
+                  </option>
                 ))}
               </select>
             </div>
@@ -190,7 +209,6 @@ const Payments = () => {
                 value={formData.total_amount}
                 onChange={handleInputChange}
                 required
-                disabled={!!formData.booking}
               />
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
@@ -270,7 +288,7 @@ const Payments = () => {
                 <th>{t('Paid Amount')}</th>
                 <th>{t('Pending Amount')}</th>
                 <th>{t('Mode')}</th>
-                {isOwner && <th>{t('Actions')}</th>}
+                <th>{t('Actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -279,27 +297,38 @@ const Payments = () => {
                   <td>{new Date(p.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
                   {isOwner && <td style={{ fontWeight: '600' }}>{p.customer_name}</td>}
                   <td>₹{parseFloat(p.total_amount).toLocaleString('en-IN')}</td>
-                  <td style={{ color: 'var(--primary)', fontWeight: 'bold' }}>₹{parseFloat(p.paid_amount).toLocaleString('en-IN')}</td>
-                  <td style={{ color: parseFloat(p.pending_amount) > 0 ? 'var(--danger)' : 'var(--text-muted)', fontWeight: parseFloat(p.pending_amount) > 0 ? 'bold' : 'normal' }}>
+                  <td style={{ color: '#4ade80', fontWeight: 'bold' }}>₹{parseFloat(p.paid_amount).toLocaleString('en-IN')}</td>
+                  <td style={{ color: parseFloat(p.pending_amount) > 0 ? '#f87171' : 'rgba(255, 255, 255, 0.5)', fontWeight: parseFloat(p.pending_amount) > 0 ? 'bold' : 'normal' }}>
                     ₹{parseFloat(p.pending_amount).toLocaleString('en-IN')}
                   </td>
                   <td>{t(p.mode)}</td>
-                  {isOwner && (
-                    <td>
+                  <td>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                       <button 
-                        onClick={() => handleDelete(p.id)} 
-                        className="btn-icon delete"
-                        title="Delete Payment Log"
+                        onClick={() => handleSendWhatsAppReceipt(p)} 
+                        className="btn-icon"
+                        style={{ background: 'rgba(37, 211, 102, 0.2)', color: '#25d366', border: '1px solid rgba(37, 211, 102, 0.4)' }}
+                        title={t('Send WhatsApp Receipt')}
                       >
-                        <Trash2 size={16} />
+                        <MessageSquare size={16} />
                       </button>
-                    </td>
-                  )}
+
+                      {isOwner && (
+                        <button 
+                          onClick={() => handleDelete(p.id)} 
+                          className="btn-icon delete"
+                          title="Delete Payment Log"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                    </div>
+                  </td>
                 </tr>
               ))}
               {filteredPayments.length === 0 && (
                 <tr>
-                  <td colSpan={isOwner ? 7 : 5} style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{t('No payments found.')}</td>
+                  <td colSpan={isOwner ? 7 : 6} style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.5)' }}>{t('No payments found.')}</td>
                 </tr>
               )}
             </tbody>
