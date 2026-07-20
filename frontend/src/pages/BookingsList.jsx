@@ -406,9 +406,9 @@ const BookingsList = () => {
               </div>
               <div style={{ margin: '20px 0', padding: '16px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '700', fontSize: '1.05rem', color: '#ffffff' }}>
-                  <span>{t('Total Amount')}:</span>
+                  <span>{t('Total Amount')} ({t('Hours')} × {t('Rate')}):</span>
                   <span style={{ color: '#4ade80', fontSize: '1.2rem', fontWeight: '900' }}>
-                    ₹{(parseFloat(completeFormData.acres_hours) * parseFloat(completeFormData.rate_per_unit) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                    ₹{((parseFloat(completeFormData.engine_hours) || parseFloat(completeFormData.acres_hours) || 0) * (parseFloat(completeFormData.rate_per_unit) || 0)).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>

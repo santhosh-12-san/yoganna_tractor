@@ -71,7 +71,8 @@ class Booking(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.total_amount = self.acres_hours * self.rate_per_unit
+        hours = self.engine_hours if (self.engine_hours and self.engine_hours > 0) else self.acres_hours
+        self.total_amount = hours * self.rate_per_unit
         super().save(*args, **kwargs)
 
     def __str__(self):
