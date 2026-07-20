@@ -15,7 +15,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.13'
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
@@ -36,8 +36,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-
-
     - name: Deploy to EC2 via SSH
       uses: appleboy/ssh-action@master
       with:
@@ -46,7 +44,8 @@ jobs:
         key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
         script: |
           cd /home/ubuntu/yoganna-tractor-works/yoganna_tractor
-          git pull origin main
-          sudo docker-compose down
-          sudo docker-compose up -d --build
+          git fetch origin main
+          git reset --hard origin/main
+          sudo docker compose down
+          sudo docker compose up -d --build
           sudo docker exec yoganna_django_backend python manage.py migrate
