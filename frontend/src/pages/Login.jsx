@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Tractor, Lock, Phone, User, Eye, EyeOff } from 'lucide-react';
+import { Tractor, Lock, Phone, User, Eye, EyeOff, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
+import FloatingParticles from '../components/FloatingParticles';
+import TiltCard from '../components/TiltCard';
 
 const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
+  const [activeRoleTab, setActiveRoleTab] = useState('CUSTOMER');
   const [formData, setFormData] = useState({
     phone_number: '',
     password: '',
@@ -31,7 +34,6 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
-      // Authenticate via Simple JWT
       const response = await axios.post('/api/token/', {
         phone_number: formData.phone_number,
         password: formData.password
@@ -41,7 +43,6 @@ const Login = () => {
       localStorage.setItem('access_token', access);
       localStorage.setItem('refresh_token', refresh);
 
-      // Fetch user profile details
       const userProfile = await axios.get('/api/me/', {
         headers: { Authorization: `Bearer ${access}` }
       });
@@ -49,9 +50,7 @@ const Login = () => {
       localStorage.setItem('user_role', userProfile.data.role);
       localStorage.setItem('user_full_name', userProfile.data.full_name);
 
-      // Connect real-time WebSocket
       connect();
-
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
@@ -77,7 +76,7 @@ const Login = () => {
         first_name: formData.first_name,
         last_name: formData.last_name,
         village: formData.village,
-        role: 'CUSTOMER' // Self registration defaults to Customer
+        role: activeRoleTab
       });
 
       setIsRegister(false);
@@ -91,79 +90,100 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-card">
-        <div className="auth-logo">
-          <Tractor size={48} />
-          <h2>Yoganna Tractor Services</h2>
-          <p>{isRegister ? 'Create your customer account' : 'Login to your account'}</p>
+    <div className="figma-login-wrapper">
+      {/* Background Floating Dust Particles */}
+      <FloatingParticles />
+
+      {/* Glassmorphism 3D Login Card */}
+      <TiltCard className="figma-login-card">
+        <div className="figma-login-logo">
+          <div className="logo-glow-wrapper">
+            <Tractor size={38} className="logo-icon-tractor" />
+          </div>
+          <h2 className="login-brand-title">Yoganna Tractor Services</h2>
+          <p className="login-brand-subtitle">
+            {isRegister ? 'Join Mandya & Karnataka Tractor Network' : 'Empowering Farmers • Enriching Lives'}
+          </p>
         </div>
 
-        {error && (
-          <div style={{
-            padding: '12px',
-            borderRadius: 'var(--radius-sm)',
-            backgroundColor: error.includes('successful') ? 'var(--primary-light)' : 'var(--danger-light)',
-            color: error.includes('successful') ? 'var(--primary)' : 'var(--danger)',
-            fontSize: '0.875rem',
-            marginBottom: '20px',
-            fontWeight: '500'
-          }}>
-            {error}
+        {/* Role Selector Tabs */}
+        {!isRegister && (
+          <div className="figma-role-tabs">
+            <button
+              type="button"
+              className={`role-tab-btn ${activeRoleTab === 'CUSTOMER' ? 'active' : ''}`}
+              onClick={() => setActiveRoleTab('CUSTOMER')}
+            >
+              <User size={14} />
+              <span>Farmer / Customer</span>
+            </button>
+            <button
+              type="button"
+              className={`role-tab-btn ${activeRoleTab === 'OWNER' ? 'active' : ''}`}
+              onClick={() => setActiveRoleTab('OWNER')}
+            >
+              <ShieldCheck size={14} />
+              <span>Owner / Admin</span>
+            </button>
           </div>
         )}
 
-        <form className="auth-form" onSubmit={isRegister ? handleRegister : handleLogin}>
+        {error && (
+          <div className={`figma-login-alert ${error.includes('successful') ? 'alert-success' : 'alert-danger'}`}>
+            <span>{error}</span>
+          </div>
+        )}
+
+        <form className="figma-login-form" onSubmit={isRegister ? handleRegister : handleLogin}>
           {isRegister && (
             <>
-              <div className="form-group">
-                <label>First Name</label>
-                <div style={{ position: 'relative' }}>
+              <div className="figma-form-row">
+                <div className="figma-input-group">
+                  <label className="figma-label">First Name</label>
                   <input
                     type="text"
                     name="first_name"
-                    className="form-control"
-                    placeholder="Enter first name"
+                    className="figma-input"
+                    placeholder="First Name"
                     value={formData.first_name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="figma-input-group">
+                  <label className="figma-label">Last Name</label>
+                  <input
+                    type="text"
+                    name="last_name"
+                    className="figma-input"
+                    placeholder="Last Name"
+                    value={formData.last_name}
                     onChange={handleInputChange}
                     required
                   />
                 </div>
               </div>
 
-              <div className="form-group">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  name="last_name"
-                  className="form-control"
-                  placeholder="Enter last name"
-                  value={formData.last_name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Email Address</label>
+              <div className="figma-input-group">
+                <label className="figma-label">Email Address</label>
                 <input
                   type="email"
                   name="email"
-                  className="form-control"
-                  placeholder="Enter email address"
+                  className="figma-input"
+                  placeholder="name@farm.com"
                   value={formData.email}
                   onChange={handleInputChange}
                   required
                 />
               </div>
 
-              <div className="form-group">
-                <label>Village</label>
+              <div className="figma-input-group">
+                <label className="figma-label">Village / Town</label>
                 <input
                   type="text"
                   name="village"
-                  className="form-control"
-                  placeholder="Enter your village"
+                  className="figma-input"
+                  placeholder="e.g. Mandya / Hassan"
                   value={formData.village}
                   onChange={handleInputChange}
                   required
@@ -172,46 +192,41 @@ const Login = () => {
             </>
           )}
 
-          <div className="form-group">
-            <label>Phone Number</label>
-            <div style={{ position: 'relative' }}>
+          <div className="figma-input-group">
+            <label className="figma-label">Phone Number</label>
+            <div className="figma-input-wrapper">
+              <span className="country-code">+91</span>
               <input
                 type="text"
                 name="phone_number"
-                className="form-control"
+                className="figma-input phone-input"
                 placeholder="Phone Number"
                 value={formData.phone_number}
                 onChange={handleInputChange}
                 required
               />
+              <Phone size={16} className="input-icon-right" />
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Password</label>
-            <div style={{ position: 'relative' }}>
+          <div className="figma-input-group">
+            <label className="figma-label">Password</label>
+            <div className="figma-input-wrapper">
+              <Lock size={16} className="input-icon-left" />
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                className="form-control"
-                placeholder="Password"
+                className="figma-input lock-input"
+                placeholder="Enter password"
                 value={formData.password}
                 onChange={handleInputChange}
                 required
               />
               <button
                 type="button"
+                className="eye-toggle-btn"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '12px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: 'var(--text-muted)'
-                }}
+                aria-label="Toggle Password Visibility"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -219,13 +234,13 @@ const Login = () => {
           </div>
 
           {isRegister && (
-            <div className="form-group">
-              <label>Confirm Password</label>
+            <div className="figma-input-group">
+              <label className="figma-label">Confirm Password</label>
               <input
                 type="password"
                 name="confirm_password"
-                className="form-control"
-                placeholder="Confirm password"
+                className="figma-input"
+                placeholder="Re-enter password"
                 value={formData.confirm_password}
                 onChange={handleInputChange}
                 required
@@ -234,33 +249,35 @@ const Login = () => {
           )}
 
           {!isRegister && (
-            <div className="auth-extra">
-              <label className="checkbox-label">
-                <input type="checkbox" />
-                <span>Remember me</span>
+            <div className="figma-extra-row">
+              <label className="figma-checkbox">
+                <input type="checkbox" defaultChecked />
+                <span>Remember Me</span>
               </label>
-              <a href="#" onClick={(e) => { e.preventDefault(); alert("Please contact the Owner to reset your password."); }}>Forgot Password?</a>
+              <a href="#" className="forgot-link" onClick={(e) => { e.preventDefault(); alert("Please contact Yoganna Service Admin to reset password."); }}>
+                Forgot Password?
+              </a>
             </div>
           )}
 
           <button 
             type="submit" 
-            className="btn btn-primary" 
-            style={{ width: '100%', padding: '12px' }}
+            className="figma-submit-btn" 
             disabled={loading}
           >
-            {loading ? 'Processing...' : (isRegister ? 'Sign Up' : 'Login')}
+            <span>{loading ? 'Processing...' : (isRegister ? 'Create Account' : 'Sign In')}</span>
+            <ArrowRight size={18} />
           </button>
         </form>
 
-        <div className="auth-footer">
+        <div className="figma-login-footer">
           {isRegister ? (
-            <p>Already have an account? <a href="#" onClick={(e) => { e.preventDefault(); setIsRegister(false); setError(''); }}>Login</a></p>
+            <p>Already have an account? <a href="#" onClick={(e) => { e.preventDefault(); setIsRegister(false); setError(''); }}>Sign In</a></p>
           ) : (
-            <p>Don't have an account? <a href="#" onClick={(e) => { e.preventDefault(); setIsRegister(true); setError(''); }}>Sign up</a></p>
+            <p>New to Yoganna Services? <a href="#" onClick={(e) => { e.preventDefault(); setIsRegister(true); setError(''); }}>Create Account</a></p>
           )}
         </div>
-      </div>
+      </TiltCard>
     </div>
   );
 };

@@ -2141,3 +2141,263 @@ a:hover {
 .status-warning { color: #fca5a5; }
 .status-info { color: #93c5fd; }
 .status-revenue { color: #fde047; }
+
+/* -------------------------------------------------------------
+   FIGMA DARK GLASSMORPHISM LOGIN PAGE DESIGN SYSTEM
+------------------------------------------------------------- */
+.figma-login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(6, 35, 21, 0.95) 0%, rgba(10, 20, 15, 0.98) 100%), url('/images/tractor_bg.jpg') center/cover no-repeat;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.figma-login-card {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(15, 25, 20, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid rgba(52, 168, 83, 0.35);
+  border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(52, 168, 83, 0.1);
+  position: relative;
+  z-index: 10;
+  animation: loginCardSpring 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes loginCardSpring {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.figma-login-logo {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.logo-glow-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(14, 98, 63, 0.8), rgba(52, 168, 83, 0.4));
+  border: 1px solid rgba(74, 222, 128, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  box-shadow: 0 0 24px rgba(52, 168, 83, 0.4);
+}
+
+.logo-icon-tractor {
+  color: #4ade80;
+}
+
+.login-brand-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.login-brand-subtitle {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.figma-role-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 4px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 24px;
+}
+
+.role-tab-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.role-tab-btn.active {
+  background: #34a853;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(52, 168, 83, 0.4);
+}
+
+.figma-login-alert {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.alert-success { background: rgba(52, 168, 83, 0.2); border: 1px solid #4ade80; color: #86efac; }
+.alert-danger { background: rgba(239, 68, 68, 0.2); border: 1px solid #f87171; color: #fca5a5; }
+
+.figma-input-group {
+  margin-bottom: 16px;
+}
+
+.figma-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.figma-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 6px;
+}
+
+.figma-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.figma-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: white;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.figma-input:focus {
+  border-color: #34a853;
+  box-shadow: 0 0 12px rgba(52, 168, 83, 0.3);
+}
+
+.phone-input { padding-left: 54px; }
+.lock-input { padding-left: 40px; padding-right: 40px; }
+
+.country-code {
+  position: absolute;
+  left: 14px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #4ade80;
+  pointer-events: none;
+}
+
+.input-icon-left {
+  position: absolute;
+  left: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+.input-icon-right {
+  position: absolute;
+  right: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+.eye-toggle-btn {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.eye-toggle-btn:hover { color: white; }
+
+.figma-extra-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  margin-bottom: 20px;
+}
+
+.figma-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: #4ade80;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.forgot-link:hover { text-decoration: underline; }
+
+.figma-submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #0e623f 0%, #34a853 100%);
+  color: white;
+  border: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(52, 168, 83, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.figma-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(52, 168, 83, 0.5);
+}
+
+.figma-login-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.figma-login-footer a {
+  color: #4ade80;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.figma-login-footer a:hover { text-decoration: underline; }
