@@ -45,29 +45,29 @@ const formatCurrency = (val) => {
 const OFFERS = [
   {
     id: 1,
-    title: "Monsoon Ploughing Offer! (ಮಳೆಗಾಲದ ಉಳುಮೆ ಕೊಡುಗೆ)",
+    title: "Monsoon Special Ploughing Offer",
     tag: "SPECIAL DISCOUNT",
-    desc: "Get ₹200 OFF per acre on Heavy Ploughing & Rotavator services for Mandya & Hassan regions.",
-    img: "/images/monsoon_offer.jpg",
-    cta: "Book Ploughing Now",
+    desc: "Get 20% OFF on Heavy Ploughing & Rotavator Work for Mandya & Hassan regions.",
+    img: "/images/offer1.jpg",
+    cta: "Book Service Now",
     badge: "Limited Time"
   },
   {
     id: 2,
-    title: "Seed Sowing & Tillage Package",
+    title: "High Yield Seed Sowing Package",
     tag: "NEW SEASON",
-    desc: "Complete seedbed preparation with John Deere 50HP & Rotavator. Guaranteed on-time service.",
-    img: "/images/seed_sowing.jpg",
+    desc: "Discounted Per-Acre Rates for Seed Sowing & Rotavator tillage.",
+    img: "/images/offer2.jpg",
     cta: "Explore Package",
     badge: "Popular"
   },
   {
     id: 3,
-    title: "Village Group Booking Offer",
+    title: "24/7 Priority Village Tractor Service",
     tag: "GROUP SAVINGS",
-    desc: "Combine 5+ acres in your village for an additional 15% discount on all tractor work.",
-    img: "/images/village_service.jpg",
-    cta: "Group Booking",
+    desc: "Fast Driver & Tractor Arrival at Your Farm with group booking discount.",
+    img: "/images/offer3.jpg",
+    cta: "Book Service Now",
     badge: "15% OFF"
   }
 ];
@@ -224,7 +224,7 @@ const Dashboard = () => {
 
       {/* Hero Offer Banner Carousel */}
       <div className="offers-carousel-wrapper" style={{ marginBottom: '28px' }}>
-        <div className="offer-slide active">
+        <div className="offer-slide active" style={{ backgroundImage: `linear-gradient(90deg, rgba(6, 35, 21, 0.92) 0%, rgba(6, 35, 21, 0.75) 50%, rgba(6, 35, 21, 0.92) 100%), url(${OFFERS[currentOfferIndex].img})` }}>
           <div className="offer-content">
             <span className="offer-tag"><Sparkles size={14} style={{ display: 'inline', marginRight: '4px' }} />{t(OFFERS[currentOfferIndex].tag)}</span>
             <h2 className="offer-title">{t(OFFERS[currentOfferIndex].title)}</h2>
@@ -232,6 +232,10 @@ const Dashboard = () => {
             <button className="btn btn-primary offer-cta" onClick={() => navigate('/bookings/add')}>
               {t(OFFERS[currentOfferIndex].cta)} <ArrowUpRight size={18} />
             </button>
+          </div>
+
+          <div className="offer-img-wrapper">
+            <img src={OFFERS[currentOfferIndex].img} alt="Tractor Offer" className="offer-hero-img" />
           </div>
 
           <div className="offer-controls">
