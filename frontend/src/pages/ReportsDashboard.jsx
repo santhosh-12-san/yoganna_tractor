@@ -50,7 +50,7 @@ const ReportsDashboard = () => {
 
   const handleExport = (format) => {
     const token = localStorage.getItem('access_token');
-    const exportUrl = `http://localhost:8000/api/reports/?export=${format}&type=${reportType}&token=${token}`;
+    const exportUrl = `/api/reports/?export=${format}&type=${reportType}&token=${token}`;
     window.open(exportUrl, '_blank');
   };
 
@@ -58,17 +58,20 @@ const ReportsDashboard = () => {
   if (error) return <div style={{ color: 'var(--danger)', padding: '20px' }}>{error}</div>;
   if (!reportData) return null;
 
+  const dailyIncome = reportData?.daily_income || {
+    month_label: '',
+    days_in_month: 30,
+    total: 0,
+    daily_data: []
+  };
+
   // Render Daily Income Bar Chart if we are on Profit/Income reports
-  const barChartData = reportType === 'profit' ? {
-    labels: Array.from({ length: 30 }, (_, i) => i + 1), // June 1 - 30
+  const barChartData = (reportType === 'profit' && dailyIncome.daily_data) ? {
+    labels: Array.from({ length: dailyIncome.days_in_month }, (_, i) => i + 1),
     datasets: [
       {
         label: t('Daily Income Chart') + ' (₹)',
-        data: [
-          10000, 12000, 8000, 15000, 11000, 9000, 14000, 16000, 12000, 13000,
-          15000, 17000, 11000, 12000, 18000, 14000, 15000, 16000, 22000, 24000,
-          24500, 18000, 19000, 21000, 20000, 19000, 22000, 23000, 24000, 25000
-        ], // Mock daily bars representation matching report #13 chart
+        data: dailyIncome.daily_data,
         backgroundColor: '#0e623f',
         borderRadius: 4
       }
@@ -116,7 +119,9 @@ const ReportsDashboard = () => {
         <div className="chart-card" style={{ marginBottom: '32px' }}>
           <div className="card-header">
             <h2>{t('Daily Income Chart')}</h2>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>June 2025 (Total: ₹1,25,000)</span>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+              {dailyIncome.month_label} (Total: ₹{parseFloat(dailyIncome.total || 0).toLocaleString('en-IN')})
+            </span>
           </div>
           <div style={{ height: '350px', position: 'relative' }}>
             {barChartData && (

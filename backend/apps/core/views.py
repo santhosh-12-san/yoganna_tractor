@@ -1,4 +1,5 @@
 import datetime
+import calendar
 from django.db.models import Sum, Count
 from django.db.models.functions import TruncDate
 from django.http import HttpResponse
@@ -503,6 +504,29 @@ class ReportsView(APIView):
                 } for item in village_summary
             ]
 
+            # Real Daily Income calculation for current month
+            days_in_month = calendar.monthrange(today.year, today.month)[1]
+            daily_payments = Payment.objects.filter(
+                date__year=today.year, 
+                date__month=today.month
+            ).values('date__day').annotate(daily_total=Sum('paid_amount'))
+            
+            daily_income_map = {item['date__day']: float(item['daily_total'] or 0) for item in daily_payments}
+            
+            daily_bookings = Booking.objects.filter(
+                status='Completed',
+                date__year=today.year,
+                date__month=today.month
+            ).values('date__day').annotate(daily_total=Sum('total_amount'))
+            
+            for item in daily_bookings:
+                d = item['date__day']
+                if d not in daily_income_map or daily_income_map[d] == 0:
+                    daily_income_map[d] = float(item['daily_total'] or 0)
+            
+            daily_data = [daily_income_map.get(d, 0.0) for d in range(1, days_in_month + 1)]
+            month_total = sum(daily_data)
+
             return Response({
                 'report_type': 'profit',
                 'summary': {
@@ -510,6 +534,12 @@ class ReportsView(APIView):
                     'totalExpenses': float(total_expenses),
                     'netProfit': float(net_profit),
                     'profitPercentage': float(profit_percentage)
+                },
+                'daily_income': {
+                    'month_label': today.strftime("%B %Y"),
+                    'days_in_month': days_in_month,
+                    'total': month_total,
+                    'daily_data': daily_data
                 },
                 'breakdown': breakdown,
                 'villages': villages,
