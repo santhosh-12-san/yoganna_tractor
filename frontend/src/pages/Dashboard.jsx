@@ -57,7 +57,12 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await axios.get('/api/dashboard/summary/');
+      let response;
+      try {
+        response = await axios.get('/api/dashboard/summary/');
+      } catch (e) {
+        response = await axios.get('/api/dashboard/');
+      }
       setData(response.data);
     } catch (err) {
       console.error("Dashboard error:", err);
