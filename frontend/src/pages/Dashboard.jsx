@@ -234,10 +234,6 @@ const Dashboard = () => {
             </button>
           </div>
 
-          <div className="offer-img-wrapper">
-            <img src={OFFERS[currentOfferIndex].img} alt="Tractor Offer" className="offer-hero-img" />
-          </div>
-
           <div className="offer-controls">
             <button className="offer-nav-btn" onClick={() => setCurrentOfferIndex((prev) => (prev === 0 ? OFFERS.length - 1 : prev - 1))}>
               <ChevronLeft size={18} />
