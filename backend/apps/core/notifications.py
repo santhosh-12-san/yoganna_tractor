@@ -1,9 +1,15 @@
 import os
 import logging
 from django.conf import settings
-from twilio.rest import Client
 
 logger = logging.getLogger(__name__)
+
+try:
+    from twilio.rest import Client
+    TWILIO_AVAILABLE = True
+except ImportError:
+    Client = None
+    TWILIO_AVAILABLE = False
 
 def send_notification(phone_number, message, mode='sms'):
     """
@@ -23,7 +29,7 @@ def send_notification(phone_number, message, mode='sms'):
         else:
             formatted_phone = f"+{formatted_phone}"
 
-    if account_sid and auth_token:
+    if TWILIO_AVAILABLE and account_sid and auth_token:
         try:
             client = Client(account_sid, auth_token)
             if mode == 'whatsapp':
