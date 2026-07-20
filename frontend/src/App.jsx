@@ -83,6 +83,13 @@ const NavigationLayout = () => {
 
   return (
     <div className="app-container">
+      {/* Dynamic Ambient Mesh Gradient Background */}
+      <div className="ambient-background">
+        <div className="ambient-orb orb-1"></div>
+        <div className="ambient-orb orb-2"></div>
+        <div className="ambient-orb orb-3"></div>
+      </div>
+
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-logo">
