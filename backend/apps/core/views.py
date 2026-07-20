@@ -174,27 +174,31 @@ class BookingViewSet(viewsets.ModelViewSet):
             payment.save()
         broadcast_dashboard_update("BOOKING_UPDATED", BookingSerializer(instance).data)
 
-        # Dispatch status transition notifications
+        # Dispatch status transition notifications safely
         new_status = instance.status
         if old_status != new_status and instance.customer:
-            from .notifications import send_notification
-            cust_name = instance.customer.name
-            phone = instance.customer.phone
-            work = instance.work_type
-            
-            if new_status == 'In Progress':
-                drv = instance.driver.name if instance.driver else 'Unassigned'
-                msg = f"Hi {cust_name}, your tractor service request for {work} has started. Driver: {drv}."
-                send_notification(phone, msg, mode='sms')
-                send_notification(phone, msg, mode='whatsapp')
-            elif new_status == 'Completed':
-                msg = f"Hi {cust_name}, your {work} work is completed. Total Amount: Rs. {instance.total_amount}. View details at: http://54.165.242.164/bookings"
-                send_notification(phone, msg, mode='sms')
-                send_notification(phone, msg, mode='whatsapp')
-            elif new_status == 'Cancelled':
-                msg = f"Hi {cust_name}, your tractor service request for {work} on {instance.date} has been cancelled."
-                send_notification(phone, msg, mode='sms')
-                send_notification(phone, msg, mode='whatsapp')
+            try:
+                from .notifications import send_notification
+                cust_name = instance.customer.name
+                phone = instance.customer.phone
+                work = instance.work_type
+                
+                if new_status == 'In Progress':
+                    drv = instance.driver.name if instance.driver else 'Unassigned'
+                    msg = f"Hi {cust_name}, your tractor service request for {work} has started. Driver: {drv}."
+                    send_notification(phone, msg, mode='sms')
+                    send_notification(phone, msg, mode='whatsapp')
+                elif new_status == 'Completed':
+                    msg = f"Hi {cust_name}, your {work} work is completed. Total Amount: Rs. {instance.total_amount}. View details at: http://3.86.203.49/bookings"
+                    send_notification(phone, msg, mode='sms')
+                    send_notification(phone, msg, mode='whatsapp')
+                elif new_status == 'Cancelled':
+                    msg = f"Hi {cust_name}, your tractor service request for {work} on {instance.date} has been cancelled."
+                    send_notification(phone, msg, mode='sms')
+                    send_notification(phone, msg, mode='whatsapp')
+            except Exception as e:
+                import logging
+                logging.getLogger(__name__).error(f"Error dispatching status notification: {str(e)}")
 
         # Check maintenance running hour thresholds on completion
         if new_status == 'Completed':

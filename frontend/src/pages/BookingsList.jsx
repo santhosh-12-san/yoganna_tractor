@@ -78,8 +78,10 @@ const BookingsList = () => {
       await axios.patch(`/api/bookings/${id}/`, { status: 'In Progress' });
       fetchBookings();
     } catch (err) {
-      console.error("Error starting work:", err);
-      alert("Failed to start booking.");
+      console.error("Error starting work:", err.response?.data || err);
+      const data = err.response?.data;
+      const errMsg = typeof data === 'object' ? (data.detail || data.booking_time || JSON.stringify(data)) : "Failed to start booking.";
+      alert(errMsg);
     }
   };
 
