@@ -126,6 +126,7 @@ const BookingsList = () => {
       });
       setCompletingBooking(null);
       fetchBookings();
+      navigate('/payments');
     } catch (err) {
       console.error("Error completing booking:", err);
       alert("Failed to complete booking.");

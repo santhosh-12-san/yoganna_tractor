@@ -136,6 +136,18 @@ const Payments = () => {
     window.open(whatsappUrl, '_blank');
   };
 
+  const handleTogglePaymentStatus = async (p) => {
+    const isPending = parseFloat(p.pending_amount) > 0;
+    const newPaidAmount = isPending ? p.total_amount : '0.00';
+    try {
+      await axios.patch(`/api/payments/${p.id}/`, { paid_amount: newPaidAmount });
+      fetchPayments();
+    } catch (err) {
+      console.error("Error updating payment status:", err);
+      alert("Failed to update payment status.");
+    }
+  };
+
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this payment transaction?")) {
       try {
@@ -298,6 +310,7 @@ const Payments = () => {
                 <th>{t('Paid Amount')}</th>
                 <th>{t('Pending Amount')}</th>
                 <th>{t('Mode')}</th>
+                <th>{t('Status')}</th>
                 <th>{t('Actions')}</th>
               </tr>
             </thead>
@@ -313,7 +326,38 @@ const Payments = () => {
                   </td>
                   <td>{t(p.mode)}</td>
                   <td>
+                    {parseFloat(p.pending_amount) > 0 ? (
+                      <span className="badge pending" style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                        {t('Pending')}
+                      </span>
+                    ) : (
+                      <span className="badge completed" style={{ background: 'rgba(52, 168, 83, 0.2)', color: '#4ade80', border: '1px solid rgba(52, 168, 83, 0.3)' }}>
+                        {t('Completed')}
+                      </span>
+                    )}
+                  </td>
+                  <td>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      {isOwner && (
+                        <button 
+                          onClick={() => handleTogglePaymentStatus(p)} 
+                          className="btn"
+                          style={{ 
+                            padding: '4px 10px', 
+                            fontSize: '0.78rem', 
+                            fontWeight: '700',
+                            borderRadius: '8px',
+                            backgroundColor: parseFloat(p.pending_amount) > 0 ? '#34a853' : 'rgba(255, 255, 255, 0.12)', 
+                            color: '#ffffff',
+                            border: 'none',
+                            cursor: 'pointer'
+                          }}
+                          title={parseFloat(p.pending_amount) > 0 ? t('Mark as Fully Paid') : t('Mark as Pending')}
+                        >
+                          {parseFloat(p.pending_amount) > 0 ? `✓ ${t('Mark Paid')}` : `↺ ${t('Set Pending')}`}
+                        </button>
+                      )}
+
                       <button 
                         onClick={() => handleSendWhatsAppReceipt(p)} 
                         className="btn-icon"
@@ -338,7 +382,7 @@ const Payments = () => {
               ))}
               {filteredPayments.length === 0 && (
                 <tr>
-                  <td colSpan={isOwner ? 7 : 6} style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.5)' }}>{t('No payments found.')}</td>
+                  <td colSpan={isOwner ? 8 : 7} style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.5)' }}>{t('No payments found.')}</td>
                 </tr>
               )}
             </tbody>
