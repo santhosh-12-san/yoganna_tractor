@@ -23,12 +23,28 @@ const FarmWeatherWidget = () => {
 
   const fetchLiveWeather = async (lat = 12.52, lon = 76.90) => {
     try {
-      const res = await axios.get(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FKolkata`
-      );
-      setWeatherData(res.data);
+      const [weatherRes, geoRes] = await Promise.all([
+        axios.get(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FKolkata`
+        ),
+        axios.get(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
+        ).catch(() => null)
+      ]);
+
+      setWeatherData(weatherRes.data);
+
+      if (geoRes && geoRes.data) {
+        const place = geoRes.data.locality || geoRes.data.city || geoRes.data.localityInfo?.administrative?.[2]?.name;
+        const state = geoRes.data.principalSubdivision || 'Karnataka';
+        if (place) {
+          setLocationName(`${place}, ${state}`);
+        } else {
+          setLocationName(`Mandya, Karnataka`);
+        }
+      }
     } catch (err) {
-      console.error("Error fetching live weather:", err);
+      console.error("Error fetching live weather & location:", err);
     } finally {
       setLoading(false);
     }
@@ -38,7 +54,6 @@ const FarmWeatherWidget = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          setLocationName('Your Farm Location');
           fetchLiveWeather(pos.coords.latitude, pos.coords.longitude);
         },
         () => fetchLiveWeather()
