@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, us
 import axios from 'axios';
 import { 
   LayoutDashboard, Users, CalendarDays, Tractor, IndianRupee, Fuel, 
-  Receipt, ShieldAlert, BarChart3, Settings as SettingsIcon, LogOut, Menu, UserCheck
+  Receipt, ShieldAlert, BarChart3, Settings as SettingsIcon, LogOut, Menu, UserCheck, Plus
 } from 'lucide-react';
 
 import { WebSocketProvider, useWebSocket } from './context/WebSocketContext';
@@ -201,6 +201,16 @@ const NavigationLayout = () => {
           </Routes>
         </main>
       </div>
+
+      {/* Floating Quick Action Booking Button */}
+      <button 
+        className="fab-booking-btn" 
+        onClick={() => navigate('/bookings/add')}
+        title={t('New Booking')}
+      >
+        <Plus size={22} />
+        <span>{t('New Booking')}</span>
+      </button>
     </div>
   );
 };
