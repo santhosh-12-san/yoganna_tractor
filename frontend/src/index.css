@@ -1286,14 +1286,16 @@ a:hover {
    HEADER FARM WEATHER WIDGET
 ------------------------------------------------------------- */
 .weather-widget {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: rgba(230, 244, 234, 0.7);
-  border: 1px solid rgba(14, 98, 63, 0.2);
+  background: rgba(230, 244, 234, 0.85);
+  border: 1px solid rgba(14, 98, 63, 0.25);
   padding: 6px 14px;
   border-radius: 20px;
   backdrop-filter: blur(8px);
+  height: 38px;
+  box-sizing: border-box;
 }
 
 .weather-icon-wrapper {
