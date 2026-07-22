@@ -15,9 +15,9 @@
   --bg-sidebar: #ffffff;
   --border: #e0e0e0;
   
-  --text-primary: #1f2937;
-  --text-secondary: #4b5563;
-  --text-muted: #9ca3af;
+  --text-primary: #ffffff;
+  --text-secondary: #ffffff;
+  --text-muted: #ffffff;
   --text-on-primary: #ffffff;
 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -231,7 +231,7 @@ a:hover {
   gap: 12px;
   padding: 12px 16px;
   border-radius: var(--radius-sm);
-  color: rgba(255, 255, 255, 0.65);
+  color: #ffffff;
   font-weight: 500;
   font-size: 0.925rem;
   transition: var(--transition);
@@ -427,7 +427,7 @@ a:hover {
 
 .metric-title {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: #ffffff !important;
   font-weight: 600;
 }
 
@@ -554,7 +554,7 @@ select option, .form-control option, .form-select option {
   padding: 14px 20px;
   font-size: 0.85rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: #ffffff !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
@@ -562,7 +562,7 @@ select option, .form-control option, .form-select option {
   padding: 16px 20px;
   font-size: 0.9rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-  color: #ffffff !important;
+  color: #ffffff;
   background: transparent !important;
 }
 
@@ -1477,8 +1477,8 @@ select option, .form-control option, .form-select option {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: rgba(230, 244, 234, 0.85);
-  border: 1px solid rgba(14, 98, 63, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 6px 14px;
   border-radius: 20px;
   backdrop-filter: blur(8px);
@@ -1511,19 +1511,19 @@ select option, .form-control option, .form-select option {
 .weather-temp {
   font-weight: 800;
   font-size: 0.9rem;
-  color: var(--primary-dark);
+  color: #ffffff;
 }
 
 .weather-desc {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: #ffffff;
 }
 
 .weather-widget.clickable:hover {
-  background: rgba(230, 244, 234, 0.95);
+  background: rgba(255, 255, 255, 0.15);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(14, 98, 63, 0.15);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
 }
 
 /* Weather Header Dropdown Card */
@@ -2502,7 +2502,7 @@ select option, .form-control option, .form-select option {
 
 .offer-desc {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: #ffffff !important;
   margin-bottom: 16px;
   line-height: 1.4;
 }
