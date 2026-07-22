@@ -152,21 +152,21 @@ const ReportsDashboard = () => {
 
         {reportType === 'profit' && (
           <div style={{ padding: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
-            <div style={{ padding: '16px', background: '#fcfdfc', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
+            <div style={{ padding: '16px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t('Total Bookings')}</div>
               <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{reportData.metrics?.totalBookings}</div>
             </div>
-            <div style={{ padding: '16px', background: '#fcfdfc', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
+            <div style={{ padding: '16px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t('Completed Bookings')}</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--primary)' }}>{reportData.metrics?.completedBookings}</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4ade80' }}>{reportData.metrics?.completedBookings}</div>
             </div>
-            <div style={{ padding: '16px', background: '#fcfdfc', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
+            <div style={{ padding: '16px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t('Cancelled')}</div>
               <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--danger)' }}>{reportData.metrics?.cancelledBookings}</div>
             </div>
-            <div style={{ padding: '16px', background: '#fcfdfc', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
+            <div style={{ padding: '16px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t('Total Amount')}</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--secondary)' }}>₹{reportData.summary?.totalIncome.toLocaleString('en-IN')}</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#fbbf24' }}>₹{reportData.summary?.totalIncome.toLocaleString('en-IN')}</div>
             </div>
           </div>
         )}
