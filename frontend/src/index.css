@@ -10,10 +10,10 @@
   --info: #1a73e8;
   --info-light: #e8f0fe;
   
-  --bg-main: #f8f9fa;
-  --bg-card: #ffffff;
-  --bg-sidebar: #ffffff;
-  --border: #e0e0e0;
+  --bg-main: rgba(255, 255, 255, 0.05);
+  --bg-card: rgba(22, 28, 45, 0.85);
+  --bg-sidebar: rgba(13, 17, 28, 0.95);
+  --border: rgba(255, 255, 255, 0.08);
   
   --text-primary: #ffffff;
   --text-secondary: #ffffff;
