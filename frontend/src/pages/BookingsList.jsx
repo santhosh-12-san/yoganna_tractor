@@ -344,7 +344,7 @@ const BookingsList = () => {
           zIndex: 1000
         }}>
           <div style={{
-            backgroundColor: 'rgba(12, 24, 18, 0.96)',
+            backgroundColor: 'rgba(15, 23, 42, 0.96)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
             border: '1px solid rgba(255, 255, 255, 0.15)',

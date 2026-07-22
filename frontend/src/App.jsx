@@ -39,6 +39,24 @@ axios.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user_role');
+      localStorage.removeItem('user_full_name');
+      localStorage.removeItem('user');
+      // Prevent infinite redirect loop if already on login page
+      if (!window.location.pathname.startsWith('/login')) {
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 const PrivateRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem('access_token');
   const role = localStorage.getItem('user_role');
